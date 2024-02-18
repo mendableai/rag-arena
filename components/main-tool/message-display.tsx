@@ -5,7 +5,6 @@ import { Separator } from "../ui/separator";
 import { SelectionMenu } from "./selection-menu";
 
 export function MessageDisplay({ message }: { message: Message[] }) {
- 
 
   return (
     <div className="flex h-full flex-col">
