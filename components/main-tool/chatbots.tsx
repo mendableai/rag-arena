@@ -1,6 +1,6 @@
 "use client";
 
-import { type Mail } from "../data";
+import { useChat } from 'ai/react';
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import {
@@ -11,43 +11,34 @@ import {
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
 import { TooltipProvider } from "../ui/tooltip";
-import { useMail } from "../use-mail";
-import { MailDisplay } from "./mail-display";
+import { MessageDisplay } from './message-display';
+import { SelectionMenu } from './selection-menu';
 
-interface MailProps {
-  mails: Mail[];
-}
-
-export function Mail({ mails }: MailProps) {
-  const [mail] = useMail();
+export function ChatBots() {
+  const { messages, input, handleInputChange, handleSubmit } = useChat();
 
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup direction="vertical">
-        <ResizablePanel defaultSize={75}>
+        <ResizablePanel defaultSize={70}>
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel defaultSize={50}>
-              <MailDisplay
-                mail={mails.find((item) => item.id === mail.selected) || null}
-              />
+              <MessageDisplay message={messages} />
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={50}>
-              <MailDisplay
-                mail={mails.find((item) => item.id === mail.selected) || null}
-              />
+              <MessageDisplay message={messages} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={25}>
-        <div className="p-4 max-w-3xl m-auto">
-            <form>
+        <ResizablePanel defaultSize={30}>
+
+        <SelectionMenu message={messages}/>
+          <div className="p-4 max-w-3xl m-auto">
+            <form onSubmit={handleSubmit}>
               <div className="grid gap-4">
-                <Textarea
-                  className="p-4"
-                  placeholder={`Reply...`}
-                />
+                <Textarea className="p-4" placeholder={`Reply...`} value={input} onChange={handleInputChange} />
                 <div className="flex items-center">
                   <Label
                     htmlFor="mute"
@@ -57,7 +48,7 @@ export function Mail({ mails }: MailProps) {
                     thread
                   </Label>
                   <Button
-                    onClick={(e) => e.preventDefault()}
+                    
                     size="sm"
                     className="ml-auto"
                   >

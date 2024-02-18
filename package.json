@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@langchain/core": "^0.1.30",
+    "@langchain/openai": "^0.0.14",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -25,7 +27,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
-    "jotai": "^2.6.4",
     "langchain": "^0.1.20",
     "lucide-react": "^0.331.0",
     "next": "14.1.0",
