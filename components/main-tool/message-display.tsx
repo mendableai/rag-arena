@@ -1,14 +1,13 @@
-
 import { type Message } from "ai";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
 import { SelectionMenu } from "./selection-menu";
 
 export function MessageDisplay({ message }: { message: Message[] }) {
-
+  
   return (
     <div className="flex h-full flex-col">
-      <SelectionMenu message={message}/>
+      <SelectionMenu message={message} />
       <Separator />
 
       <div className="flex flex-1 flex-col">
