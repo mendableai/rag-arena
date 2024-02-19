@@ -1,8 +1,15 @@
-import { type Message } from "ai";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Separator } from "../ui/separator";
+import { type Message } from 'ai';
+import { useEffect, useRef } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Separator } from '../ui/separator';
 
 export function MessageDisplay({ message }: { message: Message[] }) {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [message]);
+
   return (
     <div className="flex h-full flex-col">
       <Separator />
@@ -31,15 +38,15 @@ export function MessageDisplay({ message }: { message: Message[] }) {
                 <div
                   key={m.id}
                   className={`flex gap-3 ${
-                    m.role === "user" ? "justify-end" : "justify-between"
+                    m.role === 'user' ? 'justify-end' : 'justify-between'
                   }`}
                 >
                   <div
                     className={`whitespace-pre-wrap max-w-96 min-w-40 ${
-                      m.role !== "user" ? "text-left" : "text-right"
+                      m.role !== 'user' ? 'text-left' : 'text-right'
                     }`}
                   >
-                    <strong>{m.role === "user" ? "" : "AI: "}</strong>
+                    <strong>{m.role === 'user' ? '' : 'AI: '}</strong>
                     {m.content}
                   </div>
                   <div className="text-xs text-muted-foreground min-w-20 text-right">
@@ -48,6 +55,7 @@ export function MessageDisplay({ message }: { message: Message[] }) {
                 </div>
               ))
             : null}
+          <div ref={messagesEndRef} />
         </div>
         <Separator className="mt-auto" />
       </div>
