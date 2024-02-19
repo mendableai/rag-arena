@@ -19,22 +19,14 @@ Current conversation:
 User: {input}
 AI:`;
 
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const messages = body.messages ?? [];
 
-    console.log("messages: ", messages);
-    
-
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
-
-
-    console.log("previous messages: ",  formattedPreviousMessages.join("\n"));
-    console.log(currentMessageContent);
 
 
     const model = new ChatOpenAI({
@@ -42,17 +34,17 @@ export async function POST(req: NextRequest) {
       modelName: "gpt-3.5-turbo-1106",
     });
 
-
     const outputParser = new HttpResponseOutputParser();
 
     const chain = prompt.pipe(model).pipe(outputParser);
+
+    console.log("previous messages", formattedPreviousMessages);
+    
 
     const stream = await chain.stream({
       chat_history: formattedPreviousMessages.join("\n"),
       input: currentMessageContent,
     });
-
-
 
     return new StreamingTextResponse(stream);
   } catch (e: any) {

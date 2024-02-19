@@ -1,12 +1,13 @@
 import {
-    Archive,
-    ArchiveX,
-    Clock,
-    Forward,
-    MoreVertical,
-    Reply,
-    ReplyAll,
-    Trash2,
+  ArrowLeftSquare,
+  ArrowRightSquare,
+  Clock,
+  Equal,
+  Images,
+  ListRestart,
+  MoreVertical,
+  ThumbsDown,
+  Trash2
 } from "lucide-react";
 
 import { type Message } from "ai";
@@ -14,38 +15,76 @@ import { addDays, addHours, format, nextSaturday } from "date-fns";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Separator } from "../ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function SelectionMenu({ message }: { message: Message[] }) {
-    const today = new Date();
-    
+  const today = new Date();
+
   return (
     <div className="flex items-center p-2">
       <div className="flex items-center gap-2">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button variant="ghost" size="icon" disabled={!message}>
-              <Archive className="h-4 w-4" />
-              <span className="sr-only">Archive</span>
+              <ArrowLeftSquare className="h-4 w-4" />
+              <span className="sr-only">Vote Left</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Archive</TooltipContent>
+          <TooltipContent>Vote Left</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button variant="ghost" size="icon" disabled={!message}>
-              <ArchiveX className="h-4 w-4" />
-              <span className="sr-only">Move to junk</span>
+              <ArrowRightSquare className="h-4 w-4" />
+              <span className="sr-only">Vote Right</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Move to junk</TooltipContent>
+          <TooltipContent>Vote Right</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" disabled={!message}>
+              <Equal className="h-4 w-4" />
+              <span className="sr-only">Tie</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Tie</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" disabled={!message}>
+              <ThumbsDown className="h-4 w-4" />
+              <span className="sr-only">Both are bad</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Both are bad</TooltipContent>
+        </Tooltip>
+      </div>
+      <div className="ml-auto flex items-center gap-2">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" disabled={!message}>
+              <ListRestart className="h-4 w-4" />
+              <span className="sr-only">New Round</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>New Round</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" disabled={!message}>
+              <Images className="h-4 w-4" />
+              <span className="sr-only">Print Result</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Print Result</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -105,35 +144,8 @@ export function SelectionMenu({ message }: { message: Message[] }) {
           <TooltipContent>Snooze</TooltipContent>
         </Tooltip>
       </div>
-      <div className="ml-auto flex items-center gap-2">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={!message}>
-              <Reply className="h-4 w-4" />
-              <span className="sr-only">Reply</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Reply</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={!message}>
-              <ReplyAll className="h-4 w-4" />
-              <span className="sr-only">Reply all</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Reply all</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={!message}>
-              <Forward className="h-4 w-4" />
-              <span className="sr-only">Forward</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Forward</TooltipContent>
-        </Tooltip>
-      </div>
+      
+      
       <Separator orientation="vertical" className="mx-2 h-6" />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

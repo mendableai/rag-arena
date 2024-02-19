@@ -22,6 +22,30 @@ export function ChatBots() {
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
   const [chatHistory2, setChatHistory2] = useState<Message[]>([]);
 
+  const handleFormSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    handleSubmit({ input, chatHistory, setChatHistory });
+    handleSubmit({
+      input,
+      chatHistory: chatHistory2,
+      setChatHistory: setChatHistory2,
+    });
+
+    setInput("");
+  };
+
+  const handleKeyDown = (e: {
+    key: string;
+    shiftKey: any;
+    preventDefault: () => void;
+  }) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleFormSubmit(e);
+    }
+  };
+
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup direction="vertical">
@@ -57,6 +81,7 @@ export function ChatBots() {
                   placeholder={`Reply...`}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
                 />
                 <div className="flex items-center">
                   <Label
