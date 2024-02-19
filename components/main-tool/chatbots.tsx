@@ -14,11 +14,13 @@ import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
 import { TooltipProvider } from "../ui/tooltip";
 import { MessageDisplay } from "./message-display";
+import { SelectionMenu } from "./selection-menu";
 
 export function ChatBots() {
   const [input, setInput] = useState<string>("");
 
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
+  const [chatHistory2, setChatHistory2] = useState<Message[]>([]);
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -30,18 +32,23 @@ export function ChatBots() {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={50}>
-              {/* <MessageDisplay id={"2"} /> */}
+              <MessageDisplay message={chatHistory2} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={30}>
-          {/* <SelectionMenu message={messages} /> */}
+          <SelectionMenu message={chatHistory} />
           <div className="p-4 max-w-3xl m-auto">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSubmit({ input, chatHistory, setChatHistory });
+                handleSubmit({
+                  input,
+                  chatHistory: chatHistory2,
+                  setChatHistory: setChatHistory2,
+                });
               }}
             >
               <div className="grid gap-4">

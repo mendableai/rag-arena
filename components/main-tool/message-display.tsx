@@ -1,13 +1,10 @@
 import { type Message } from "ai";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
-import { SelectionMenu } from "./selection-menu";
 
 export function MessageDisplay({ message }: { message: Message[] }) {
-  
   return (
     <div className="flex h-full flex-col">
-      <SelectionMenu message={message} />
       <Separator />
 
       <div className="flex flex-1 flex-col">
@@ -15,26 +12,29 @@ export function MessageDisplay({ message }: { message: Message[] }) {
           <div className="flex items-start gap-4 text-sm">
             <Avatar>
               <AvatarImage />
-              <AvatarFallback>{"Leonardo"}</AvatarFallback>
+              <AvatarFallback>LM</AvatarFallback>
             </Avatar>
             <div className="grid gap-1">
-              <div className="font-semibold">{"leonardo"}</div>
-              <div className="line-clamp-1 text-xs">{"mail subject"}</div>
-              <div className="line-clamp-1 text-xs">
-                <span className="font-medium">Reply-To:</span> {"mail.email"}
-              </div>
+              <div className="font-semibold">Retriever Name</div>
+              <div className="line-clamp-1 text-xs">Retriever description</div>
+              
             </div>
           </div>
 
-          <div className="ml-auto text-xs text-muted-foreground">{"date"}</div>
+          <div className="ml-auto text-xs text-muted-foreground">Learn more..</div>
         </div>
         <Separator />
-        <div className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[400px] overflow-y-scroll">
+        <div className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[400px] overflow-y-scroll gap-4 flex flex-col">
           {message.length > 0
             ? message.map((m) => (
-                <div key={m.id} className="whitespace-pre-wrap">
-                  {m.role === "user" ? "User: " : "AI: "}
-                  {m.content}
+                <div key={m.id} className="flex gap-3" >
+                  <div className="whitespace-pre-wrap max-w-96 min-w-40">
+                    <strong>{m.role === "user" ? "User: " : "AI: "}</strong>
+                    {m.content}
+                  </div>{" "}
+                  <div className="ml-auto text-xs text-muted-foreground min-w-20">
+                    {m?.createdAt?.toLocaleTimeString()}
+                  </div>
                 </div>
               ))
             : null}
