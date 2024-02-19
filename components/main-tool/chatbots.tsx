@@ -1,7 +1,8 @@
 "use client";
 
+import { handleSubmit } from "@/lib/handleSubmit";
 import { Message } from "ai";
-import { FormEvent, useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import {
@@ -16,66 +17,8 @@ import { MessageDisplay } from "./message-display";
 
 export function ChatBots() {
   const [input, setInput] = useState<string>("");
-  const [openAIResponse, setOpenAIResponse] = useState<string>("");
 
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const newUserEntry: Message = {
-      id: `${Math.random().toString(36).substring(7)}`,
-      role: "user",
-      content: input,
-      createdAt: new Date(),
-    };
-
-    const newChatHistory = [...chatHistory, newUserEntry];
-
-    setChatHistory(newChatHistory);
-
-    let receivedContent = "";
-
-    await fetch("api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        messages: newChatHistory,
-      }),
-    }).then(async (response: any) => {
-      const reader = response.body?.getReader();
-
-      const aiMessageId = `${Math.random().toString(36).substring(7)}`;
-
-      const newAiMessage: Message = {
-        id: aiMessageId,
-        role: "assistant",
-        content: "",
-        createdAt: new Date(),
-      };
-
-      setChatHistory((prev) => [...prev, newAiMessage]);
-
-      while (true) {
-        const { done, value } = await reader?.read();
-        if (done) break;
-        receivedContent += new TextDecoder().decode(value);
-        setOpenAIResponse(receivedContent);
-
-        setChatHistory((prev) =>
-          prev.map((msg) =>
-            msg.id === aiMessageId ? { ...msg, content: receivedContent } : msg
-          )
-        );
-      }
-    });
-  }
-
-  useEffect(() => {
-    console.log("openAIResponse: ", openAIResponse);
-  }, [openAIResponse]);
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -97,7 +40,8 @@ export function ChatBots() {
           <div className="p-4 max-w-3xl m-auto">
             <form
               onSubmit={(e) => {
-                handleSubmit(e);
+                e.preventDefault();
+                handleSubmit({ input, chatHistory, setChatHistory });
               }}
             >
               <div className="grid gap-4">
