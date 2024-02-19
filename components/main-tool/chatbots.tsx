@@ -20,17 +20,17 @@ export function ChatBots() {
   const [input, setInput] = useState<string>("");
 
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
-  const [chatHistory2, setChatHistory2] = useState<Message[]>([]);
+  // const [chatHistory2, setChatHistory2] = useState<Message[]>([]);
 
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     handleSubmit({ input, chatHistory, setChatHistory });
-    handleSubmit({
-      input,
-      chatHistory: chatHistory2,
-      setChatHistory: setChatHistory2,
-    });
+    // handleSubmit({
+    //   input,
+    //   chatHistory: chatHistory2,
+    //   setChatHistory: setChatHistory2,
+    // });
 
     setInput("");
   };
@@ -56,7 +56,7 @@ export function ChatBots() {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={50}>
-              <MessageDisplay message={chatHistory2} />
+              {/* <MessageDisplay message={chatHistory2} /> */}
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>
@@ -68,11 +68,11 @@ export function ChatBots() {
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSubmit({ input, chatHistory, setChatHistory });
-                handleSubmit({
-                  input,
-                  chatHistory: chatHistory2,
-                  setChatHistory: setChatHistory2,
-                });
+                // handleSubmit({
+                //   input,
+                //   chatHistory: chatHistory2,
+                //   setChatHistory: setChatHistory2,
+                // });
               }}
             >
               <div className="grid gap-4">

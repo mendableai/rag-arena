@@ -1,13 +1,15 @@
-import { type Message } from 'ai';
-import { useEffect, useRef } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Separator } from '../ui/separator';
+import { type Message } from "ai";
+import { useEffect, useRef } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Separator } from "../ui/separator";
 
 export function MessageDisplay({ message }: { message: Message[] }) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  console.log(message);
+
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [message]);
 
   return (
@@ -38,16 +40,41 @@ export function MessageDisplay({ message }: { message: Message[] }) {
                 <div
                   key={m.id}
                   className={`flex gap-3 ${
-                    m.role === 'user' ? 'justify-end' : 'justify-between'
+                    m.role === "user" ? "justify-end" : "justify-between"
                   }`}
                 >
                   <div
                     className={`whitespace-pre-wrap max-w-96 min-w-40 ${
-                      m.role !== 'user' ? 'text-left' : 'text-right'
+                      m.role !== "user" ? "text-left" : "text-right"
                     }`}
                   >
-                    <strong>{m.role === 'user' ? '' : 'AI: '}</strong>
+                    <strong>{m.role === "user" ? "" : "AI: "}</strong>
                     {m.content}
+                    {m.annotations && m.annotations.length ? (
+                      <div className="ml-4 mt-2 dark:bg-slate-900 bg-slate-100 px-4 py-2 drop-shadow-lg">
+                        <span>
+                         🔍 Sources:
+                        </span>
+                        <span className="mt-1 mr-2 px-2 py-1 rounded text-xs">
+                          {m.annotations?.map((source: any, i) => (
+                            <div className="mt-3" key={"source:" + i}>
+                              {i + 1}. &quot;{source.pageContent}&quot;
+                              {source.metadata?.loc?.lines !== undefined ? (
+                                <div className="mt-1">
+                                  - (Lines {
+                                    source.metadata?.loc?.lines?.from
+                                  } to {source.metadata?.loc?.lines?.to})
+                                </div>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          ))}
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="text-xs text-muted-foreground min-w-20 text-right">
                     {m?.createdAt?.toLocaleTimeString()}
