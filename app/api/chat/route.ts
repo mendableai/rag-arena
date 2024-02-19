@@ -38,8 +38,7 @@ export async function POST(req: NextRequest) {
 
     const chain = prompt.pipe(model).pipe(outputParser);
 
-    console.log("previous messages", formattedPreviousMessages);
-    
+
 
     const stream = await chain.stream({
       chat_history: formattedPreviousMessages.join("\n"),
