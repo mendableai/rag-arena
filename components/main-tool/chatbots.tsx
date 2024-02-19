@@ -73,6 +73,7 @@ export function ChatBots() {
                 //   chatHistory: chatHistory2,
                 //   setChatHistory: setChatHistory2,
                 // });
+                
               }}
             >
               <div className="grid gap-4">

@@ -1,9 +1,9 @@
-import { type Message } from "ai";
-import { useEffect, useRef } from "react";
+import { Message } from "ai";
+import React, { useEffect, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
 
-export function MessageDisplay({ message }: { message: Message[] }) {
+const MessageDisplay = React.memo(({ message }: { message: Message[] }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   console.log(message);
@@ -88,4 +88,8 @@ export function MessageDisplay({ message }: { message: Message[] }) {
       </div>
     </div>
   );
-}
+});
+
+MessageDisplay.displayName = 'MessageDisplay';
+
+export { MessageDisplay };

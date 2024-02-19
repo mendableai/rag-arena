@@ -18,7 +18,7 @@ export async function handleSubmit({ input, chatHistory, setChatHistory }: {
 
     let receivedContent = "";
 
-    await fetch("api/chat", {
+    await fetch("api/retrieval_agents", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -29,6 +29,7 @@ export async function handleSubmit({ input, chatHistory, setChatHistory }: {
     }).then(async (response: any) => {
 
         const sourcesHeader = response.headers.get("x-sources");
+
         const sources = sourcesHeader ? JSON.parse((Buffer.from(sourcesHeader, 'base64')).toString('utf8')) : [];
 
         const reader = response.body?.getReader();
