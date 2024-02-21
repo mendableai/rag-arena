@@ -18,7 +18,7 @@ export async function handleSubmit({ input, chatHistory, setChatHistory }: {
 
     let receivedContent = "";
 
-    await fetch("api/retrieval_agents", {
+    await fetch("api/retrievers/contextual-compression", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

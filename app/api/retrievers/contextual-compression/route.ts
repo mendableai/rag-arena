@@ -8,12 +8,14 @@ import { type Document } from "@langchain/core/documents";
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { AgentExecutor, createOpenAIFunctionsAgent } from "langchain/agents";
+import { ContextualCompressionRetriever } from "langchain/retrievers/contextual_compression";
 import { createRetrieverTool } from "langchain/tools/retriever";
 
 import {
     ChatPromptTemplate,
     MessagesPlaceholder,
 } from "@langchain/core/prompts";
+import { LLMChainExtractor } from "langchain/retrievers/document_compressors/chain_extract";
 
 export const runtime = "edge";
 
@@ -31,19 +33,11 @@ const AGENT_SYSTEM_TEMPLATE = `You are a stereotypical robot named Robbie and mu
 
 If you don't know how to answer a question, use the available tools to look up relevant information. You should particularly do this for questions about LangChain.`;
 
-/**
- * This handler initializes and calls a retrieval agent. It requires an OpenAI
- * Functions model. See the docs for more information:
- *
- * https://js.langchain.com/docs/use_cases/question_answering/conversational_retrieval_agents
- */
+
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        /**
-         * We represent intermediate steps as system messages for display purposes,
-         * but don't want them in the chat history.
-         */
+
         const messages = (body.messages ?? []).filter(
             (message: VercelChatMessage) =>
                 message.role === "user" || message.role === "assistant",
@@ -64,6 +58,7 @@ export async function POST(req: NextRequest) {
             process.env.SUPABASE_URL!,
             process.env.SUPABASE_PRIVATE_KEY!,
         );
+
         const vectorstore = new SupabaseVectorStore(new OpenAIEmbeddings(), {
             client,
             tableName: "documents",
@@ -71,11 +66,18 @@ export async function POST(req: NextRequest) {
         });
 
         let resolveWithDocuments: (value: Document[]) => void;
+
         const documentPromise = new Promise<Document[]>((resolve) => {
             resolveWithDocuments = resolve;
         });
 
-        const retriever = vectorstore.asRetriever({
+        // retriever configuration:
+
+        const baseCompressor = LLMChainExtractor.fromLLM(chatModel);
+
+        const retriever = new ContextualCompressionRetriever({
+            baseCompressor,
+            baseRetriever: vectorstore.asRetriever(),
             callbacks: [
                 {
                     handleRetrieverEnd(documents) {
@@ -83,8 +85,9 @@ export async function POST(req: NextRequest) {
                     },
                 },
             ],
-        });
+        })
 
+        // end retriever configuration
 
         const tool = createRetrieverTool(retriever, {
             name: "search_latest_knowledge",
@@ -113,10 +116,11 @@ export async function POST(req: NextRequest) {
 
         if (!returnIntermediateSteps) {
 
-            const logStream = await agentExecutor.streamLog({
+            const logStream = agentExecutor.streamLog({
                 input: currentMessageContent,
                 chat_history: previousMessages,
             });
+
 
             const textEncoder = new TextEncoder();
             const transformStream = new ReadableStream({
@@ -129,6 +133,7 @@ export async function POST(req: NextRequest) {
                                 typeof addOp.value === "string" &&
                                 addOp.value.length
                             ) {
+
                                 controller.enqueue(textEncoder.encode(addOp.value));
                             }
                         }
@@ -151,6 +156,7 @@ export async function POST(req: NextRequest) {
             ).toString("base64");
 
             const response = new StreamingTextResponse(transformStream);
+
             response.headers.set('x-sources', serializedSources);
 
             return response;
