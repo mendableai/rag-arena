@@ -33,6 +33,7 @@
     "lucide-react": "^0.331.0",
     "next": "14.1.0",
     "next-themes": "^0.2.1",
+    "peggy": "^4.0.0",
     "radix-ui": "^1.0.1",
     "react": "^18.2.0",
     "react-day-picker": "^8.10.0",

@@ -63,7 +63,7 @@ dependencies:
     version: 3.3.1
   langchain:
     specifier: ^0.1.20
-    version: 0.1.20(@supabase/supabase-js@2.39.7)
+    version: 0.1.20(@supabase/supabase-js@2.39.7)(peggy@4.0.0)
   lucide-react:
     specifier: ^0.331.0
     version: 0.331.0(react@18.2.0)
@@ -73,6 +73,9 @@ dependencies:
   next-themes:
     specifier: ^0.2.1
     version: 0.2.1(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
+  peggy:
+    specifier: ^4.0.0
+    version: 4.0.0
   radix-ui:
     specifier: ^1.0.1
     version: 1.0.1(@types/react-dom@18.2.19)(@types/react@18.2.56)(react-dom@18.2.0)(react@18.2.0)
@@ -2686,6 +2689,11 @@ packages:
     engines: {node: '>=14'}
     dev: false
 
+  /commander@12.0.0:
+    resolution: {integrity: sha512-MwVNWlYjDTtOjX5PiD7o5pK0UrFU/OYgcJfjjK4RaHZETNtjJqrZa9Y9ds88+A+f+d5lv+561eZ+yCKoS3gbAA==}
+    engines: {node: '>=18'}
+    dev: false
+
   /commander@4.1.1:
     resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
     engines: {node: '>= 6'}
@@ -3891,7 +3899,7 @@ packages:
       json-buffer: 3.0.1
     dev: true
 
-  /langchain@0.1.20(@supabase/supabase-js@2.39.7):
+  /langchain@0.1.20(@supabase/supabase-js@2.39.7)(peggy@4.0.0):
     resolution: {integrity: sha512-NaO4Ovbwb0EHqyo83Wg7TKQE7tV1WGvnGdncpMiazBL9Qgv+vYpDpOV66C64M2C/4fYrNJV/BKDljjFhSE8PSw==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -4068,6 +4076,7 @@ packages:
       ml-distance: 4.0.1
       openapi-types: 12.1.3
       p-retry: 4.6.2
+      peggy: 4.0.0
       uuid: 9.0.1
       yaml: 2.3.4
       zod: 3.22.4
@@ -4655,6 +4664,15 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /peggy@4.0.0:
+    resolution: {integrity: sha512-fg9oKdoLSiP24lEsH+5vtYawR9v46a9sNikmYWPtORv+wZKqf9bFVMC5m8NWiTfRu6GaednL96YcmSmMcLY8Dg==}
+    engines: {node: '>=18'}
+    hasBin: true
+    dependencies:
+      commander: 12.0.0
+      source-map-generator: 0.8.0
+    dev: false
+
   /periscopic@3.1.0:
     resolution: {integrity: sha512-vKiQ8RRtkl9P+r/+oefh25C3fhybptkHKCZSPlcXiJux2tJF55GnEj3BVn4A5gKfq9NWWXXrxkHBwVPUfH0opw==}
     dependencies:
@@ -5126,6 +5144,11 @@ packages:
     dependencies:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /source-map-generator@0.8.0:
+    resolution: {integrity: sha512-psgxdGMwl5MZM9S3FWee4EgsEaIjahYV5AzGnwUvPhWeITz/j6rKpysQHlQ4USdxvINlb8lKfWGIXwfkrgtqkA==}
+    engines: {node: '>= 10'}
     dev: false
 
   /source-map-js@1.0.2:

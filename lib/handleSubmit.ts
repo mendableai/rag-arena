@@ -18,7 +18,7 @@ export async function handleSubmit({ input, chatHistory, setChatHistory }: {
 
     let receivedContent = "";
 
-    await fetch("api/retrievers/parent-document", {
+    await fetch("api/retrievers/time-weighted", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -47,7 +47,10 @@ export async function handleSubmit({ input, chatHistory, setChatHistory }: {
         setChatHistory((prev: Message[]) => [...prev, newAiMessage]);
 
         while (true) {
+            console.log('Stream finished');
             const { done, value } = await reader?.read();
+            console.log('Stream chunk received', value); 
+
             if (done) {
 
                 setChatHistory((prev: Message[]) =>
@@ -59,6 +62,7 @@ export async function handleSubmit({ input, chatHistory, setChatHistory }: {
                 break;
             };
             receivedContent += new TextDecoder().decode(value);
+            console.log('Received content updated', receivedContent); // Debug log
 
             setChatHistory((prev: Message[]) =>
                 prev.map((msg: Message) =>
