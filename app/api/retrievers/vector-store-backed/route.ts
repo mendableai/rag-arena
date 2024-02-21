@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
 
         if (!returnIntermediateSteps) {
 
-            const logStream = agentExecutor.streamLog({
+            const logStream = await agentExecutor.streamLog({
                 input: currentMessageContent,
                 chat_history: previousMessages,
             });

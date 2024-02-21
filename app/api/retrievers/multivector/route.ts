@@ -8,14 +8,14 @@ import { type Document } from "@langchain/core/documents";
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { AgentExecutor, createOpenAIFunctionsAgent } from "langchain/agents";
-import { ContextualCompressionRetriever } from "langchain/retrievers/contextual_compression";
+import { MultiVectorRetriever } from "langchain/retrievers/multi_vector";
+import { InMemoryStore } from "langchain/storage/in_memory";
 import { createRetrieverTool } from "langchain/tools/retriever";
 
 import {
     ChatPromptTemplate,
     MessagesPlaceholder,
 } from "@langchain/core/prompts";
-import { LLMChainExtractor } from "langchain/retrievers/document_compressors/chain_extract";
 
 export const runtime = "edge";
 
@@ -73,11 +73,11 @@ export async function POST(req: NextRequest) {
 
         // retriever configuration:
 
-        const baseCompressor = LLMChainExtractor.fromLLM(chatModel);
+        const byteStore = new InMemoryStore<Uint8Array>();
 
-        const retriever = new ContextualCompressionRetriever({
-            baseCompressor,
-            baseRetriever: vectorstore.asRetriever(),
+        const retriever = new MultiVectorRetriever({
+            vectorstore,
+            byteStore,
             callbacks: [
                 {
                     handleRetrieverEnd(documents) {
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
                     },
                 },
             ],
-        })
+        });
 
         // end retriever configuration
 
@@ -126,6 +126,8 @@ export async function POST(req: NextRequest) {
             const transformStream = new ReadableStream({
                 async start(controller) {
                     for await (const chunk of logStream) {
+
+
                         if (chunk.ops?.length > 0 && chunk.ops[0].op === "add") {
                             const addOp = chunk.ops[0];
                             if (
@@ -141,7 +143,6 @@ export async function POST(req: NextRequest) {
                     controller.close();
                 },
             });
-
 
             const documents = await documentPromise;
             const serializedSources = Buffer.from(
