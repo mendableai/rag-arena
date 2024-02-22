@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
             (message: VercelChatMessage) =>
                 message.role === "user" || message.role === "assistant",
         );
-        const returnIntermediateSteps = body.show_intermediate_steps;
+        
         const previousMessages = messages
             .slice(0, -1)
             .map(convertVercelMessageToLangChainMessage);
@@ -109,10 +109,8 @@ export async function POST(req: NextRequest) {
         const agentExecutor = new AgentExecutor({
             agent,
             tools: [tool],
-            returnIntermediateSteps,
         });
 
-        if (!returnIntermediateSteps) {
 
             const logStream = await agentExecutor.streamLog({
                 input: currentMessageContent,
@@ -144,33 +142,7 @@ export async function POST(req: NextRequest) {
 
 
             return response;
-        } else {
-
-            const result = await agentExecutor.invoke({
-                input: currentMessageContent,
-                chat_history: previousMessages,
-            });
-
-            const documents = await documentPromise;
-            const serializedSources = Buffer.from(
-                JSON.stringify(
-                    documents.map((doc) => {
-                        return {
-                            pageContent: doc.pageContent.slice(0, 50) + "...",
-                            metadata: doc.metadata,
-                        };
-                    }),
-                ),
-            ).toString("base64");
-
-            const response = NextResponse.json(
-                { output: result.output, intermediate_steps: result.intermediateSteps },
-                { status: 200 },
-            );
-
-            response.headers.set('x-sources', serializedSources);
-            return response;
-        }
+      
     } catch (e: any) {
         return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
     }

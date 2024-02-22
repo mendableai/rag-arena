@@ -16,21 +16,47 @@ import { TooltipProvider } from "../ui/tooltip";
 import { MessageDisplay } from "./message-display";
 import { SelectionMenu } from "./selection-menu";
 
+import { getRandomSelection } from "@/lib/utils";
+import { arrayOfRetrievers } from "./select-retriever-menu";
+
 export function ChatBots() {
   const [input, setInput] = useState<string>("");
 
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
-  // const [chatHistory2, setChatHistory2] = useState<Message[]>([]);
+  const [chatHistory2, setChatHistory2] = useState<Message[]>([]);
+
+  const [retrieverSelection, setRetrieverSelection] =
+    useState<string>("random");
+  const [retrieverSelection2, setRetrieverSelection2] =
+    useState<string>("random");
 
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    handleSubmit({ input, chatHistory, setChatHistory });
-    // handleSubmit({
-    //   input,
-    //   chatHistory: chatHistory2,
-    //   setChatHistory: setChatHistory2,
-    // });
+    let newRetrieverSelection = retrieverSelection;
+    let newRetrieverSelection2 = retrieverSelection2;
+
+    if (retrieverSelection === "random") {
+      newRetrieverSelection = getRandomSelection(arrayOfRetrievers);
+    }
+    if (retrieverSelection2 === "random") {
+      newRetrieverSelection2 = getRandomSelection(
+        arrayOfRetrievers,
+        newRetrieverSelection
+      );
+    }
+
+    setRetrieverSelection(newRetrieverSelection);
+    setRetrieverSelection2(newRetrieverSelection2);
+
+
+    handleSubmit({ input, chatHistory, setChatHistory, retrieverSelection: newRetrieverSelection });
+    handleSubmit({
+      input,
+      chatHistory: chatHistory2,
+      setChatHistory: setChatHistory2,
+      retrieverSelection: newRetrieverSelection2,
+    });
 
     setInput("");
   };
@@ -52,28 +78,34 @@ export function ChatBots() {
         <ResizablePanel defaultSize={70}>
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel defaultSize={50}>
-              <MessageDisplay message={chatHistory} />
+              <MessageDisplay
+                message={chatHistory}
+                setRetrieverSelection={setRetrieverSelection}
+                retrieverSelection={retrieverSelection}
+              />
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={50}>
-              {/* <MessageDisplay message={chatHistory2} /> */}
+              <MessageDisplay
+                message={chatHistory2}
+                setRetrieverSelection={setRetrieverSelection2}
+                retrieverSelection={retrieverSelection2}
+              />
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={30}>
-          <SelectionMenu message={chatHistory} />
+          <SelectionMenu
+            message={chatHistory}
+            setRetrieverSelection={setRetrieverSelection}
+            setRetrieverSelection2={setRetrieverSelection2}
+          />
           <div className="p-4 max-w-3xl m-auto">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleSubmit({ input, chatHistory, setChatHistory });
-                // handleSubmit({
-                //   input,
-                //   chatHistory: chatHistory2,
-                //   setChatHistory: setChatHistory2,
-                // });
-                
+                handleFormSubmit(e);
               }}
             >
               <div className="grid gap-4">

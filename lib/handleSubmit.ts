@@ -1,9 +1,10 @@
 import { Message } from "ai";
 
-export async function handleSubmit({ input, chatHistory, setChatHistory }: {
+export async function handleSubmit({ input, chatHistory, setChatHistory, retrieverSelection }: {
     input: string;
     chatHistory: Message[];
     setChatHistory: (chatHistory: Message[] | ((prevChatHistory: Message[]) => Message[])) => void;
+    retrieverSelection: string;
 }) {
     const newUserEntry: Message = {
         id: `${Math.random().toString(36).substring(7)}`,
@@ -16,21 +17,25 @@ export async function handleSubmit({ input, chatHistory, setChatHistory }: {
 
     setChatHistory(newChatHistory);
 
-    let receivedContent = "";
 
-    await fetch("api/retrievers/time-weighted", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            messages: newChatHistory,
-        }),
-    }).then(async (response: any) => {
+
+    try {
+        let receivedContent = "";
+
+        const response = await fetch(`api/retrievers/${retrieverSelection}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                messages: newChatHistory,
+            }),
+        });
 
         const sourcesHeader = response.headers.get("x-sources");
 
-        const sources = sourcesHeader ? JSON.parse((Buffer.from(sourcesHeader, 'base64')).toString('utf8')) : [];
+        const sources = sourcesHeader ? JSON.parse(atob(sourcesHeader)) : [];
+
 
         const reader = response.body?.getReader();
 
@@ -46,10 +51,15 @@ export async function handleSubmit({ input, chatHistory, setChatHistory }: {
 
         setChatHistory((prev: Message[]) => [...prev, newAiMessage]);
 
+        if (!reader) {
+            throw new Error("Response body reader is undefined");
+        }
+
         while (true) {
-            console.log('Stream finished');
-            const { done, value } = await reader?.read();
-            console.log('Stream chunk received', value); 
+            const { done, value } = await reader.read();
+
+            console.log("THIS IS IN THE HANDLE SUBMIT", value, done);
+            
 
             if (done) {
 
@@ -62,7 +72,6 @@ export async function handleSubmit({ input, chatHistory, setChatHistory }: {
                 break;
             };
             receivedContent += new TextDecoder().decode(value);
-            console.log('Received content updated', receivedContent); // Debug log
 
             setChatHistory((prev: Message[]) =>
                 prev.map((msg: Message) =>
@@ -72,5 +81,8 @@ export async function handleSubmit({ input, chatHistory, setChatHistory }: {
 
 
         }
-    });
+
+    } catch (error) {
+        return "Error while fetching response from retriever."
+    }
 }

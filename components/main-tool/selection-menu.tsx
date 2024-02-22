@@ -7,7 +7,7 @@ import {
   ListRestart,
   MoreVertical,
   ThumbsDown,
-  Trash2
+  Trash2,
 } from "lucide-react";
 
 import { type Message } from "ai";
@@ -24,7 +24,15 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Separator } from "../ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
-export function SelectionMenu({ message }: { message: Message[] }) {
+export function SelectionMenu({
+  message,
+  setRetrieverSelection,
+  setRetrieverSelection2,
+}: {
+  message: Message[];
+  setRetrieverSelection: (value: string) => void;
+  setRetrieverSelection2: (value: string) => void;
+}) {
   const today = new Date();
 
   return (
@@ -88,7 +96,10 @@ export function SelectionMenu({ message }: { message: Message[] }) {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={!message}>
+            <Button onClick={() => {
+              setRetrieverSelection("random");
+              setRetrieverSelection2("random");
+            }} variant="ghost" size="icon" disabled={!message}>
               <Trash2 className="h-4 w-4" />
               <span className="sr-only">Move to trash</span>
             </Button>
@@ -144,8 +155,7 @@ export function SelectionMenu({ message }: { message: Message[] }) {
           <TooltipContent>Snooze</TooltipContent>
         </Tooltip>
       </div>
-      
-      
+
       <Separator orientation="vertical" className="mx-2 h-6" />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
