@@ -58,8 +58,6 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
         while (true) {
             const { done, value } = await reader.read();
 
-            console.log("THIS IS IN THE HANDLE SUBMIT", value, done);
-            
 
             if (done) {
 

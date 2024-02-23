@@ -133,8 +133,6 @@ export async function POST(req: NextRequest) {
                                 addOp.value.length
                             ) {
 
-                                console.log("chunking", addOp.value);
-
 
                                 controller.enqueue(textEncoder.encode(addOp.value));
                             }
