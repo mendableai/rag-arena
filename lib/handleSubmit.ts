@@ -22,13 +22,14 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
     try {
         let receivedContent = "";
 
-        const response = await fetch(`api/retrievers/${retrieverSelection}`, {
+        const response = await fetch(`api/retrievers/dynamic-retriever`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 messages: newChatHistory,
+                retrieverSelection,
             }),
         });
 
