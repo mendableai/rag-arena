@@ -4,13 +4,11 @@ import { handleSubmit } from "@/lib/handleSubmit";
 import { Message } from "ai";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { Label } from "../ui/label";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "../ui/resizable";
-import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
 import { TooltipProvider } from "../ui/tooltip";
 import { MessageDisplay } from "./message-display";
@@ -49,8 +47,12 @@ export function ChatBots() {
     setRetrieverSelection(newRetrieverSelection);
     setRetrieverSelection2(newRetrieverSelection2);
 
-
-    handleSubmit({ input, chatHistory, setChatHistory, retrieverSelection: newRetrieverSelection });
+    handleSubmit({
+      input,
+      chatHistory,
+      setChatHistory,
+      retrieverSelection: newRetrieverSelection,
+    });
     handleSubmit({
       input,
       chatHistory: chatHistory2,
@@ -77,7 +79,7 @@ export function ChatBots() {
       <ResizablePanelGroup direction="vertical">
         <ResizablePanel defaultSize={70}>
           <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={50}>
+            <ResizablePanel defaultSize={50} className="min-w-72">
               <MessageDisplay
                 message={chatHistory}
                 setRetrieverSelection={setRetrieverSelection}
@@ -85,7 +87,7 @@ export function ChatBots() {
               />
             </ResizablePanel>
             <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={50}>
+            <ResizablePanel defaultSize={50} className="min-w-72">
               <MessageDisplay
                 message={chatHistory2}
                 setRetrieverSelection={setRetrieverSelection2}
@@ -95,7 +97,7 @@ export function ChatBots() {
           </ResizablePanelGroup>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={30}>
+        <ResizablePanel defaultSize={30} className="min-h-40 max-h-96">
           <SelectionMenu
             message={chatHistory}
             setRetrieverSelection={setRetrieverSelection}
@@ -108,7 +110,7 @@ export function ChatBots() {
                 handleFormSubmit(e);
               }}
             >
-              <div className="grid gap-4">
+              <div className="gap-4 flex items-center">
                 <Textarea
                   className="p-4"
                   placeholder={`Reply...`}
@@ -116,18 +118,10 @@ export function ChatBots() {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
-                <div className="flex items-center">
-                  <Label
-                    htmlFor="mute"
-                    className="flex items-center gap-2 text-xs font-normal"
-                  >
-                    <Switch id="mute" aria-label="Mute thread" /> Mute this
-                    thread
-                  </Label>
-                  <Button size="sm" className="ml-auto">
-                    Send
-                  </Button>
-                </div>
+
+                <Button size="sm" className="ml-auto">
+                  Send
+                </Button>
               </div>
             </form>
           </div>

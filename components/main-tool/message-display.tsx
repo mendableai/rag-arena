@@ -1,6 +1,5 @@
 import { Message } from "ai";
 import React, { useEffect, useRef } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
 import { SelectRetrieverMenu } from "./select-retriever-menu";
 
@@ -18,8 +17,13 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [message]);
 
+    console.log("message", message);
+    
+
     return (
-      <div className="flex h-full flex-col">
+      <div className={`flex h-full flex-col
+      ${message.length>0 && "hover:border-yellow-200 hover:border-2 cursor-pointer hover:animate-pulse ease-linear transition-all duration-100"}
+      `}>
         <SelectRetrieverMenu
           setRetrieverSelection={setRetrieverSelection}
           retrieverSelection={retrieverSelection}
@@ -29,12 +33,8 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
         <div className="flex flex-1 flex-col">
           <div className="flex items-start p-4">
             <div className="flex items-start gap-4 text-sm">
-              <Avatar>
-                <AvatarImage />
-                <AvatarFallback>LM</AvatarFallback>
-              </Avatar>
+             
               <div className="grid gap-1">
-                <div className="font-semibold">Retriever Name</div>
                 <div className="line-clamp-1 text-xs">
                   Retriever description
                 </div>
