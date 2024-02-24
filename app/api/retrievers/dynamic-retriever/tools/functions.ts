@@ -16,21 +16,20 @@ import { attributeInfo } from "./variables";
 
 let resolveWithDocuments: (value: Document[]) => void;
 
-const MAX_DOCUMENT_RETRIEVAL_TIME = 10000; // 10 seconds as an example
+const MAX_DOCUMENT_RETRIEVAL_TIME = 5000;
 
 export const documentPromise = new Promise<Document[]>((resolve, reject) => {
     resolveWithDocuments = resolve;
-    // Set a timeout to reject the promise if not resolved within the expected time
     setTimeout(() => {
-        reject(new Error("Document retrieval timed out"));
+        return reject("Document retrieval timed out");
     }, MAX_DOCUMENT_RETRIEVAL_TIME);
 });
 
 export function ContextualCompression(
-    chatModel: ChatOpenAI,
+    model: ChatOpenAI,
     vectorstore: SupabaseVectorStore,
 ) {
-    const baseCompressor = LLMChainExtractor.fromLLM(chatModel);
+    const baseCompressor = LLMChainExtractor.fromLLM(model);
 
     return new ContextualCompressionRetriever({
         baseCompressor,
@@ -46,12 +45,12 @@ export function ContextualCompression(
 }
 
 export function MultiQuery(
-    chatModel: ChatOpenAI,
+    model: ChatOpenAI,
     vectorstore: SupabaseVectorStore,
 ) {
 
     return MultiQueryRetriever.fromLLM({
-        llm: chatModel,
+        llm: model,
         retriever: vectorstore.asRetriever(),
         verbose: false,
         callbacks: [
@@ -85,13 +84,13 @@ export function ParentDocument(
 }
 
 export function SelfQuery(
-    chatModel: ChatOpenAI,
+    model: ChatOpenAI,
     vectorstore: SupabaseVectorStore,
     currentMessageContent: string,
 ) {
 
     return SelfQueryRetriever.fromLLM({
-        llm: chatModel,
+        llm: model,
         vectorStore: vectorstore,
         documentContents: currentMessageContent,
         attributeInfo,

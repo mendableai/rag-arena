@@ -1,4 +1,5 @@
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
+import { Document } from "@langchain/core/documents";
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
 import { ChatOpenAI } from "@langchain/openai";
 import { Message as VercelChatMessage } from "ai";
@@ -6,19 +7,19 @@ import { ContextualCompression, MultiQuery, MultiVector, ParentDocument, SelfQue
 
 export function dynamicRetrieverUtility(
     retrieverSelected: string,
-    chatModel: ChatOpenAI,
+    model: ChatOpenAI,
     vectorstore: SupabaseVectorStore,
     currentMessageContent: string,
 ) {
     switch (retrieverSelected) {
         case "contextual-compression":
             return ContextualCompression(
-                chatModel,
+                model,
                 vectorstore,
             );
         case "multi-query":
             return MultiQuery(
-                chatModel,
+                model,
                 vectorstore,
             );
         case "parent-document":
@@ -27,7 +28,7 @@ export function dynamicRetrieverUtility(
             );
         case "self-query":
             return SelfQuery(
-                chatModel,
+                model,
                 vectorstore,
                 currentMessageContent,
             );
@@ -60,4 +61,23 @@ export const vercelToLangchainMessage = (message: VercelChatMessage) => {
     } else {
         return new ChatMessage(message.content, message.role);
     }
+};
+
+export const combineDocumentsFn = (docs: Document[]) => {
+    const serializedDocs = docs.map((doc) => doc.pageContent);
+    return serializedDocs.join("\n\n");
+};
+
+
+export const formatVercelMessages = (chatHistory: VercelChatMessage[]) => {
+    const formattedDialogueTurns = chatHistory.map((message) => {
+        if (message.role === "user") {
+            return `Human: ${message.content}`;
+        } else if (message.role === "assistant") {
+            return `Assistant: ${message.content}`;
+        } else {
+            return `${message.role}: ${message.content}`;
+        }
+    });
+    return formattedDialogueTurns.join("\n");
 };

@@ -1,3 +1,4 @@
+import { PromptTemplate } from "@langchain/core/prompts";
 import { type AttributeInfo } from "langchain/schema/query_constructor";
 
 export const AGENT_SYSTEM_TEMPLATE = `You should only answer based on what you find in the documents. If you don't know how to answer a question just say you can't. Try to be concise and to the point.`;
@@ -29,3 +30,31 @@ export const attributeInfo: AttributeInfo[] = [
         type: "number",
     },
 ];
+
+
+const CONDENSE_QUESTION_TEMPLATE = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
+  
+  <chat_history>
+    {chat_history}
+  </chat_history>
+  
+  Follow Up Input: {question}
+  Standalone question:`;
+export const condenseQuestionPrompt = PromptTemplate.fromTemplate(
+    CONDENSE_QUESTION_TEMPLATE,
+);
+
+const ANSWER_TEMPLATE = `Answer the question based only on the following context and chat history:
+  <context>
+    {context}
+  </context>
+  
+  <chat_history>
+    {chat_history}
+  </chat_history>
+  
+  Question: {question}
+  `;
+
+  
+export const answerPrompt = PromptTemplate.fromTemplate(ANSWER_TEMPLATE);
