@@ -35,8 +35,12 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
 
         const sourcesHeader = response.headers.get("x-sources");
 
+        
+        
+
         const sources = sourcesHeader ? JSON.parse(atob(sourcesHeader)) : [];
 
+        console.log("THE SOURCES", sources);
 
         const reader = response.body?.getReader();
 

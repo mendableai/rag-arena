@@ -6,7 +6,7 @@ export default function Main() {
   return (
     <>
       <Header />
-      <div className="h-[750px] max-w-6xl border m-auto mt-24 bg-black">
+      <div className="h-[750px] max-w-6xl border m-auto mt-24">
         <ChatBots />
       </div>
       <Footer />

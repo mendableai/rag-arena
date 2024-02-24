@@ -16,14 +16,9 @@ import { attributeInfo } from "./variables";
 
 let resolveWithDocuments: (value: Document[]) => void;
 
-const MAX_DOCUMENT_RETRIEVAL_TIME = 5000;
-
-export const documentPromise = new Promise<Document[]>((resolve, reject) => {
+export const documentPromise = new Promise<Document[]>((resolve) => {
     resolveWithDocuments = resolve;
-    setTimeout(() => {
-        return reject("Document retrieval timed out");
-    }, MAX_DOCUMENT_RETRIEVAL_TIME);
-});
+  });
 
 export function ContextualCompression(
     model: ChatOpenAI,

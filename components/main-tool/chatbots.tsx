@@ -32,20 +32,20 @@ export function ChatBots() {
     e.preventDefault();
 
     let newRetrieverSelection = retrieverSelection;
-    let newRetrieverSelection2 = retrieverSelection2;
+    // let newRetrieverSelection2 = retrieverSelection2;
 
     if (retrieverSelection === "random") {
       newRetrieverSelection = getRandomSelection(arrayOfRetrievers);
     }
-    if (retrieverSelection2 === "random") {
-      newRetrieverSelection2 = getRandomSelection(
-        arrayOfRetrievers,
-        newRetrieverSelection
-      );
-    }
+    // if (retrieverSelection2 === "random") {
+    //   newRetrieverSelection2 = getRandomSelection(
+    //     arrayOfRetrievers,
+    //     newRetrieverSelection
+    //   );
+    // }
 
     setRetrieverSelection(newRetrieverSelection);
-    setRetrieverSelection2(newRetrieverSelection2);
+    // setRetrieverSelection2(newRetrieverSelection2);
 
     handleSubmit({
       input,
@@ -53,12 +53,12 @@ export function ChatBots() {
       setChatHistory,
       retrieverSelection: newRetrieverSelection,
     });
-    handleSubmit({
-      input,
-      chatHistory: chatHistory2,
-      setChatHistory: setChatHistory2,
-      retrieverSelection: newRetrieverSelection2,
-    });
+    // handleSubmit({
+    //   input,
+    //   chatHistory: chatHistory2,
+    //   setChatHistory: setChatHistory2,
+    //   retrieverSelection: newRetrieverSelection2,
+    // });
 
     setInput("");
   };
