@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <div className="flex items-center py-5 mt-10 w-full justify-center border-t">
+    <div className="flex items-center py-5 mt-10 w-full justify-center border-t bg-[#080a0c]">
       <div className="flex flex-row justify-evenly items-center max-w-7xl w-full center">
         <div>
           <TextRevealCard
