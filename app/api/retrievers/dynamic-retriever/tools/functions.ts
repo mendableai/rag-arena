@@ -16,6 +16,16 @@ import { attributeInfo } from "./variables";
 
 let resolveWithDocuments: (value: Document[]) => void;
 
+const MAX_DOCUMENT_RETRIEVAL_TIME = 10000; // 10 seconds as an example
+
+export const documentPromise = new Promise<Document[]>((resolve, reject) => {
+    resolveWithDocuments = resolve;
+    // Set a timeout to reject the promise if not resolved within the expected time
+    setTimeout(() => {
+        reject(new Error("Document retrieval timed out"));
+    }, MAX_DOCUMENT_RETRIEVAL_TIME);
+});
+
 export function ContextualCompression(
     chatModel: ChatOpenAI,
     vectorstore: SupabaseVectorStore,
@@ -134,6 +144,7 @@ export function TimeWeighted(
 export function VectorStore(
     vectorstore: SupabaseVectorStore
 ) {
+
     return vectorstore.asRetriever({
         callbacks: [
             {

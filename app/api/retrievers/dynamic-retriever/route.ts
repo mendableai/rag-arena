@@ -13,6 +13,7 @@ import {
     MessagesPlaceholder,
 } from "@langchain/core/prompts";
 import { dynamicRetrieverUtility, vercelToLangchainMessage } from "./tools/config";
+import { documentPromise } from "./tools/functions";
 import { AGENT_SYSTEM_TEMPLATE } from "./tools/variables";
 
 export const runtime = "edge";
@@ -51,6 +52,8 @@ export async function POST(req: NextRequest) {
         });
 
         const retriever = dynamicRetrieverUtility(retrieverSelected, chatModel, vectorstore, currentMessageContent);
+
+
 
         const tool = createRetrieverTool(retriever, {
             name: "search_latest_knowledge",
@@ -103,10 +106,31 @@ export async function POST(req: NextRequest) {
                 }
             },
         });
-
         const response = new StreamingTextResponse(transformStream);
 
-        return response;
+
+        
+        try {
+
+            const documents = await documentPromise;
+            const serializedSources = Buffer.from(
+                JSON.stringify(
+                    documents.map((doc) => {
+                        return {
+                            pageContent: doc.pageContent.slice(0, 50) + "...",
+                            metadata: doc.metadata,
+                        };
+                    }),
+                ),
+            ).toString("base64");
+
+            response.headers.set('x-sources', serializedSources);
+
+            return response;
+        } catch (e) {
+            return response;
+        }
+
 
     } catch (e: any) {
         return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });

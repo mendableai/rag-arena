@@ -12,13 +12,18 @@ interface MessageDisplayProps {
 const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
   ({ message, setRetrieverSelection, retrieverSelection }) => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      if (scrollContainerRef.current) {
+        const { scrollHeight, clientHeight } = scrollContainerRef.current;
+        scrollContainerRef.current.scrollTo({
+          top: scrollHeight - clientHeight,
+          behavior: "smooth",
+        });
+      }
     }, [message]);
 
-    console.log("message", message);
-    
 
     return (
       <div className={`flex h-full flex-col
@@ -46,7 +51,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
             </div>
           </div>
           <Separator />
-          <div className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[400px] overflow-y-scroll gap-6 flex flex-col">
+          <div ref={scrollContainerRef} className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[400px] overflow-y-scroll gap-6 flex flex-col">
             {message.length > 0
               ? message.map((m) => (
                   <div
@@ -91,7 +96,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                   </div>
                 ))
               : null}
-            <div ref={messagesEndRef} />
+            <div/>
           </div>
           <Separator className="mt-auto" />
         </div>
