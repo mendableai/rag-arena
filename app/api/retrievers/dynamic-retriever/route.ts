@@ -10,15 +10,6 @@ import { answerPrompt, condenseQuestionPrompt } from "./tools/variables";
 
 export const runtime = "edge";
 
-function provideDocsAsContext(docs: any[]) {
-    return (input: any) => {
-        return {
-            ...input,
-            context: docs.map(doc => doc.pageContent).join("\n"),
-        };
-    };
-}
-
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();

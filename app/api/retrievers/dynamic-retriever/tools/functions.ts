@@ -106,7 +106,7 @@ export function SimilarityScore(
 
     return ScoreThresholdRetriever.fromVectorStore(vectorstore, {
         minSimilarityScore: 0,
-        maxK: 100,
+        maxK: 5,
         kIncrement: 2,
         callbacks: [
             {
