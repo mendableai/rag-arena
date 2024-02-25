@@ -5,13 +5,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-
-export const getRandomSelection = (arrayOfRetrievers: string[], exclude: string = "") => {
-  let possibleSelections = arrayOfRetrievers.filter(item => item !== exclude);
+export const getRandomSelection = (arrayOfRetrievers: string[], exclude: string[] = []) => {
+  let possibleSelections = arrayOfRetrievers.filter(item => !exclude.includes(item));
   if (possibleSelections.length > 0) {
     const randomIndex = Math.floor(Math.random() * possibleSelections.length);
     return possibleSelections[randomIndex];
   } else {
-    return exclude;
+    const randomIndex = Math.floor(Math.random() * arrayOfRetrievers.length);
+    return arrayOfRetrievers[randomIndex];
   }
 };

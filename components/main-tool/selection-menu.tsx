@@ -23,13 +23,19 @@ export function SelectionMenu({ chatSessions }: SelectionMenuProps) {
   }
 
   let message: string[] = [];
+  let retriever: any = [];
   chatSessions.forEach((session) => {
     session.chatHistory.forEach((chat) => {
       if (chat?.content && chat?.role === "assistant") {
         message.push(chat.content);
       }
     });
+
+    // retriever.push(session.retrieverSelection);
   });
+
+  // console.log("RETRIEVER", retriever);
+  
 
   return (
     <div className="flex items-center p-2">

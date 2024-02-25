@@ -23,7 +23,7 @@ export interface ChatSession {
 [];
 
 export function ChatBots() {
-  const [input, setInput] = useState<string>("");
+  const [input, setInput] = useState<string>("The question to ask about an early ");
   const [chatSessions, setChatSessions] = useState<Array<ChatSession>>([
     { chatHistory: [], retrieverSelection: "random" },
     { chatHistory: [], retrieverSelection: "random" },
@@ -32,10 +32,14 @@ export function ChatBots() {
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
+    const alreadySelectedRetrievers = chatSessions.map(session => session.retrieverSelection);
+
     chatSessions.forEach((session, index) => {
+      let excludeList = alreadySelectedRetrievers.filter((_, idx) => idx !== index);
+
       let newRetrieverSelection =
         session.retrieverSelection === "random"
-          ? getRandomSelection(arrayOfRetrievers)
+          ? getRandomSelection(arrayOfRetrievers, excludeList)
           : session.retrieverSelection;
 
       handleSubmit({
@@ -84,7 +88,6 @@ export function ChatBots() {
             {chatSessions.map((session, index) => (
               <React.Fragment key={index}>
                 <ResizablePanel
-                  key={index}
                   defaultSize={50}
                   className="min-w-72"
                 >
@@ -114,8 +117,7 @@ export function ChatBots() {
                 <Textarea
                   className="p-4"
                   placeholder="Reply..."
-                  // value={input}
-                  value={'The question to ask about an early'}
+                  value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
