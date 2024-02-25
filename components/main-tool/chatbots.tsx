@@ -5,6 +5,7 @@ import { handleSubmit } from "@/lib/handleSubmit";
 import { getRandomSelection } from "@/lib/utils";
 import {
   useAllRandomStore,
+  useChatSessionsStore,
   useInProcessStore,
 } from "@/lib/zustand";
 import { Message } from "ai";
@@ -31,10 +32,7 @@ export function ChatBots() {
   const [input, setInput] = useState<string>(
     "The question to ask about an early "
   );
-  const [chatSessions, setChatSessions] = useState<Array<ChatSession>>([
-    { chatHistory: [], retrieverSelection: "random", loading: false },
-    { chatHistory: [], retrieverSelection: "random", loading: false },
-  ]);
+  const { chatSessions, setChatSessions } = useChatSessionsStore();
 
   const { setAllRandom } = useAllRandomStore();
 
@@ -66,8 +64,8 @@ export function ChatBots() {
         input,
         chatHistory: session.chatHistory,
         setChatHistory: (newHistory) => {
-          setChatSessions((currentSessions) =>
-            currentSessions.map((currentSession, idx) => {
+          setChatSessions((currentSessions: ChatSession[]) =>
+            currentSessions.map((currentSession: ChatSession, idx: number) => {
               if (idx === index) {
                 return {
                   ...currentSession,
@@ -84,8 +82,8 @@ export function ChatBots() {
         },
         retrieverSelection: newRetrieverSelection,
         setLoading: (isLoading) => { 
-          setChatSessions((currentSessions) =>
-            currentSessions.map((session, idx) => {
+          setChatSessions((currentSessions: ChatSession[]) =>
+            currentSessions.map((session: ChatSession, idx: number) => {
               if (idx === index) {
                 return { ...session, loading: isLoading };
               }

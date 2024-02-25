@@ -1,4 +1,27 @@
+import { Message } from 'ai';
 import { create } from 'zustand';
+
+
+interface ChatSession {
+  chatHistory: Message[];
+  retrieverSelection: string;
+  loading: boolean;
+}
+
+interface ChatSessionsState {
+  chatSessions: Array<ChatSession>;
+  setChatSessions: (sessions: Array<ChatSession> | ((sessions: Array<ChatSession>) => Array<ChatSession>)) => void;
+}
+
+export const useChatSessionsStore = create<ChatSessionsState>((set) => ({
+  chatSessions: [
+    { chatHistory: [], retrieverSelection: "random", loading: false },
+    { chatHistory: [], retrieverSelection: "random", loading: false },
+  ],
+  setChatSessions: (updater) => set((state) => ({
+    chatSessions: typeof updater === 'function' ? updater(state.chatSessions) : updater,
+  })),
+}));
 
 interface VoteState {
     hasVoted: boolean;
