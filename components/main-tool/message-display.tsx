@@ -36,16 +36,12 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
       }
     }, [message]);
 
-    useEffect(() => {
-      console.log("loading: ", loading);
-    }, [loading]);
-
     return (
       <div
         className={`flex h-full flex-col
       ${
         (message.length > 0 &&
-        inProcess && allRandom) &&
+        inProcess && allRandom && !loading) &&
         "hover:border-yellow-200 cursor-pointer ease-linear transition-all duration-100 hover:bg-green-400 hover:bg-opacity-50"
     }
        ${loading && "hover:animate-pulse"}`}

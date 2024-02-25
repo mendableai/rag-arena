@@ -1,6 +1,11 @@
 import { retrieverInfo } from "@/lib/constants";
-import { useAllRandomStore, useInProcessStore } from "@/lib/zustand";
+import {
+  useAllRandomStore,
+  useChatSessionsStore,
+  useInProcessStore,
+} from "@/lib/zustand";
 import Link from "next/link";
+import GridLoader from "react-spinners/GridLoader";
 import {
   Select,
   SelectContent,
@@ -22,8 +27,26 @@ export function SelectRetrieverMenu({
   const { allRandom } = useAllRandomStore();
   const { inProcess } = useInProcessStore();
 
+  const { chatSessions } = useChatSessionsStore();
+  const getLoadingStateForCurrentSelection = () => {
+    const session = chatSessions.find(
+      (session) => session.retrieverSelection === retrieverSelection
+    );
+    return session ? session.loading : false;
+  };
+
+  const isLoading = getLoadingStateForCurrentSelection();
+
   return (
     <>
+      <GridLoader
+        color="white"
+        loading={isLoading}
+        size={4}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+        className="mt-2 ml-2 absolute"
+      />
       <div className="flex items-center p-2 self-center">
         <div className="flex items-center gap-2">
           <Select
@@ -62,7 +85,11 @@ export function SelectRetrieverMenu({
       </div>
       <Separator />
 
-      <div className={`flex items-start p-4 ${allRandom && inProcess && "blur-sm"}`}>
+      <div
+        className={`flex items-start p-4 ${
+          allRandom && inProcess && "blur-sm"
+        }`}
+      >
         <div className="flex items-start gap-4 text-sm">
           <div className="grid gap-1">
             <div className="line-clamp-1 text-xs">
