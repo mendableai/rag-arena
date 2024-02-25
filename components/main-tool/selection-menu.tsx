@@ -8,6 +8,9 @@ import {
   Trash2,
 } from "lucide-react";
 
+import { voteFunction } from "@/app/actions/voting-system";
+import aplyToast from "@/lib/aplyToaster";
+import { useInProcessStore, useVoteStore } from "@/lib/zustand";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
@@ -18,9 +21,8 @@ interface SelectionMenuProps {
 }
 
 export function SelectionMenu({ chatSessions }: SelectionMenuProps) {
-  function voteFunction() {
-    console.log();
-  }
+  const { setHasVoted } = useVoteStore();
+  const { setInProcess } = useInProcessStore();
 
   let message: string[] = [];
   let retriever: any = [];
@@ -31,18 +33,29 @@ export function SelectionMenu({ chatSessions }: SelectionMenuProps) {
       }
     });
 
-    // retriever.push(session.retrieverSelection);
+    retriever.push(session.retrieverSelection);
   });
-
-  // console.log("RETRIEVER", retriever);
-  
 
   return (
     <div className="flex items-center p-2">
       <div className="flex items-center gap-2">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={!message.length}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => {
+                const response = voteFunction(retriever[0]);
+                setInProcess(false);
+                if (!response) {
+                  aplyToast("Error voting");
+                  return;
+                }
+                aplyToast(`Vote recorded!`);
+                setHasVoted(true);
+              }}
+              // disabled={!message.length}
+            >
               <ArrowLeftSquare className="h-4 w-4" />
               <span className="sr-only">Vote Left</span>
             </Button>
@@ -51,7 +64,12 @@ export function SelectionMenu({ chatSessions }: SelectionMenuProps) {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={!message.length}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => voteFunction(retriever[1])}
+              disabled={!message.length}
+            >
               <ArrowRightSquare className="h-4 w-4" />
               <span className="sr-only">Vote Right</span>
             </Button>

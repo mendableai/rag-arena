@@ -43,7 +43,8 @@
     "sonner": "^1.4.0",
     "supabase": "^1.142.2",
     "tailwind-merge": "^2.2.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zustand": "^4.5.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.19",

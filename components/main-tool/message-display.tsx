@@ -36,20 +36,6 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
         <Separator />
 
         <div className="flex flex-1 flex-col">
-          <div className="flex items-start p-4">
-            <div className="flex items-start gap-4 text-sm">
-             
-              <div className="grid gap-1">
-                <div className="line-clamp-1 text-xs">
-                  Retriever description
-                </div>
-              </div>
-            </div>
-
-            <div className="ml-auto text-xs text-muted-foreground">
-              Learn more..
-            </div>
-          </div>
           <Separator />
           <div ref={scrollContainerRef} className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[400px] overflow-y-scroll gap-6 flex flex-col">
             {message.length > 0

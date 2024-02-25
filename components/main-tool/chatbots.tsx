@@ -1,7 +1,12 @@
 "use client";
 
+import { arrayOfRetrievers } from "@/lib/constants";
 import { handleSubmit } from "@/lib/handleSubmit";
 import { getRandomSelection } from "@/lib/utils";
+import {
+  useAllRandomStore,
+  useInProcessStore,
+} from "@/lib/zustand";
 import { Message } from "ai";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
@@ -13,7 +18,6 @@ import {
 import { Textarea } from "../ui/textarea";
 import { TooltipProvider } from "../ui/tooltip";
 import { MessageDisplay } from "./message-display";
-import { arrayOfRetrievers } from "./select-retriever-menu";
 import { SelectionMenu } from "./selection-menu";
 
 export interface ChatSession {
@@ -23,19 +27,34 @@ export interface ChatSession {
 [];
 
 export function ChatBots() {
-  const [input, setInput] = useState<string>("The question to ask about an early ");
+  const [input, setInput] = useState<string>(
+    "The question to ask about an early "
+  );
   const [chatSessions, setChatSessions] = useState<Array<ChatSession>>([
     { chatHistory: [], retrieverSelection: "random" },
     { chatHistory: [], retrieverSelection: "random" },
   ]);
 
+  const { allRandom, setAllRandom } = useAllRandomStore();
+
+  const { inProcess, setInProcess } = useInProcessStore();
+
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const alreadySelectedRetrievers = chatSessions.map(session => session.retrieverSelection);
+    setInProcess(true);
 
+    const alreadySelectedRetrievers = chatSessions.map(
+      (session) => session.retrieverSelection
+    );
     chatSessions.forEach((session, index) => {
-      let excludeList = alreadySelectedRetrievers.filter((_, idx) => idx !== index);
+      let excludeList = alreadySelectedRetrievers.filter(
+        (_, idx) => idx !== index
+      );
+
+      if (session.retrieverSelection !== "random") {
+        setAllRandom(false);
+      }
 
       let newRetrieverSelection =
         session.retrieverSelection === "random"
@@ -87,10 +106,7 @@ export function ChatBots() {
           <ResizablePanelGroup direction="horizontal">
             {chatSessions.map((session, index) => (
               <React.Fragment key={index}>
-                <ResizablePanel
-                  defaultSize={50}
-                  className="min-w-72"
-                >
+                <ResizablePanel defaultSize={50} className="min-w-72">
                   <MessageDisplay
                     message={session.chatHistory}
                     setRetrieverSelection={(newSelection) => {
