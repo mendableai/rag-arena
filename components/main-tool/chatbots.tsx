@@ -23,6 +23,7 @@ import { SelectionMenu } from "./selection-menu";
 export interface ChatSession {
   chatHistory: Message[];
   retrieverSelection: string;
+  loading: boolean; 
 }
 [];
 
@@ -31,13 +32,13 @@ export function ChatBots() {
     "The question to ask about an early "
   );
   const [chatSessions, setChatSessions] = useState<Array<ChatSession>>([
-    { chatHistory: [], retrieverSelection: "random" },
-    { chatHistory: [], retrieverSelection: "random" },
+    { chatHistory: [], retrieverSelection: "random", loading: false },
+    { chatHistory: [], retrieverSelection: "random", loading: false },
   ]);
 
-  const { allRandom, setAllRandom } = useAllRandomStore();
+  const { setAllRandom } = useAllRandomStore();
 
-  const { inProcess, setInProcess } = useInProcessStore();
+  const { setInProcess } = useInProcessStore();
 
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -82,6 +83,16 @@ export function ChatBots() {
           );
         },
         retrieverSelection: newRetrieverSelection,
+        setLoading: (isLoading) => { 
+          setChatSessions((currentSessions) =>
+            currentSessions.map((session, idx) => {
+              if (idx === index) {
+                return { ...session, loading: isLoading };
+              }
+              return session;
+            })
+          );
+        },
       });
     });
 
@@ -115,6 +126,7 @@ export function ChatBots() {
                       setChatSessions(updatedSessions);
                     }}
                     retrieverSelection={session.retrieverSelection}
+                    loading={session.loading}
                   />
                 </ResizablePanel>
                 {index < chatSessions.length - 1 && (

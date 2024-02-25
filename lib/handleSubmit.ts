@@ -4,8 +4,10 @@ interface HandleSubmitParams {
     chatHistory: Message[];
     setChatHistory: (newHistory: Message[] | ((currentHistory: Message[]) => Message[])) => void;
     retrieverSelection: string;
+    setLoading: (isLoading: boolean) => void; 
 }
-export async function handleSubmit({ input, chatHistory, setChatHistory, retrieverSelection }: HandleSubmitParams) {
+export async function handleSubmit({ input, chatHistory, setChatHistory, retrieverSelection, setLoading }: HandleSubmitParams) {
+    setLoading(true); 
 
     const newUserEntry: Message = {
         id: `${Math.random().toString(36).substring(7)}`,
@@ -58,7 +60,7 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
 
 
             if (done) {
-
+                setLoading(false);
                 setChatHistory((prev: Message[]) =>
                     prev.map((msg: Message) =>
                         msg.id === aiMessageId ? { ...msg, annotations: sources } : msg
@@ -77,8 +79,9 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
 
 
         }
-
+         // Set loading to false once loading is complete
     } catch (error) {
+        setLoading(false); // Ensure loading is set to false even if there's an error
         return "Error while fetching response from retriever."
     }
 }

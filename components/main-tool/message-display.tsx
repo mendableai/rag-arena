@@ -15,10 +15,11 @@ interface MessageDisplayProps {
   message: Message[];
   setRetrieverSelection: (value: string) => void;
   retrieverSelection: string;
+  loading: boolean; 
 }
 
 const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
-  ({ message, setRetrieverSelection, retrieverSelection }) => {
+  ({ message, setRetrieverSelection, retrieverSelection, loading }) => { 
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const { inProcess, setInProcess } = useInProcessStore();
@@ -35,17 +36,21 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
       }
     }, [message]);
 
+    useEffect(() => {
+      console.log("loading: ", loading);
+    }, [loading]);
+
     return (
       <div
         className={`flex h-full flex-col
       ${
         (message.length > 0 &&
         inProcess && allRandom) &&
-        "hover:border-yellow-200 cursor-pointer hover:animate-pulse ease-linear transition-all duration-100 hover:bg-green-400 hover:bg-opacity-50"
-      }
-      `}
+        "hover:border-yellow-200 cursor-pointer ease-linear transition-all duration-100 hover:bg-green-400 hover:bg-opacity-50"
+    }
+       ${loading && "hover:animate-pulse"}`}
         onClick={() => {
-          if (hasVoted || message.length === 0 || !allRandom) return;
+          if (hasVoted || message.length === 0 || !allRandom || loading) return;
           const response = voteFunction(retrieverSelection);
           setInProcess(false);
           if (!response) {
@@ -73,8 +78,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
             ref={scrollContainerRef}
             className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[400px] overflow-y-scroll gap-6 flex flex-col"
           >
-            {message.length > 0
-              ? message.map((m) => (
+            {message.map((m) => (
                   <div
                     key={m.id}
                     className={`flex gap-3 ${
@@ -115,8 +119,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                       {m?.createdAt?.toLocaleTimeString()}
                     </div>
                   </div>
-                ))
-              : null}
+                ))}
             <div />
           </div>
           <Separator className="mt-auto" />
