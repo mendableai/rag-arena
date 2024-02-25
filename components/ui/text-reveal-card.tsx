@@ -137,9 +137,20 @@ export const TextRevealCardDescription = ({
 };
 
 const Stars = () => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
+
   const randomMove = () => Math.random() * 4 - 2;
   const randomOpacity = () => Math.random();
   const random = () => Math.random();
+
   return (
     <div className="absolute inset-0">
       {[...Array(20)].map((_, i) => (

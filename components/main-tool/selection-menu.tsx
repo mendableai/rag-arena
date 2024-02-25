@@ -10,19 +10,22 @@ import {
 
 import { voteFunction } from "@/app/actions/voting-system";
 import aplyToast from "@/lib/aplyToaster";
-import { useInProcessStore, useVoteStore } from "@/lib/zustand";
+import { useAllRandomStore, useInProcessStore, useVoteStore } from "@/lib/zustand";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { ChatSession } from "./chatbots";
+
+import { retrieverInfo } from "@/lib/constants";
 
 interface SelectionMenuProps {
   chatSessions: ChatSession[];
 }
 
 export function SelectionMenu({ chatSessions }: SelectionMenuProps) {
-  const { setHasVoted } = useVoteStore();
+  const { hasVoted, setHasVoted } = useVoteStore();
   const { setInProcess } = useInProcessStore();
+  const {allRandom} = useAllRandomStore();
 
   let message: string[] = [];
   let retriever: any = [];
@@ -45,13 +48,14 @@ export function SelectionMenu({ chatSessions }: SelectionMenuProps) {
               variant="ghost"
               size="icon"
               onClick={() => {
+                if (hasVoted || !allRandom) return;
                 const response = voteFunction(retriever[0]);
                 setInProcess(false);
                 if (!response) {
                   aplyToast("Error voting");
                   return;
                 }
-                aplyToast(`Vote recorded!`);
+                aplyToast(`Vote recorded for ${retrieverInfo[retriever[0] as keyof typeof retrieverInfo]?.fullName}!`);
                 setHasVoted(true);
               }}
               // disabled={!message.length}

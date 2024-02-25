@@ -1,3 +1,11 @@
+import { voteFunction } from "@/app/actions/voting-system";
+import aplyToast from "@/lib/aplyToaster";
+import { retrieverInfo } from "@/lib/constants";
+import {
+  useAllRandomStore,
+  useInProcessStore,
+  useVoteStore,
+} from "@/lib/zustand";
 import { Message } from "ai";
 import React, { useEffect, useRef } from "react";
 import { Separator } from "../ui/separator";
@@ -11,8 +19,11 @@ interface MessageDisplayProps {
 
 const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
   ({ message, setRetrieverSelection, retrieverSelection }) => {
-    const messagesEndRef = useRef<HTMLDivElement>(null);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    const { inProcess, setInProcess } = useInProcessStore();
+    const { hasVoted, setHasVoted } = useVoteStore();
+    const { allRandom } = useAllRandomStore();
 
     useEffect(() => {
       if (scrollContainerRef.current) {
@@ -24,11 +35,32 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
       }
     }, [message]);
 
-
     return (
-      <div className={`flex h-full flex-col
-      ${message.length>0 && "hover:border-yellow-200 hover:border-2 cursor-pointer hover:animate-pulse ease-linear transition-all duration-100"}
-      `}>
+      <div
+        className={`flex h-full flex-col
+      ${
+        (message.length > 0 &&
+        inProcess && allRandom) &&
+        "hover:border-yellow-200 cursor-pointer hover:animate-pulse ease-linear transition-all duration-100 hover:bg-green-400 hover:bg-opacity-50"
+      }
+      `}
+        onClick={() => {
+          if (hasVoted || message.length === 0 || !allRandom) return;
+          const response = voteFunction(retrieverSelection);
+          setInProcess(false);
+          if (!response) {
+            aplyToast("Error voting");
+            return;
+          }
+          aplyToast(
+            `Vote recorded for ${
+              retrieverInfo[retrieverSelection as keyof typeof retrieverInfo]
+                ?.fullName
+            }!`
+          );
+          setHasVoted(true);
+        }}
+      >
         <SelectRetrieverMenu
           setRetrieverSelection={setRetrieverSelection}
           retrieverSelection={retrieverSelection}
@@ -37,7 +69,10 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
 
         <div className="flex flex-1 flex-col">
           <Separator />
-          <div ref={scrollContainerRef} className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[400px] overflow-y-scroll gap-6 flex flex-col">
+          <div
+            ref={scrollContainerRef}
+            className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[400px] overflow-y-scroll gap-6 flex flex-col"
+          >
             {message.length > 0
               ? message.map((m) => (
                   <div
@@ -82,7 +117,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                   </div>
                 ))
               : null}
-            <div/>
+            <div />
           </div>
           <Separator className="mt-auto" />
         </div>
