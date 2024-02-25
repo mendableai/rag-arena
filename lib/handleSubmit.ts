@@ -35,12 +35,7 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
 
         const sourcesHeader = response.headers.get("x-sources");
 
-        
-        
-
         const sources = sourcesHeader ? JSON.parse(atob(sourcesHeader)) : [];
-
-        console.log("THE SOURCES", sources);
 
         const reader = response.body?.getReader();
 
@@ -75,6 +70,7 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
                 break;
             };
             receivedContent += new TextDecoder().decode(value);
+            // receivedContent += value;
 
             setChatHistory((prev: Message[]) =>
                 prev.map((msg: Message) =>

@@ -1,8 +1,5 @@
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
-import {
-    BytesOutputParser,
-    StringOutputParser,
-} from "@langchain/core/output_parsers";
+import { BytesOutputParser, StringOutputParser } from "@langchain/core/output_parsers";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { createClient } from "@supabase/supabase-js";
@@ -49,6 +46,7 @@ export async function POST(req: NextRequest) {
             queryName: "match_documents",
         });
 
+
         const standaloneQuestionChain = RunnableSequence.from([
             condenseQuestionPrompt,
             model,
@@ -71,17 +69,18 @@ export async function POST(req: NextRequest) {
                 ]),
                 chat_history: (input) => input.chat_history,
                 question: (input) => input.question,
-                
+
             },
             answerPrompt,
             model,
         ]);
 
+
         const conversationalRetrievalQAChain = RunnableSequence.from([
             {
                 question: standaloneQuestionChain,
                 chat_history: (input) => input.chat_history,
-                
+
             },
             answerChain,
             new BytesOutputParser(),
