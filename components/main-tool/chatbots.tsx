@@ -1,7 +1,9 @@
 "use client";
 
+import { handleSubmit } from "@/lib/handleSubmit";
+import { getRandomSelection } from "@/lib/utils";
 import { Message } from "ai";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import {
   ResizableHandle,
@@ -11,53 +13,53 @@ import {
 import { Textarea } from "../ui/textarea";
 import { TooltipProvider } from "../ui/tooltip";
 import { MessageDisplay } from "./message-display";
+import { arrayOfRetrievers } from "./select-retriever-menu";
 import { SelectionMenu } from "./selection-menu";
 
-import { handleSubmit } from "@/lib/handleSubmit";
-import { getRandomSelection } from "@/lib/utils";
-import { arrayOfRetrievers } from "./select-retriever-menu";
+export interface ChatSession {
+  chatHistory: Message[];
+  retrieverSelection: string;
+}
+[];
 
 export function ChatBots() {
   const [input, setInput] = useState<string>("");
-
-  const [chatHistory, setChatHistory] = useState<Message[]>([]);
-  const [chatHistory2, setChatHistory2] = useState<Message[]>([]);
-
-  const [retrieverSelection, setRetrieverSelection] =
-    useState<string>("random");
-  const [retrieverSelection2, setRetrieverSelection2] =
-    useState<string>("random");
+  const [chatSessions, setChatSessions] = useState<Array<ChatSession>>([
+    { chatHistory: [], retrieverSelection: "random" },
+    { chatHistory: [], retrieverSelection: "random" },
+  ]);
 
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    let newRetrieverSelection = retrieverSelection;
-    let newRetrieverSelection2 = retrieverSelection2;
+    chatSessions.forEach((session, index) => {
+      let newRetrieverSelection =
+        session.retrieverSelection === "random"
+          ? getRandomSelection(arrayOfRetrievers)
+          : session.retrieverSelection;
 
-    if (retrieverSelection === "random") {
-      newRetrieverSelection = getRandomSelection(arrayOfRetrievers);
-    }
-    if (retrieverSelection2 === "random") {
-      newRetrieverSelection2 = getRandomSelection(
-        arrayOfRetrievers,
-        newRetrieverSelection
-      );
-    }
-
-    setRetrieverSelection(newRetrieverSelection);
-    setRetrieverSelection2(newRetrieverSelection2);
-
-    handleSubmit({
-      input,
-      chatHistory,
-      setChatHistory,
-      retrieverSelection: newRetrieverSelection,
-    });
-    handleSubmit({
-      input,
-      chatHistory: chatHistory2,
-      setChatHistory: setChatHistory2,
-      retrieverSelection: newRetrieverSelection2,
+      handleSubmit({
+        input,
+        chatHistory: session.chatHistory,
+        setChatHistory: (newHistory) => {
+          setChatSessions((currentSessions) =>
+            currentSessions.map((currentSession, idx) => {
+              if (idx === index) {
+                return {
+                  ...currentSession,
+                  chatHistory:
+                    typeof newHistory === "function"
+                      ? newHistory(currentSession.chatHistory)
+                      : newHistory,
+                  retrieverSelection: newRetrieverSelection,
+                };
+              }
+              return currentSession;
+            })
+          );
+        },
+        retrieverSelection: newRetrieverSelection,
+      });
     });
 
     setInput("");
@@ -65,7 +67,7 @@ export function ChatBots() {
 
   const handleKeyDown = (e: {
     key: string;
-    shiftKey: any;
+    shiftKey: boolean;
     preventDefault: () => void;
   }) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -79,46 +81,44 @@ export function ChatBots() {
       <ResizablePanelGroup direction="vertical">
         <ResizablePanel defaultSize={70}>
           <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={50} className="min-w-72">
-              <MessageDisplay
-                message={chatHistory}
-                setRetrieverSelection={setRetrieverSelection}
-                retrieverSelection={retrieverSelection}
-              />
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={50} className="min-w-72">
-              <MessageDisplay
-                message={chatHistory2}
-                setRetrieverSelection={setRetrieverSelection2}
-                retrieverSelection={retrieverSelection2}
-              />
-            </ResizablePanel>
+            {chatSessions.map((session, index) => (
+              <React.Fragment key={index}>
+                <ResizablePanel
+                  key={index}
+                  defaultSize={50}
+                  className="min-w-72"
+                >
+                  <MessageDisplay
+                    message={session.chatHistory}
+                    setRetrieverSelection={(newSelection) => {
+                      const updatedSessions = [...chatSessions];
+                      updatedSessions[index].retrieverSelection = newSelection;
+                      setChatSessions(updatedSessions);
+                    }}
+                    retrieverSelection={session.retrieverSelection}
+                  />
+                </ResizablePanel>
+                {index < chatSessions.length - 1 && (
+                  <ResizableHandle withHandle />
+                )}
+              </React.Fragment>
+            ))}
           </ResizablePanelGroup>
         </ResizablePanel>
         <ResizableHandle withHandle />
+        <SelectionMenu chatSessions={chatSessions} />
         <ResizablePanel defaultSize={30} className="min-h-40 max-h-96">
-          <SelectionMenu
-            message={chatHistory}
-            setRetrieverSelection={setRetrieverSelection}
-            setRetrieverSelection2={setRetrieverSelection2}
-          />
           <div className="p-4 max-w-3xl m-auto">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleFormSubmit(e);
-              }}
-            >
+            <form onSubmit={handleFormSubmit}>
               <div className="gap-4 flex items-center">
                 <Textarea
                   className="p-4"
-                  placeholder={`Reply...`}
-                  value={input}
+                  placeholder="Reply..."
+                  // value={input}
+                  value={'The question to ask about an early'}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
-
                 <Button size="sm" className="ml-auto">
                   Send
                 </Button>

@@ -1,11 +1,12 @@
 import { Message } from "ai";
-
-export async function handleSubmit({ input, chatHistory, setChatHistory, retrieverSelection }: {
+interface HandleSubmitParams {
     input: string;
     chatHistory: Message[];
-    setChatHistory: (chatHistory: Message[] | ((prevChatHistory: Message[]) => Message[])) => void;
+    setChatHistory: (newHistory: Message[] | ((currentHistory: Message[]) => Message[])) => void;
     retrieverSelection: string;
-}) {
+}
+export async function handleSubmit({ input, chatHistory, setChatHistory, retrieverSelection }: HandleSubmitParams) {
+
     const newUserEntry: Message = {
         id: `${Math.random().toString(36).substring(7)}`,
         role: "user",
@@ -16,8 +17,6 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
     const newChatHistory = [...chatHistory, newUserEntry];
 
     setChatHistory(newChatHistory);
-
-
 
     try {
         let receivedContent = "";
@@ -34,7 +33,6 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
         });
 
         const sourcesHeader = response.headers.get("x-sources");
-
         const sources = sourcesHeader ? JSON.parse(atob(sourcesHeader)) : [];
 
         const reader = response.body?.getReader();
@@ -70,7 +68,6 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
                 break;
             };
             receivedContent += new TextDecoder().decode(value);
-            // receivedContent += value;
 
             setChatHistory((prev: Message[]) =>
                 prev.map((msg: Message) =>
