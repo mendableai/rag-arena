@@ -111,7 +111,7 @@ export function ChatBots() {
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup direction="vertical">
-        <ResizablePanel defaultSize={70}>
+        <ResizablePanel defaultSize={80}>
           <ResizablePanelGroup direction="horizontal">
             {chatSessions.map((session, index) => (
               <React.Fragment key={index}>
@@ -136,7 +136,7 @@ export function ChatBots() {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <SelectionMenu />
-        <ResizablePanel defaultSize={30} className="min-h-40 max-h-96">
+        <ResizablePanel defaultSize={20} className="min-h-40 max-h-96">
           <div className="p-4 max-w-3xl m-auto">
             <form onSubmit={handleFormSubmit}>
               <div className="gap-4 flex items-center">

@@ -50,7 +50,7 @@ export function SelectionMenu() {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant="ghost"
+              variant="default"
               size="icon"
               onClick={() => {
                 if (hasVoted || !allRandom) return;
@@ -79,7 +79,7 @@ export function SelectionMenu() {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant="ghost"
+              variant="default"
               size="icon"
               onClick={() => {
                 if (hasVoted || !allRandom) return;
@@ -107,7 +107,7 @@ export function SelectionMenu() {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={!message.length}>
+            <Button variant="secondary" size="icon" disabled={!message.length}>
               <Equal className="h-4 w-4" />
               <span className="sr-only">Tie</span>
             </Button>
@@ -116,7 +116,7 @@ export function SelectionMenu() {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={!message.length}>
+            <Button variant="secondary" size="icon" disabled={!message.length}>
               <ThumbsDown className="h-4 w-4" />
               <span className="sr-only">Both are bad</span>
             </Button>
@@ -127,7 +127,13 @@ export function SelectionMenu() {
       <div className="ml-auto flex items-center gap-2">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={!message.length}>
+            <Button
+              variant={!hasVoted ? "ghost" : "default"}
+              size="icon"
+              disabled={!hasVoted}
+              onClick={() => refresh()}
+              className="transition-all duration-300"
+            >
               <ListRestart className="h-4 w-4" />
               <span className="sr-only">New Round</span>
             </Button>
