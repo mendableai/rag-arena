@@ -135,7 +135,7 @@ export function ChatBots() {
           </ResizablePanelGroup>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <SelectionMenu chatSessions={chatSessions} />
+        <SelectionMenu />
         <ResizablePanel defaultSize={30} className="min-h-40 max-h-96">
           <div className="p-4 max-w-3xl m-auto">
             <form onSubmit={handleFormSubmit}>

@@ -1,7 +1,7 @@
 export default function Logo() {
     return (
       <h1 className="font-black tracking-widest text-xl">
-        ChatBot<span className="rounded-sm bg-purple-600 px-1 text-black">Arena</span>
+        Retrieval<span className="rounded-sm dark:bg-white px-1 dark:text-black bg-black text-white">Arena</span>
       </h1>
     );
   }

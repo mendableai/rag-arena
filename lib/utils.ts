@@ -15,3 +15,4 @@ export const getRandomSelection = (arrayOfRetrievers: string[], exclude: string[
     return arrayOfRetrievers[randomIndex];
   }
 };
+

@@ -10,22 +10,27 @@ import {
 
 import { voteFunction } from "@/app/actions/voting-system";
 import aplyToast from "@/lib/aplyToaster";
-import { useAllRandomStore, useInProcessStore, useVoteStore } from "@/lib/zustand";
+import {
+  useAllRandomStore,
+  useChatSessionsStore,
+  useInProcessStore,
+  useVoteStore,
+} from "@/lib/zustand";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { ChatSession } from "./chatbots";
 
 import { retrieverInfo } from "@/lib/constants";
+import { useRefresher } from "@/lib/hooks/useRefresher";
 
-interface SelectionMenuProps {
-  chatSessions: ChatSession[];
-}
-
-export function SelectionMenu({ chatSessions }: SelectionMenuProps) {
+export function SelectionMenu() {
   const { hasVoted, setHasVoted } = useVoteStore();
   const { setInProcess } = useInProcessStore();
-  const {allRandom} = useAllRandomStore();
+  const { allRandom } = useAllRandomStore();
+
+  const { chatSessions } = useChatSessionsStore();
+
+  const refresh = useRefresher();
 
   let message: string[] = [];
   let retriever: any = [];
@@ -55,10 +60,15 @@ export function SelectionMenu({ chatSessions }: SelectionMenuProps) {
                   aplyToast("Error voting");
                   return;
                 }
-                aplyToast(`Vote recorded for ${retrieverInfo[retriever[0] as keyof typeof retrieverInfo]?.fullName}!`);
+                aplyToast(
+                  `Vote recorded for ${
+                    retrieverInfo[retriever[0] as keyof typeof retrieverInfo]
+                      ?.fullName
+                  }!`
+                );
                 setHasVoted(true);
               }}
-              // disabled={!message.length}
+              disabled={!message.length}
             >
               <ArrowLeftSquare className="h-4 w-4" />
               <span className="sr-only">Vote Left</span>
@@ -71,7 +81,22 @@ export function SelectionMenu({ chatSessions }: SelectionMenuProps) {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => voteFunction(retriever[1])}
+              onClick={() => {
+                if (hasVoted || !allRandom) return;
+                const response = voteFunction(retriever[1]);
+                setInProcess(false);
+                if (!response) {
+                  aplyToast("Error voting");
+                  return;
+                }
+                aplyToast(
+                  `Vote recorded for ${
+                    retrieverInfo[retriever[1] as keyof typeof retrieverInfo]
+                      ?.fullName
+                  }!`
+                );
+                setHasVoted(true);
+              }}
               disabled={!message.length}
             >
               <ArrowRightSquare className="h-4 w-4" />
@@ -122,10 +147,7 @@ export function SelectionMenu({ chatSessions }: SelectionMenuProps) {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              onClick={() => {
-                // setRetrieverSelection("random");
-                // setRetrieverSelection2("random");
-              }}
+              onClick={() => refresh()}
               variant="ghost"
               size="icon"
               disabled={false}
