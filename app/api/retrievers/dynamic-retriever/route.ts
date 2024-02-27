@@ -28,16 +28,15 @@ function getClientIp(req: NextRequest) {
 export async function POST(req: NextRequest) {
     const identifier = getClientIp(req);
 
-    console.log(identifier);
-    
     if (!identifier) {
         return NextResponse.json({ error: 'No identifier found' }, { status: 400 })
     }
-    const result = await ratelimit.limit(identifier);
-    
-    if (!result.success) {
-        
-        return NextResponse.json({ error: 'Rate limit achieved' }, { status: 429 })
+
+    if (process.env.PRODUCTION) {
+        const result = await ratelimit.limit(identifier);
+        if (!result.success) {
+            return NextResponse.json({ error: 'Rate limit achieved' }, { status: 429 })
+        }
     }
 
     try {
@@ -55,13 +54,11 @@ export async function POST(req: NextRequest) {
             streaming: true,
         });
 
-
         const vectorstore = new SupabaseVectorStore(new OpenAIEmbeddings(), {
             client: supabase,
             tableName: "documents",
             queryName: "match_documents",
         });
-
 
         const standaloneQuestionChain = RunnableSequence.from([
             condenseQuestionPrompt,
@@ -90,7 +87,6 @@ export async function POST(req: NextRequest) {
             answerPrompt,
             model,
         ]);
-
 
         const conversationalRetrievalQAChain = RunnableSequence.from([
             {
