@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'No identifier found' }, { status: 400 })
     }
 
-    if (process.env.PRODUCTION) {
+    if (process.env.PRODUCTION === "true") {
         const result = await ratelimit.limit(identifier);
         if (!result.success) {
             return NextResponse.json({ error: 'Rate limit achieved' }, { status: 429 })

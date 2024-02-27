@@ -43,7 +43,7 @@ export function SelectionMenu() {
   });
 
   return (
-    <div className="flex items-center p-2 self-center">
+    <div className="flex items-center p-2 self-center gap-2">
       <div className="flex items-center gap-2 ">
         <Tooltip>
           <TooltipTrigger asChild>
