@@ -24,14 +24,12 @@ import { SelectionMenu } from "./selection-menu";
 export interface ChatSession {
   chatHistory: Message[];
   retrieverSelection: string;
-  loading: boolean; 
+  loading: boolean;
 }
 [];
 
 export function ChatBots() {
-  const [input, setInput] = useState<string>(
-    "The question to ask about an early "
-  );
+  const [input, setInput] = useState<string>("");
   const { chatSessions, setChatSessions } = useChatSessionsStore();
 
   const { setAllRandom } = useAllRandomStore();
@@ -81,7 +79,7 @@ export function ChatBots() {
           );
         },
         retrieverSelection: newRetrieverSelection,
-        setLoading: (isLoading) => { 
+        setLoading: (isLoading) => {
           setChatSessions((currentSessions: ChatSession[]) =>
             currentSessions.map((session: ChatSession, idx: number) => {
               if (idx === index) {

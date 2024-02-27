@@ -1,4 +1,3 @@
-import { createClient } from "@supabase/supabase-js";
 import { Message, StreamingTextResponse } from "ai";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,6 +6,7 @@ import { ChatOpenAI } from "@langchain/openai";
 
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 
+import supabase from "@/lib/supabase";
 import { type Document } from "@langchain/core/documents";
 import {
   BytesOutputParser,
@@ -73,13 +73,10 @@ export async function POST(req: NextRequest) {
       modelName: "gpt-3.5-turbo-1106",
     });
 
-    const client = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_PRIVATE_KEY!,
-    );
+    
     
     const vectorstore = new SupabaseVectorStore(new OpenAIEmbeddings(), {
-      client,
+      client: supabase,
       tableName: "documents",
       queryName: "match_documents",
     });

@@ -1,3 +1,4 @@
+import supabase from "@/lib/supabase";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import {
@@ -7,7 +8,6 @@ import {
 } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
-import { createClient } from "@supabase/supabase-js";
 import { StreamingTextResponse } from "ai";
 import { formatDocumentsAsString } from "langchain/util/document";
 import { NextRequest, NextResponse } from "next/server";
@@ -31,13 +31,8 @@ export async function POST(req: NextRequest) {
             streaming: true,
         });
 
-        const client = createClient(
-            process.env.SUPABASE_URL!,
-            process.env.SUPABASE_PRIVATE_KEY!,
-        );
-
         const vectorstore = new SupabaseVectorStore(new OpenAIEmbeddings(), {
-            client,
+            client: supabase,
             tableName: "documents",
             queryName: "match_documents",
         });

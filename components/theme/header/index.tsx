@@ -11,8 +11,7 @@ export default function Header() {
       <nav className="flex h-20 items-center justify-between px-4 xl:px-60">
         <div className="hidden lg:block">
           <Link
-            href={"https://github.com/Kiranism/next-shadcn-dashboard-starter"}
-            target="_blank"
+            href={"/"}
           >
             <Logo />
           </Link>

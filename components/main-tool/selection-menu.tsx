@@ -68,7 +68,7 @@ export function SelectionMenu() {
                 );
                 setHasVoted(true);
               }}
-              disabled={!message.length}
+              disabled={!message.length || hasVoted}
             >
               <ArrowLeftSquare className="h-4 w-4" />
               <span className="sr-only">Vote Left</span>
@@ -97,7 +97,7 @@ export function SelectionMenu() {
                 );
                 setHasVoted(true);
               }}
-              disabled={!message.length}
+              disabled={!message.length || hasVoted}
             >
               <ArrowRightSquare className="h-4 w-4" />
               <span className="sr-only">Vote Right</span>

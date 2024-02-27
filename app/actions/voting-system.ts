@@ -1,9 +1,18 @@
 "use server";
 
-import { createClient } from '@supabase/supabase-js';
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PRIVATE_KEY!);
+import supabase from '@/lib/supabase';
 
-export async function voteFunction(retriever: string) {
+export type Retriever = {
+    id: number,
+    retriever: string,
+    votes: number,
+    times_tested: number,
+    full_name: string,
+    description: string,
+    link: string,
+}
+
+export async function voteFunction(retriever: Retriever[]) {
     const { data, error: selectError } = await supabase
         .from('leaderboard')
         .select('votes')
