@@ -7,6 +7,7 @@ import {
   useAllRandomStore,
   useChatSessionsStore,
   useInProcessStore,
+  useVoteStore,
 } from "@/lib/zustand";
 import { Message } from "ai";
 import React, { useState } from "react";
@@ -33,7 +34,7 @@ export function ChatBots() {
   const { chatSessions, setChatSessions } = useChatSessionsStore();
 
   const { setAllRandom } = useAllRandomStore();
-
+  const { hasVoted } = useVoteStore();
   const { setInProcess } = useInProcessStore();
 
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
@@ -57,8 +58,6 @@ export function ChatBots() {
         session.retrieverSelection === "random"
           ? getRandomSelection(arrayOfRetrievers, excludeList)
           : session.retrieverSelection;
-
-      console.log("RETRIEVER SELECTION: ", newRetrieverSelection);
 
       handleSubmit({
         input,
@@ -146,8 +145,9 @@ export function ChatBots() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
+                  disabled={hasVoted}
                 />
-                <Button size="sm" className="ml-auto">
+                <Button size="sm" className="ml-auto" disabled={hasVoted}>
                   Send
                 </Button>
               </div>

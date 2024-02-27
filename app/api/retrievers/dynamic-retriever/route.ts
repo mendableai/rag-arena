@@ -46,6 +46,10 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const messages = body.messages ?? [];
 
+        if (messages.length > 5) {
+            return NextResponse.json({ error: "Too many messages" }, { status: 400 })
+        }
+
         const previousMessages = messages.slice(0, -1);
         const currentMessageContent = messages[messages.length - 1].content;
 
@@ -68,7 +72,7 @@ export async function POST(req: NextRequest) {
         const retrievedDocs = await retriever.getRelevantDocuments(
             currentMessageContent,
         );
-        
+
         const prompt = CONDENSE_QUESTION_TEMPLATE(previousMessages, currentMessageContent, retrievedDocs);
 
         const response = await openai.chat.completions.create({
@@ -88,7 +92,7 @@ export async function POST(req: NextRequest) {
                 JSON.stringify(
                     retrievedDocs.map((doc) => {
                         return {
-                            pageContent: doc.pageContent.slice(0, 50) + "...",
+                            pageContent: doc.pageContent.slice(0, 100) + "...",
                             metadata: doc.metadata,
                         };
                     }),

@@ -1,11 +1,9 @@
 import {
   ArrowLeftSquare,
   ArrowRightSquare,
-  Equal,
   Images,
   ListRestart,
-  ThumbsDown,
-  Trash2,
+  Trash2
 } from "lucide-react";
 
 import { addTimesTestedForBoth, voteFunction } from "@/app/actions/voting-system";
@@ -45,8 +43,8 @@ export function SelectionMenu() {
   });
 
   return (
-    <div className="flex items-center p-2">
-      <div className="flex items-center gap-2">
+    <div className="flex items-center p-2 self-center">
+      <div className="flex items-center gap-2 ">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -121,27 +119,9 @@ export function SelectionMenu() {
           </TooltipTrigger>
           <TooltipContent>Vote Right</TooltipContent>
         </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="secondary" size="icon" disabled={!message.length}>
-              <Equal className="h-4 w-4" />
-              <span className="sr-only">Tie</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Tie</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="secondary" size="icon" disabled={!message.length}>
-              <ThumbsDown className="h-4 w-4" />
-              <span className="sr-only">Both are bad</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Both are bad</TooltipContent>
-        </Tooltip>
       </div>
       <div className="ml-auto flex items-center gap-2">
-        <Tooltip>
+        <Tooltip open={hasVoted}>
           <TooltipTrigger asChild>
             <Button
               variant={!hasVoted ? "ghost" : "default"}
