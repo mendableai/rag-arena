@@ -26,6 +26,8 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@supabase/ssr": "^0.1.0",
     "@supabase/supabase-js": "^2.39.7",
+    "@upstash/ratelimit": "^1.0.1",
+    "@upstash/redis": "^1.28.4",
     "ai": "^2.2.35",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
