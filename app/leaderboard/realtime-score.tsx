@@ -27,9 +27,9 @@ export default function RealTimeScore({
 }: {
   retriever: Retriever[];
 }) {
-    const [retrieverList, setRetrieverList] = useState<Retriever[]>(
-        [...retriever].sort((a, b) => b.votes - a.votes)
-      );
+  const [retrieverList, setRetrieverList] = useState<Retriever[]>(
+    [...retriever].sort((a, b) => b.votes - a.votes)
+  );
 
   useEffect(() => {
     const channel = supabase
@@ -42,12 +42,14 @@ export default function RealTimeScore({
           table: "leaderboard",
         },
         (payload) => {
-            setRetrieverList(prevList => {
-                const updatedList = prevList.map(item => 
-                  item.id === (payload.new as Retriever).id ? (payload.new as Retriever) : item
-                );
-                return updatedList.sort((a, b) => b.votes - a.votes);
-              });
+          setRetrieverList((prevList) => {
+            const updatedList = prevList.map((item) =>
+              item.id === (payload.new as Retriever).id
+                ? (payload.new as Retriever)
+                : item
+            );
+            return updatedList.sort((a, b) => b.votes - a.votes);
+          });
         }
       )
       .subscribe();
@@ -67,16 +69,21 @@ export default function RealTimeScore({
           }`}
         >
           <TableCell>{index + 1}</TableCell>
-          <TableCell>{entry.full_name}</TableCell>
+          <TableCell>
+            <a
+              style={{ textDecoration: "underline" }}
+              href={entry.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {entry.full_name}
+            </a>
+          </TableCell>
           <TableCell>{entry.elo}</TableCell>
           <TableCell>{entry.votes}</TableCell>
           <TableCell>{entry.times_tested}</TableCell>
           <TableCell>{entry.description}</TableCell>
-          <TableCell>
-            <a href={entry.link} target="_blank" rel="noopener noreferrer">
-              Link
-            </a>
-          </TableCell>
+
           <TableCell>{renderTrophy(index)}</TableCell>
         </TableRow>
       ))}
