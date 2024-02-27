@@ -1,14 +1,13 @@
 import supabase from "@/lib/supabase";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
-import { BytesOutputParser, StringOutputParser } from "@langchain/core/output_parsers";
-import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import { StreamingTextResponse } from "ai";
+import { OpenAIStream, StreamingTextResponse } from 'ai';
 import { NextRequest, NextResponse } from "next/server";
-import { combineDocumentsFn, dynamicRetrieverUtility, formatVercelMessages } from "./tools/config";
-import { answerPrompt, condenseQuestionPrompt } from "./tools/variables";
+import OpenAI from 'openai';
+import { dynamicRetrieverUtility } from "./tools/config";
+import { CONDENSE_QUESTION_TEMPLATE } from "./tools/variables";
 
 export const runtime = "edge";
 
@@ -24,6 +23,10 @@ const ratelimit = new Ratelimit({
 function getClientIp(req: NextRequest) {
     return req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for') ?? req.ip;
 }
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY!,
+});
 
 export async function POST(req: NextRequest) {
     const identifier = getClientIp(req);
@@ -60,49 +63,24 @@ export async function POST(req: NextRequest) {
             queryName: "match_documents",
         });
 
-        const standaloneQuestionChain = RunnableSequence.from([
-            condenseQuestionPrompt,
-            model,
-            new StringOutputParser(),
-        ]);
-
-        const retriever = dynamicRetrieverUtility(retrieverSelected, model, vectorstore, currentMessageContent);
+        const retriever = await dynamicRetrieverUtility(retrieverSelected, model, vectorstore, currentMessageContent);
 
         const retrievedDocs = await retriever.getRelevantDocuments(
             currentMessageContent,
         );
+        
+        const prompt = CONDENSE_QUESTION_TEMPLATE(previousMessages, currentMessageContent, retrievedDocs);
 
-        const retrievalChain = retriever.pipe(combineDocumentsFn);
-
-        const answerChain = RunnableSequence.from([
-            {
-                context: RunnableSequence.from([
-                    (input) => input.question,
-                    retrievalChain,
-                ]),
-                chat_history: (input) => input.chat_history,
-                question: (input) => input.question,
-
-            },
-            answerPrompt,
-            model,
-        ]);
-
-        const conversationalRetrievalQAChain = RunnableSequence.from([
-            {
-                question: standaloneQuestionChain,
-                chat_history: (input) => input.chat_history,
-
-            },
-            answerChain,
-            new BytesOutputParser(),
-
-        ]);
-
-        const stream = await conversationalRetrievalQAChain.stream({
-            question: currentMessageContent,
-            chat_history: formatVercelMessages(previousMessages),
+        const response = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo',
+            stream: true,
+            messages: [
+                { "role": "system", "content": "You are a helpful assistant." },
+                { "role": "system", "content": prompt }
+            ],
         });
+
+        const stream = OpenAIStream(response);
 
         let serializedSources = "";
         try {

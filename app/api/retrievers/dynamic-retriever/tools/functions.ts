@@ -118,10 +118,10 @@ export function SimilarityScore(
     });
 }
 
-export function TimeWeighted(
+export async function TimeWeighted(
     vectorstore: SupabaseVectorStore
 ) {
-    return new TimeWeightedVectorStoreRetriever({
+    const retriever = new TimeWeightedVectorStoreRetriever({
         vectorStore: vectorstore,
         memoryStream: [],
         searchKwargs: 2,
@@ -133,6 +133,18 @@ export function TimeWeighted(
             },
         ]
     });
+
+    const documents = [
+        "My name is John.",
+        "My name is Bob.",
+        "My favourite food is pizza.",
+        "My favourite food is pasta.",
+        "My favourite food is sushi.",
+    ].map((pageContent) => ({ pageContent, metadata: {} }));
+
+    await retriever.addDocuments(documents);
+
+    return retriever
 }
 
 export function VectorStore(
