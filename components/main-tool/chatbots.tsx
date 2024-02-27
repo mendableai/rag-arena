@@ -58,6 +58,8 @@ export function ChatBots() {
           ? getRandomSelection(arrayOfRetrievers, excludeList)
           : session.retrieverSelection;
 
+      console.log("RETRIEVER SELECTION: ", newRetrieverSelection);
+
       handleSubmit({
         input,
         chatHistory: session.chatHistory,

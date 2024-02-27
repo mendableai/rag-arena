@@ -18,6 +18,7 @@ export default async function Leaderboard() {
           <TableRow className="text-left">
             <TableHead>Rank</TableHead>
             <TableHead>Name</TableHead>
+            <TableHead>Elo</TableHead>
             <TableHead>Votes</TableHead>
             <TableHead className="min-w-32">Times Tested</TableHead>
             <TableHead className="max-w-80">Description</TableHead>

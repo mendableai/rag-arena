@@ -55,20 +55,31 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
             throw new Error("Response body reader is undefined");
         }
 
+        const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 10000, { done: true }));
+        
         while (true) {
-            const { done, value } = await reader.read();
-
-
+            const result = await Promise.race([
+                reader.read(),
+                timeoutPromise
+            ]);
+            const { done, value } = result as { done: boolean; value: Uint8Array };
             if (done) {
                 setLoading(false);
-                setChatHistory((prev: Message[]) =>
-                    prev.map((msg: Message) =>
-                        msg.id === aiMessageId ? { ...msg, annotations: sources } : msg
-                    )
-                );
-
+                if (receivedContent === "") {
+                    setChatHistory((prev: Message[]) =>
+                        prev.map((msg: Message) =>
+                            msg.id === aiMessageId ? { ...msg, content: "timeout exceeded and no answer was found from the retriever", annotations: sources } : msg
+                        )
+                    );
+                } else {
+                    setChatHistory((prev: Message[]) =>
+                        prev.map((msg: Message) =>
+                            msg.id === aiMessageId ? { ...msg, annotations: sources } : msg
+                        )
+                    );
+                }
                 break;
-            };
+            }
             receivedContent += new TextDecoder().decode(value);
 
             setChatHistory((prev: Message[]) =>
@@ -76,12 +87,12 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
                     msg.id === aiMessageId ? { ...msg, content: receivedContent } : msg
                 )
             );
-
-
         }
-         // Set loading to false once loading is complete
+
+        
+
     } catch (error) {
-        setLoading(false); // Ensure loading is set to false even if there's an error
+        setLoading(false); 
         return "Error while fetching response from retriever."
     }
 }

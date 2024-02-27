@@ -8,7 +8,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { voteFunction } from "@/app/actions/voting-system";
+import { addTimesTestedForBoth, voteFunction } from "@/app/actions/voting-system";
 import aplyToast from "@/lib/aplyToaster";
 import {
   useAllRandomStore,
@@ -52,9 +52,16 @@ export function SelectionMenu() {
             <Button
               variant="default"
               size="icon"
-              onClick={() => {
+              onClick={async () => {
                 if (hasVoted || !allRandom) return;
-                const response = voteFunction(retriever[0]);
+
+                const addTestCount = await addTimesTestedForBoth(retriever);
+                
+                if(!addTestCount){
+                  aplyToast("Error adding test count");
+                  return;
+                }
+                const response = await voteFunction(retriever[0]);
                 setInProcess(false);
                 if (!response) {
                   aplyToast("Error voting");
@@ -81,8 +88,17 @@ export function SelectionMenu() {
             <Button
               variant="default"
               size="icon"
-              onClick={() => {
+              onClick={async () => {
                 if (hasVoted || !allRandom) return;
+
+                if (hasVoted || !allRandom) return;
+                const addTestCount = await addTimesTestedForBoth(retriever);
+
+                if(!addTestCount){
+                  aplyToast("Error adding test count");
+                  return;
+                }
+
                 const response = voteFunction(retriever[1]);
                 setInProcess(false);
                 if (!response) {

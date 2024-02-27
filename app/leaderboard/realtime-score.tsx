@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 type Retriever = {
   id: number;
   retriever: string;
+  elo: number;
   votes: number;
   times_tested: number;
   full_name: string;
@@ -41,13 +42,11 @@ export default function RealTimeScore({
           table: "leaderboard",
         },
         (payload) => {
-            console.log(payload);
-            
             setRetrieverList(prevList => {
                 const updatedList = prevList.map(item => 
                   item.id === (payload.new as Retriever).id ? (payload.new as Retriever) : item
                 );
-                return updatedList.sort((a, b) => b.votes - a.votes); // Sort by votes descending
+                return updatedList.sort((a, b) => b.votes - a.votes);
               });
         }
       )
@@ -69,6 +68,7 @@ export default function RealTimeScore({
         >
           <TableCell>{index + 1}</TableCell>
           <TableCell>{entry.full_name}</TableCell>
+          <TableCell>{entry.elo}</TableCell>
           <TableCell>{entry.votes}</TableCell>
           <TableCell>{entry.times_tested}</TableCell>
           <TableCell>{entry.description}</TableCell>
