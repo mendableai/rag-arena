@@ -25,8 +25,13 @@ export default function Header() {
           </Link>
         </div>
         <div className="flex items-center gap-6">
-          <Link href={redirectTo} onClick={() => {setIsHomePage(isHomePage ? false : true)}}>
-            <Button variant="secondary" size="icon" disabled={false}>
+          <Link
+            href={redirectTo}
+            onClick={() => {
+              setIsHomePage(isHomePage ? false : true);
+            }}
+          >
+            <Button variant="outline" size="icon" disabled={false}>
               {isHomePage ? (
                 <Trophy className="h-4 w-4" />
               ) : (

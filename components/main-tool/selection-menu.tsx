@@ -3,10 +3,13 @@ import {
   ArrowRightSquare,
   Images,
   ListRestart,
-  Trash2
+  Trash2,
 } from "lucide-react";
 
-import { addTimesTestedForBoth, voteFunction } from "@/app/actions/voting-system";
+import {
+  addTimesTestedForBoth,
+  voteFunction,
+} from "@/app/actions/voting-system";
 import aplyToast from "@/lib/aplyToaster";
 import {
   useAllRandomStore,
@@ -48,14 +51,14 @@ export function SelectionMenu() {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant="default"
+              variant="outline"
               size="icon"
               onClick={async () => {
                 if (hasVoted || !allRandom) return;
 
                 const addTestCount = await addTimesTestedForBoth(retriever);
-                
-                if(!addTestCount){
+
+                if (!addTestCount) {
                   aplyToast("Error adding test count");
                   return;
                 }
@@ -84,7 +87,7 @@ export function SelectionMenu() {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant="default"
+              variant="outline"
               size="icon"
               onClick={async () => {
                 if (hasVoted || !allRandom) return;
@@ -92,7 +95,7 @@ export function SelectionMenu() {
                 if (hasVoted || !allRandom) return;
                 const addTestCount = await addTimesTestedForBoth(retriever);
 
-                if(!addTestCount){
+                if (!addTestCount) {
                   aplyToast("Error adding test count");
                   return;
                 }
@@ -121,10 +124,10 @@ export function SelectionMenu() {
         </Tooltip>
       </div>
       <div className="ml-auto flex items-center gap-2">
-        <Tooltip open={hasVoted}>
+        {/*<Tooltip open={hasVoted}>
           <TooltipTrigger asChild>
             <Button
-              variant={!hasVoted ? "ghost" : "default"}
+              variant={!hasVoted ? "outline" : "default"}
               size="icon"
               disabled={!hasVoted}
               onClick={() => refresh()}
@@ -138,27 +141,29 @@ export function SelectionMenu() {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={!message.length}>
+            <Button variant="outline" size="icon" disabled={!message.length}>
               <Images className="h-4 w-4" />
               <span className="sr-only">Print Result</span>
             </Button>
           </TooltipTrigger>
           <TooltipContent>Print Result</TooltipContent>
         </Tooltip>
+            */}
         <Separator orientation="vertical" className="mx-1 h-6" />
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               onClick={() => refresh()}
-              variant="ghost"
+              variant={!hasVoted ? "outline" : "default"}
+              className={!hasVoted ? "" : "text-white"}
               size="icon"
               disabled={false}
             >
-              <Trash2 className="h-4 w-4" />
-              <span className="sr-only">Move to trash</span>
+              <ListRestart className="h-4 w-4" />
+              <span className="sr-only">New Round</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Move to trash</TooltipContent>
+          <TooltipContent>New Round</TooltipContent>
         </Tooltip>
       </div>
     </div>

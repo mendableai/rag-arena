@@ -20,9 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className="manrope san">
+      <body className="manrope san html-body">
         <Header />
-        {children}
+        <div className="content-grow">{children}</div>
         <Footer />
         <Toaster />
       </body>

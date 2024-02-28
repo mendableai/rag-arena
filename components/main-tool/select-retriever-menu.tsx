@@ -66,18 +66,22 @@ export function SelectRetrieverMenu({
               <SelectGroup>
                 <SelectLabel>Retrievers:</SelectLabel>
                 <SelectItem value="random">Random Retriever</SelectItem>
-                <SelectItem value="vector-store">Vector Store</SelectItem>
+                <SelectItem value="vector-store">Vector Store 🦜🔗</SelectItem>
                 <SelectItem value="contextual-compression">
-                  Contextual Compression
+                  Contextual Compression 🦜🔗
                 </SelectItem>
-                <SelectItem value="multi-query">Multi Query</SelectItem>
-                <SelectItem value="multi-vector">Multi Vector</SelectItem>
-                <SelectItem value="parent-document">Parent Document</SelectItem>
-                <SelectItem value="self-query">Self Query</SelectItem>
+                <SelectItem value="multi-query">Multi Query 🦜🔗</SelectItem>
+                <SelectItem value="multi-vector">Multi Vector 🦜🔗</SelectItem>
+                <SelectItem value="parent-document">
+                  Parent Document 🦜🔗
+                </SelectItem>
+                <SelectItem value="self-query">Self Query 🦜🔗</SelectItem>
                 <SelectItem value="similarity-score">
-                  Similarity Score
+                  Similarity Score 🦜🔗
                 </SelectItem>
-                <SelectItem value="time-weighted">Time Weighted</SelectItem>
+                <SelectItem value="time-weighted">
+                  Time Weighted 🦜🔗
+                </SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

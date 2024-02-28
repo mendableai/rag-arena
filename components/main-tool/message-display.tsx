@@ -62,10 +62,10 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
           if (hasVoted || message.length === 0 || !allRandom || loading) return;
 
           console.log(retriever);
-          
+
           const addTestCount = await addTimesTestedForBoth(retriever);
           console.log(addTestCount);
-          
+
           if (!addTestCount) {
             aplyToast("Error adding test count");
             return;
@@ -152,4 +152,3 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
 MessageDisplay.displayName = "MessageDisplay";
 
 export { MessageDisplay };
-

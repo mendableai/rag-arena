@@ -141,13 +141,17 @@ export function ChatBots() {
               <div className="gap-4 flex items-center">
                 <Textarea
                   className="p-4"
-                  placeholder="Reply..."
+                  placeholder="Ask a question about Paul Graham's essays on startups..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                   disabled={hasVoted}
                 />
-                <Button size="sm" className="ml-auto" disabled={hasVoted}>
+                <Button
+                  size="sm"
+                  className="ml-auto text-white"
+                  disabled={hasVoted}
+                >
                   Send
                 </Button>
               </div>
