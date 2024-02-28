@@ -11,14 +11,7 @@ import { CONDENSE_QUESTION_TEMPLATE } from "./tools/variables";
 
 export const runtime = "edge";
 
-const redis = new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL!,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-})
-const ratelimit = new Ratelimit({
-    redis: redis,
-    limiter: Ratelimit.fixedWindow(50, "180 m"),
-});
+
 
 function getClientIp(req: NextRequest) {
     return req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for') ?? req.ip;
@@ -36,6 +29,14 @@ export async function POST(req: NextRequest) {
     }
 
     if (process.env.PRODUCTION === "true") {
+        const redis = new Redis({
+            url: process.env.UPSTASH_REDIS_REST_URL!,
+            token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+        })
+        const ratelimit = new Ratelimit({
+            redis: redis,
+            limiter: Ratelimit.fixedWindow(50, "180 m"),
+        });
         const result = await ratelimit.limit(identifier);
         if (!result.success) {
             return NextResponse.json({ error: 'Rate limit achieved' }, { status: 429 })
