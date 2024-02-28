@@ -25,11 +25,8 @@ export default function Header() {
           </Link>
         </div>
         <div className="flex items-center gap-6">
-          <Link
+          <a
             href={redirectTo}
-            onClick={() => {
-              setIsHomePage(isHomePage ? false : true);
-            }}
           >
             <Button variant="outline" size="icon" disabled={false}>
               {isHomePage ? (
@@ -38,7 +35,7 @@ export default function Header() {
                 <Home className="h-4 w-4" />
               )}
             </Button>
-          </Link>
+          </a>
 
           <ThemeToggle />
         </div>
