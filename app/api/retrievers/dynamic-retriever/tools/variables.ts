@@ -31,7 +31,7 @@ export const attributeInfo: AttributeInfo[] = [
 
 
 export const CONDENSE_QUESTION_TEMPLATE = (chat_history: any[], question: string, sources: DocumentInterface<Record<string, any>>[]) => {
-  return `Given the chat history and the sources found, answer the current input in English. You should only answer based on what was found from the sources.
+  return `Given the chat history and the sources found, answer the current input in English. 
 
   <Sources>
   ${!sources ?? "No sources found."}
@@ -46,7 +46,6 @@ export const CONDENSE_QUESTION_TEMPLATE = (chat_history: any[], question: string
     return `\nrole: ${message.role}
       \ncontent: ${message.content}`
   }).join("\n")}
-    
   </chat_history>
   
   Current Input: ${question}`

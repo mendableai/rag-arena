@@ -9,7 +9,7 @@ export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const text = body.text;
+  const { text, title, date, author } = body;
 
   if (process.env.NEXT_PUBLIC_DEMO === "true") {
     return NextResponse.json(
@@ -31,8 +31,13 @@ export async function POST(req: NextRequest) {
 
     const splitDocuments = await splitter.createDocuments([text]);
 
+    const documentsWithMetadata = splitDocuments.map(doc => ({
+      ...doc,
+      metadata: { ...doc.metadata, title, date, author },
+    }));
+
     const vectorstore = await SupabaseVectorStore.fromDocuments(
-      splitDocuments,
+      documentsWithMetadata,
       new OpenAIEmbeddings(),
       {
         client: supabase,

@@ -49,7 +49,6 @@ export async function addTimesTestedForBoth(retriever: string[]) {
 
         return true;
     } catch (e) {
-        console.log();
         return false;
     }
 }

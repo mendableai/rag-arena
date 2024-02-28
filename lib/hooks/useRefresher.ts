@@ -15,8 +15,6 @@ export const useRefresher = () => {
         setAllRandom(true);
         setInProcess(false);
 
-        console.log("new chat sessions: ", chatSessions);
-
     }
 };
 
