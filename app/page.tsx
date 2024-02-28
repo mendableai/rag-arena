@@ -1,4 +1,4 @@
-import { ChatBots } from "@/components/main-tool/chatbots";
+import { ChatBots } from "@/components/main-tool";
 
 export default function Main() {
   return (

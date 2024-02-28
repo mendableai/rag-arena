@@ -1,3 +1,4 @@
+import DocumentPopUp from "@/components/document-pop-up";
 import Footer from "@/components/theme/footer";
 import Header from "@/components/theme/header";
 import type { Metadata } from "next";
@@ -24,6 +25,7 @@ export default function RootLayout({
         <Header />
         <div className="content-grow">{children}</div>
         <Footer />
+        <DocumentPopUp />
         <Toaster />
       </body>
     </html>

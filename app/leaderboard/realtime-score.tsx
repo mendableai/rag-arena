@@ -68,7 +68,7 @@ export default function RealTimeScore({
             index % 2 === 0 ? "gray-800" : "gray-900"
           }`}
         >
-          <TableCell>{index + 1}</TableCell>
+          <TableCell className="text-center">{index + 1}</TableCell>
           <TableCell>
             <a
               style={{ textDecoration: "underline" }}
@@ -79,9 +79,9 @@ export default function RealTimeScore({
               {entry.full_name}
             </a>
           </TableCell>
-          <TableCell>{entry.elo}</TableCell>
-          <TableCell>{entry.votes}</TableCell>
-          <TableCell>{entry.times_tested}</TableCell>
+          <TableCell className="text-center">{entry.elo}</TableCell>
+          <TableCell className="text-center">{entry.votes}</TableCell>
+          <TableCell className="text-center">{entry.times_tested}</TableCell>
           <TableCell>{entry.description}</TableCell>
 
           <TableCell>{renderTrophy(index)}</TableCell>

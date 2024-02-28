@@ -81,7 +81,7 @@ export const TextRevealCard = ({
             style={{
               textShadow: "4px 4px 15px rgba(0,0,0,0.5)",
             }}
-            className="text-base sm:text-[1rem] py-10 font-bold dark:text-white text-black bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-300"
+            className="text-base sm:text-[1rem] py-10 font-bold dark:text-white bg-clip-text  bg-gradient-to-b from-white to-neutral-300 text-black"
           >
             {revealText}
           </p>
@@ -168,9 +168,9 @@ const Stars = () => {
             position: "absolute",
             top: `${random() * 100}%`,
             left: `${random() * 100}%`,
-            width: `2px`,
-            height: `2px`,
-            backgroundColor: "black",
+            width: `3px`,
+            height: `3px`,
+            backgroundColor: "#8559f4",
             borderRadius: "50%",
             zIndex: 1,
           }}
