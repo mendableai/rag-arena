@@ -3,6 +3,7 @@ import {
   ArrowRightSquare,
   Images,
   ListRestart,
+  RefreshCcw,
   Trash2,
 } from "lucide-react";
 
@@ -46,13 +47,14 @@ export function SelectionMenu() {
   });
 
   return (
-    <div className="flex items-center p-2 self-center gap-2">
-      <div className="flex items-center gap-2 ">
+    <div className="relative w-full flex items-center p-2 self-center gap-2">
+      <div className="w-full flex justify-center items-center gap-2 ">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               variant="outline"
               size="icon"
+              className="w-fit px-2 h-10 gap-2 items-center"
               onClick={async () => {
                 if (hasVoted || !allRandom) return;
 
@@ -79,6 +81,7 @@ export function SelectionMenu() {
               disabled={!message.length || hasVoted}
             >
               <ArrowLeftSquare className="h-4 w-4" />
+              Left is better
               <span className="sr-only">Vote Left</span>
             </Button>
           </TooltipTrigger>
@@ -89,6 +92,7 @@ export function SelectionMenu() {
             <Button
               variant="outline"
               size="icon"
+              className="w-fit px-2 h-10 gap-2 items-center"
               onClick={async () => {
                 if (hasVoted || !allRandom) return;
 
@@ -116,6 +120,7 @@ export function SelectionMenu() {
               }}
               disabled={!message.length || hasVoted}
             >
+              Right is better
               <ArrowRightSquare className="h-4 w-4" />
               <span className="sr-only">Vote Right</span>
             </Button>
@@ -123,7 +128,7 @@ export function SelectionMenu() {
           <TooltipContent>Vote Right</TooltipContent>
         </Tooltip>
       </div>
-      <div className="ml-auto flex items-center gap-2">
+      <div className="absolute right-0 flex items-center gap-2 pr-4">
         {/*<Tooltip open={hasVoted}>
           <TooltipTrigger asChild>
             <Button
@@ -149,17 +154,18 @@ export function SelectionMenu() {
           <TooltipContent>Print Result</TooltipContent>
         </Tooltip>
             */}
-        <Separator orientation="vertical" className="mx-1 h-6" />
+        {/* <Separator orientation="vertical" className="mx-1 h-6" /> */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               onClick={() => refresh()}
               variant={!hasVoted ? "outline" : "default"}
-              className={!hasVoted ? "" : "text-white"}
+              className={`${!hasVoted ? "" : "text-white"} w-fit px-2 h-10 gap-2`}
               size="icon"
               disabled={false}
             >
-              <ListRestart className="h-4 w-4" />
+              <RefreshCcw className="h-4 w-4" />
+              New Round
               <span className="sr-only">New Round</span>
             </Button>
           </TooltipTrigger>

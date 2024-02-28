@@ -17,15 +17,16 @@ export default function Footer() {
           ></TextRevealCard>
         </div>
 
-        <div className="flex gap-7">
+        <div className="flex gap-5">
           <Link
-            className="dark:text-white hover:opacity-80 ease-in-out transition-all duration-300 px-4 "
+            className="dark:text-white hover:opacity-80 ease-in-out transition-all duration-300 pr-1 "
             href={"https://mendable.ai/"}
             target="_BLANK"
           >
             <Image
               src="/images/mendable_logo_transparent.png"
               alt="Mendable Logo"
+              className="rounded-md"
               width={23}
               height={23}
             />
