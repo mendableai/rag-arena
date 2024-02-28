@@ -15,11 +15,11 @@ export default function ThemeToggle({}: CompProps) {
       html.classList.remove("dark");
     }
 
-    localStorage.setItem("theme", theme);
+    localStorage.setItem("retrieval-arena-theme", theme);
   };
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") ?? "light";
+    const savedTheme = localStorage.getItem("retrieval-arena-theme") ?? "light";
     setTheme(savedTheme);
   }, []);
 

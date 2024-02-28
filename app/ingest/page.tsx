@@ -27,7 +27,7 @@ export default function UploadDocumentsForm() {
     setIsLoading(false);
   };
   return (
-    <form onSubmit={ingest} className="flex max-w-3xl m-auto mt-10 mb-4">
+    <form onSubmit={ingest} className="flex max-w-3xl m-auto mb-4 mt-40 gap-4">
       <Textarea
         value={document}
         onChange={(e) => setDocument(e.target.value)}
