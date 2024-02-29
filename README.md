@@ -26,13 +26,14 @@ pnpm install
 Configure your environment variables:
 
 ```
+# probably in: https://platform.openai.com/api-keys
 OPENAI_API_KEY=
 
-//probably in: https://supabase.com/dashboard/ project>project settings>api
+# probably in: https://supabase.com/dashboard/ project>project settings>api
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PRIVATE_KEY=
 
-//probably in: https://console.upstash.com/redis/
+# probably in: https://console.upstash.com/redis/
 UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 
