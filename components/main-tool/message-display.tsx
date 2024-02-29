@@ -113,8 +113,8 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                   <strong>{m.role === "user" ? "" : "AI: "}</strong>
                   {m.content}
                   {m.annotations && m.annotations.length ? (
-                    <div className="ml-4 mt-2 dark:bg-slate-900 bg-slate-100 px-4 py-2 drop-shadow-lg">
-                      <span>🔍 Sources:</span>
+                    <div className=" mt-2 dark:bg-slate-900 bg-slate-100 px-3 py-2 drop-shadow-lg rounded-md">
+                      <span >🔍 Sources:</span>
                       <span className="mt-1 mr-2 px-2 py-1 rounded text-xs">
                         {m.annotations?.map((source: any, i) => (
                           <div className="mt-3" key={"source:" + i}>
