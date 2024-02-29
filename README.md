@@ -20,7 +20,7 @@ Navigate to the project directory and install the dependencies:
 
 ```bash
 cd retrieval-arena
-pnpm install
+pnpm i
 ```
 
 Configure your environment variables:
@@ -43,7 +43,7 @@ PRODUCTION=false
 Start the development server:
 
 ```bash
-pnpm run dev
+pnpm dev
 ```
 
 Open http://localhost:3000 with your browser to see the result.
