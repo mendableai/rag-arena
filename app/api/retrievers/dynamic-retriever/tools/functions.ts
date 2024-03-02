@@ -59,6 +59,7 @@ export function MultiQuery(
 
 export async function ParentDocument(
     vectorstore: SupabaseVectorStore,
+    currentMessageContent: string,
 ) {
 
     const temporaryVectorStore = new MemoryVectorStore(new OpenAIEmbeddings());
@@ -85,7 +86,7 @@ export async function ParentDocument(
     const vstoreRetriever = vectorstore.asRetriever();
 
     const parentDocuments = await vstoreRetriever.getRelevantDocuments(
-        "Should I scale my business?",
+        currentMessageContent,
     );
 
     await retriever.addDocuments(parentDocuments);

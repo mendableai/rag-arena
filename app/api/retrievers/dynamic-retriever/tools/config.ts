@@ -25,6 +25,7 @@ export async function dynamicRetrieverUtility(
         case "parent-document":
             return ParentDocument(
                 vectorstore,
+                currentMessageContent,
             );
         case "self-query":
             return SelfQuery(
