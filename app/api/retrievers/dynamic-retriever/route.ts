@@ -11,8 +11,6 @@ import { CONDENSE_QUESTION_TEMPLATE } from "./tools/variables";
 
 export const runtime = "edge";
 
-
-
 function getClientIp(req: NextRequest) {
     return req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for') ?? req.ip;
 }
@@ -74,9 +72,7 @@ export async function POST(req: NextRequest) {
             currentMessageContent,
         );
 
-        if (retrievedDocs.length === 0) {
-            return NextResponse.json({ error: "Unable to find any documents." }, { status: 400 })
-        }
+       // atempt to retrieve documents 3 times. If unsucesful, place +1 error in db
 
         const prompt = CONDENSE_QUESTION_TEMPLATE(previousMessages, currentMessageContent, retrievedDocs);
 
