@@ -33,6 +33,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
+    "dotenv": "^16.4.5",
     "framer-motion": "^11.0.5",
     "langchain": "^0.1.20",
     "lucide-react": "^0.331.0",

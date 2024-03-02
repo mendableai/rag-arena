@@ -1,6 +1,6 @@
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { type Document } from "@langchain/core/documents";
-import { ChatOpenAI } from "@langchain/openai";
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { ContextualCompressionRetriever } from "langchain/retrievers/contextual_compression";
 import { LLMChainExtractor } from "langchain/retrievers/document_compressors/chain_extract";
 import { MultiQueryRetriever } from "langchain/retrievers/multi_query";
@@ -12,18 +12,16 @@ import { SupabaseTranslator } from "langchain/retrievers/self_query/supabase";
 import { TimeWeightedVectorStoreRetriever } from "langchain/retrievers/time_weighted";
 import { InMemoryStore } from "langchain/storage/in_memory";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { attributeInfo } from "./variables";
 
-let resolveWithDocuments: (value: Document[]) => void;
 
-export const documentPromise = new Promise<Document[]>((resolve) => {
-    resolveWithDocuments = resolve;
-  });
 
 export function ContextualCompression(
     model: ChatOpenAI,
     vectorstore: SupabaseVectorStore,
 ) {
+    let resolveWithDocuments: (value: Document[]) => void;
     const baseCompressor = LLMChainExtractor.fromLLM(model);
 
     return new ContextualCompressionRetriever({
@@ -43,6 +41,7 @@ export function MultiQuery(
     model: ChatOpenAI,
     vectorstore: SupabaseVectorStore,
 ) {
+    let resolveWithDocuments: (value: Document[]) => void;
 
     return MultiQueryRetriever.fromLLM({
         llm: model,
@@ -58,24 +57,41 @@ export function MultiQuery(
     });
 }
 
-export function ParentDocument(
+export async function ParentDocument(
     vectorstore: SupabaseVectorStore,
 ) {
 
+    const temporaryVectorStore = new MemoryVectorStore(new OpenAIEmbeddings());
     const docstore = new InMemoryStore();
-
-    return new ParentDocumentRetriever({
-        vectorstore,
+    
+    const retriever = new ParentDocumentRetriever({
+        vectorstore: temporaryVectorStore,
         docstore,
-        childSplitter: new RecursiveCharacterTextSplitter(),
-        callbacks: [
-            {
-                handleRetrieverEnd(documents) {
-                    resolveWithDocuments(documents);
-                },
-            },
-        ],
+
+        parentSplitter: new RecursiveCharacterTextSplitter({
+            chunkOverlap: 0,
+            chunkSize: 500,
+        }),
+        childSplitter: new RecursiveCharacterTextSplitter({
+            chunkOverlap: 0,
+            chunkSize: 50,
+        }),
+
+        childK: 20,
+
+        parentK: 5,
     });
+
+    const vstoreRetriever = vectorstore.asRetriever();
+
+    const parentDocuments = await vstoreRetriever.getRelevantDocuments(
+        "Should I scale my business?",
+    );
+
+    await retriever.addDocuments(parentDocuments);
+
+    return retriever;
+
 }
 
 export function SelfQuery(
@@ -83,6 +99,7 @@ export function SelfQuery(
     vectorstore: SupabaseVectorStore,
     currentMessageContent: string,
 ) {
+    let resolveWithDocuments: (value: Document[]) => void;
 
     return SelfQueryRetriever.fromLLM({
         llm: model,
@@ -103,6 +120,7 @@ export function SelfQuery(
 export function SimilarityScore(
     vectorstore: SupabaseVectorStore,
 ) {
+    let resolveWithDocuments: (value: Document[]) => void;
 
     return ScoreThresholdRetriever.fromVectorStore(vectorstore, {
         minSimilarityScore: 0,
@@ -121,6 +139,7 @@ export function SimilarityScore(
 export async function TimeWeighted(
     vectorstore: SupabaseVectorStore
 ) {
+    let resolveWithDocuments: (value: Document[]) => void;
     const retriever = new TimeWeightedVectorStoreRetriever({
         vectorStore: vectorstore,
         memoryStream: [],
@@ -150,6 +169,7 @@ export async function TimeWeighted(
 export function VectorStore(
     vectorstore: SupabaseVectorStore
 ) {
+    let resolveWithDocuments: (value: Document[]) => void;
 
     return vectorstore.asRetriever({
         callbacks: [
@@ -165,6 +185,7 @@ export function VectorStore(
 export function MultiVector(
     vectorstore: SupabaseVectorStore,
 ) {
+    let resolveWithDocuments: (value: Document[]) => void;
     const byteStore = new InMemoryStore<Uint8Array>();
 
     return new MultiVectorRetriever({

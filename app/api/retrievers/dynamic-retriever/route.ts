@@ -74,10 +74,6 @@ export async function POST(req: NextRequest) {
             currentMessageContent,
         );
 
-        if (retrievedDocs.length === 0) {
-            return NextResponse.json({ error: "Unable to find any documents." }, { status: 400 })
-        }
-
         const prompt = CONDENSE_QUESTION_TEMPLATE(previousMessages, currentMessageContent, retrievedDocs);
 
         const response = await openai.chat.completions.create({

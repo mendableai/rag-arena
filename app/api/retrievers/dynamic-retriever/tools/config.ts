@@ -5,7 +5,7 @@ import { ChatOpenAI } from "@langchain/openai";
 import { Message as VercelChatMessage } from "ai";
 import { ContextualCompression, MultiQuery, MultiVector, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
 
-export function dynamicRetrieverUtility(
+export async function dynamicRetrieverUtility(
     retrieverSelected: string,
     model: ChatOpenAI,
     vectorstore: SupabaseVectorStore,

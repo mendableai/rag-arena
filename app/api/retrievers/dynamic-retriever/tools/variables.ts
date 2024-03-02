@@ -3,30 +3,20 @@ import { type AttributeInfo } from "langchain/schema/query_constructor";
 
 export const attributeInfo: AttributeInfo[] = [
   {
-    name: "genre",
-    description: "The genre of the movie",
-    type: "string or array of strings",
-  },
-  {
-    name: "year",
-    description: "The year the movie was released",
-    type: "number",
-  },
-  {
-    name: "director",
-    description: "The director of the movie",
+    name: "title",
+    description: "The title of the article",
     type: "string",
   },
   {
-    name: "rating",
-    description: "The rating of the movie (1-10)",
-    type: "number",
+    name: "author",
+    description: "The author of the article",
+    type: "string",
   },
   {
-    name: "length",
-    description: "The length of the movie in minutes",
-    type: "number",
-  },
+    name: "date",
+    description: "The date of the article",
+    type: "string",
+  }
 ];
 
 
