@@ -1,4 +1,4 @@
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { CharacterTextSplitter } from "langchain/text_splitter";
 import { NextRequest, NextResponse } from "next/server";
 
 import supabase from "@/lib/supabase";
@@ -24,7 +24,8 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const splitter = RecursiveCharacterTextSplitter.fromLanguage("markdown", {
+    const splitter = new CharacterTextSplitter({
+      separator: "\n",
       chunkSize: 500,
       chunkOverlap: 100,
     });

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"; // Assuming you have a similar Input component
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, type FormEvent } from "react";
 
@@ -26,8 +26,6 @@ export default function UploadDocumentsForm() {
     });
     if (response.ok) {
       setDocument("Uploaded!");
-      setTitle("");
-      setDate("");
     } else {
       const json = await response.json();
       setDocument(json.error || "Error uploading document");
@@ -36,7 +34,10 @@ export default function UploadDocumentsForm() {
   };
 
   return (
-    <form onSubmit={ingest} className="flex flex-col max-w-3xl m-auto mb-4 mt-40 gap-4">
+    <form
+      onSubmit={ingest}
+      className="flex flex-col max-w-3xl m-auto mb-4 mt-40 gap-4"
+    >
       <Input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
