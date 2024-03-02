@@ -1,3 +1,4 @@
+import supabase from "@/lib/supabase";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { type Document } from "@langchain/core/documents";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
@@ -64,7 +65,7 @@ export async function ParentDocument(
 
     const temporaryVectorStore = new MemoryVectorStore(new OpenAIEmbeddings());
     const docstore = new InMemoryStore();
-    
+
     const retriever = new ParentDocumentRetriever({
         vectorstore: temporaryVectorStore,
         docstore,
@@ -95,27 +96,31 @@ export async function ParentDocument(
 
 }
 
-export function SelfQuery(
+export async function SelfQuery(
     model: ChatOpenAI,
     vectorstore: SupabaseVectorStore,
     currentMessageContent: string,
 ) {
-    let resolveWithDocuments: (value: Document[]) => void;
 
-    return SelfQueryRetriever.fromLLM({
+    const vstoreRetriever = vectorstore.asRetriever();
+    const embeddings = new OpenAIEmbeddings();
+    const documents = await vstoreRetriever.getRelevantDocuments(
+        currentMessageContent,
+    );
+
+    const vectorStore2 = await SupabaseVectorStore.fromDocuments(documents, embeddings, {
+        client: supabase,
+    });
+
+    const selfQueryRetriever = await SelfQueryRetriever.fromLLM({
         llm: model,
-        vectorStore: vectorstore,
+        vectorStore: vectorStore2,
         documentContents: currentMessageContent,
         attributeInfo,
         structuredQueryTranslator: new SupabaseTranslator(),
-        callbacks: [
-            {
-                handleRetrieverEnd(documents) {
-                    resolveWithDocuments(documents);
-                },
-            },
-        ],
-    })
+    });
+
+    return selfQueryRetriever
 }
 
 export function SimilarityScore(
@@ -155,7 +160,7 @@ export async function TimeWeighted(
         currentMessageContent,
     );
 
-   
+
     await retriever.addDocuments(documents);
 
     return retriever
