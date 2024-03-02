@@ -40,6 +40,7 @@ export async function dynamicRetrieverUtility(
         case "time-weighted":
             return TimeWeighted(
                 vectorstore,
+                currentMessageContent,
             );
         case "vector-store":
             return VectorStore(

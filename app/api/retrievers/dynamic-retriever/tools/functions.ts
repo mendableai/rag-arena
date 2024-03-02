@@ -138,30 +138,24 @@ export function SimilarityScore(
 }
 
 export async function TimeWeighted(
-    vectorstore: SupabaseVectorStore
+    vectorstore: SupabaseVectorStore,
+    currentMessageContent: string,
 ) {
-    let resolveWithDocuments: (value: Document[]) => void;
+    const vectorstore2 = new MemoryVectorStore(new OpenAIEmbeddings());
+
     const retriever = new TimeWeightedVectorStoreRetriever({
-        vectorStore: vectorstore,
+        vectorStore: vectorstore2,
         memoryStream: [],
         searchKwargs: 2,
-        callbacks: [
-            {
-                handleRetrieverEnd(documents) {
-                    resolveWithDocuments(documents);
-                },
-            },
-        ]
     });
 
-    const documents = [
-        "My name is John.",
-        "My name is Bob.",
-        "My favourite food is pizza.",
-        "My favourite food is pasta.",
-        "My favourite food is sushi.",
-    ].map((pageContent) => ({ pageContent, metadata: {} }));
+    const vstoreRetriever = vectorstore.asRetriever();
 
+    const documents = await vstoreRetriever.getRelevantDocuments(
+        currentMessageContent,
+    );
+
+   
     await retriever.addDocuments(documents);
 
     return retriever
