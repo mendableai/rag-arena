@@ -4,7 +4,7 @@ export const arrayOfRetrievers = [
     "multi-query",
     // "multi-vector",
     "parent-document",
-    "self-query",
+    // "self-query",
     "similarity-score",
     "time-weighted",
   ];
