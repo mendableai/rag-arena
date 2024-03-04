@@ -30,9 +30,8 @@ async function createDocumentFromText(
   chunkSize: number,
   chunkOverlap: number
 ) {
-  
   const splitter = new CharacterTextSplitter({
-    separator: "\n", 
+    separator: "\n",
     chunkSize: chunkSize,
     chunkOverlap: chunkOverlap,
   });
@@ -40,10 +39,13 @@ async function createDocumentFromText(
   const splitDocuments = await splitter.createDocuments([text]);
 
   const documentsWithMetadata = splitDocuments.map((doc) => {
-    const additionalMetadata = metadata.reduce((acc: Record<string, string>, { parameter, value }) => {
-      acc[parameter] = value;
-      return acc;
-    }, {});
+    const additionalMetadata = metadata.reduce(
+      (acc: Record<string, string>, { parameter, value }) => {
+        acc[parameter] = value;
+        return acc;
+      },
+      {}
+    );
 
     return {
       ...doc,
@@ -117,12 +119,12 @@ export default function CustomIngest() {
             } -ml-3`}
             size={40}
           />
-          Ingest Data
+          Ingest Custom Data
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl justify-center">
         <DialogHeader>
-          <DialogTitle>Ingest Data</DialogTitle>
+          <DialogTitle>Ingest Custom Data</DialogTitle>
           <DialogDescription>
             Use the retrievers with your own data. You can add metadata to
             documents and split them into chunks.
@@ -271,7 +273,11 @@ export default function CustomIngest() {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={() => setDialogOpen(false)}>
+          <Button
+            className=" text-white"
+            type="submit"
+            onClick={() => setDialogOpen(false)}
+          >
             Save changes
           </Button>
         </DialogFooter>
