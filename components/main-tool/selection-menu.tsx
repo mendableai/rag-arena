@@ -93,6 +93,21 @@ export function SelectionMenu() {
               variant="outline"
               size="icon"
               className="w-fit px-2 h-10 gap-2 items-center"
+              onClick={() => refresh()}
+              disabled={!message.length || hasVoted}
+            >
+              Tie
+              <span className="sr-only">Tie</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Tie</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="w-fit px-2 h-10 gap-2 items-center"
               onClick={async () => {
                 if (hasVoted || !allRandom) return;
 
@@ -160,7 +175,9 @@ export function SelectionMenu() {
             <Button
               onClick={() => refresh()}
               variant={!hasVoted ? "outline" : "default"}
-              className={`${!hasVoted ? "" : "text-white"} w-fit px-2 h-10 gap-2`}
+              className={`${
+                !hasVoted ? "" : "text-white"
+              } w-fit px-2 h-10 gap-2`}
               size="icon"
               disabled={false}
             >

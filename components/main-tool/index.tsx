@@ -145,7 +145,11 @@ export function ChatBots() {
               <div className="gap-4 flex items-center">
                 <Textarea
                   className="p-4"
-                  placeholder="Ask a question about Paul Graham's essays on startups..."
+                  placeholder={
+                    customDocuments.length > 0
+                      ? "Ask a question about your custom data"
+                      : "Ask a question about Paul Graham's essays on startups..."
+                  }
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
