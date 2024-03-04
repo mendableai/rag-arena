@@ -17,7 +17,7 @@ import { attributeInfo } from "./variables";
 
 export function ContextualCompression(
     model: ChatOpenAI,
-    vectorstore: SupabaseVectorStore,
+    vectorstore: SupabaseVectorStore | MemoryVectorStore,
 ) {
     const baseCompressor = LLMChainExtractor.fromLLM(model);
 
@@ -30,7 +30,7 @@ export function ContextualCompression(
 
 export function MultiQuery(
     model: ChatOpenAI,
-    vectorstore: SupabaseVectorStore,
+    vectorstore: SupabaseVectorStore | MemoryVectorStore,
 ) {
 
     return MultiQueryRetriever.fromLLM({
@@ -42,7 +42,7 @@ export function MultiQuery(
 }
 
 export async function ParentDocument(
-    vectorstore: SupabaseVectorStore,
+    vectorstore: SupabaseVectorStore | MemoryVectorStore,
     currentMessageContent: string,
 ) {
 
@@ -81,7 +81,7 @@ export async function ParentDocument(
 
 export async function SelfQuery(
     model: ChatOpenAI,
-    vectorstore: SupabaseVectorStore,
+    vectorstore: SupabaseVectorStore | MemoryVectorStore,
     currentMessageContent: string,
 ) {
 
@@ -107,7 +107,7 @@ export async function SelfQuery(
 }
 
 export function SimilarityScore(
-    vectorstore: SupabaseVectorStore,
+    vectorstore: SupabaseVectorStore | MemoryVectorStore,
 ) {
 
     return ScoreThresholdRetriever.fromVectorStore(vectorstore, {
@@ -119,7 +119,7 @@ export function SimilarityScore(
 }
 
 export async function TimeWeighted(
-    vectorstore: SupabaseVectorStore,
+    vectorstore: SupabaseVectorStore | MemoryVectorStore,
     currentMessageContent: string,
 ) {
     const vectorstore2 = new MemoryVectorStore(new OpenAIEmbeddings());
@@ -143,14 +143,14 @@ export async function TimeWeighted(
 }
 
 export function VectorStore(
-    vectorstore: SupabaseVectorStore
+    vectorstore: SupabaseVectorStore | MemoryVectorStore
 ) {
 
     return vectorstore.asRetriever();
 }
 
 export function MultiVector(
-    vectorstore: SupabaseVectorStore,
+    vectorstore: SupabaseVectorStore | MemoryVectorStore,
 ) {
     const byteStore = new InMemoryStore<Uint8Array>();
 

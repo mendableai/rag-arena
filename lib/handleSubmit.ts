@@ -1,13 +1,17 @@
+import { DocumentInterface } from "@langchain/core/documents";
 import { Message } from "ai";
+
 interface HandleSubmitParams {
+    customDocuments: DocumentInterface<Record<string, any>>[];
     input: string;
     chatHistory: Message[];
     setChatHistory: (newHistory: Message[] | ((currentHistory: Message[]) => Message[])) => void;
     retrieverSelection: string;
-    setLoading: (isLoading: boolean) => void; 
+    setLoading: (isLoading: boolean) => void;
 }
-export async function handleSubmit({ input, chatHistory, setChatHistory, retrieverSelection, setLoading }: HandleSubmitParams) {
-    setLoading(true); 
+
+export async function handleSubmit({ customDocuments, input, chatHistory, setChatHistory, retrieverSelection, setLoading }: HandleSubmitParams) {
+    setLoading(true);
 
     const newUserEntry: Message = {
         id: `${Math.random().toString(36).substring(7)}`,
@@ -31,6 +35,7 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
             body: JSON.stringify({
                 messages: newChatHistory,
                 retrieverSelection,
+                customDocuments,
             }),
         });
 
@@ -56,7 +61,7 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
         }
 
         const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 10000, { done: true }));
-        
+
         while (true) {
             const result = await Promise.race([
                 reader.read(),
@@ -89,10 +94,10 @@ export async function handleSubmit({ input, chatHistory, setChatHistory, retriev
             );
         }
 
-        
+
 
     } catch (error) {
-        setLoading(false); 
+        setLoading(false);
         return "Error while fetching response from retriever."
     }
 }

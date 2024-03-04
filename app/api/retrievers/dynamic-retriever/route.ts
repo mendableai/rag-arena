@@ -1,17 +1,17 @@
 import supabase from "@/lib/supabase";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
+import { DocumentInterface } from "@langchain/core/documents";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { OpenAIStream, StreamingTextResponse } from 'ai';
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from 'openai';
 import { dynamicRetrieverUtility } from "./tools/config";
 import { CONDENSE_QUESTION_TEMPLATE } from "./tools/variables";
 
 export const runtime = "edge";
-
-
 
 function getClientIp(req: NextRequest) {
     return req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for') ?? req.ip;
@@ -47,6 +47,8 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const messages = body.messages ?? [];
 
+        const customDocuments: DocumentInterface<Record<string, any>>[] = body.customDocuments ?? [];
+
         if (messages.length > 5) {
             return NextResponse.json({ error: "Too many messages" }, { status: 400 })
         }
@@ -62,11 +64,20 @@ export async function POST(req: NextRequest) {
             streaming: true,
         });
 
-        const vectorstore = new SupabaseVectorStore(new OpenAIEmbeddings(), {
-            client: supabase,
-            tableName: "documents",
-            queryName: "match_documents",
-        });
+        let vectorstore: SupabaseVectorStore | MemoryVectorStore;
+
+        if (customDocuments.length > 0) {
+            vectorstore = await MemoryVectorStore.fromDocuments(
+                customDocuments,
+                new OpenAIEmbeddings()
+            );
+        } else {
+            vectorstore = new SupabaseVectorStore(new OpenAIEmbeddings(), {
+                client: supabase,
+                tableName: "documents",
+                queryName: "match_documents",
+            });
+        }
 
         const retriever = await dynamicRetrieverUtility(retrieverSelected, model, vectorstore, currentMessageContent);
 

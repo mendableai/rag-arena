@@ -3,12 +3,13 @@ import { Document } from "@langchain/core/documents";
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
 import { ChatOpenAI } from "@langchain/openai";
 import { Message as VercelChatMessage } from "ai";
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { ContextualCompression, MultiQuery, MultiVector, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
 
 export async function dynamicRetrieverUtility(
     retrieverSelected: string,
     model: ChatOpenAI,
-    vectorstore: SupabaseVectorStore,
+    vectorstore: SupabaseVectorStore | MemoryVectorStore,
     currentMessageContent: string,
 ) {
     switch (retrieverSelected) {

@@ -6,6 +6,7 @@ import { getRandomSelection } from "@/lib/utils";
 import {
   useAllRandomStore,
   useChatSessionsStore,
+  useCustomDocumentStore,
   useInProcessStore,
   useVoteStore,
 } from "@/lib/zustand";
@@ -37,6 +38,8 @@ export function ChatBots() {
   const { hasVoted } = useVoteStore();
   const { setInProcess } = useInProcessStore();
 
+  const { customDocuments } = useCustomDocumentStore();
+
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
@@ -60,6 +63,7 @@ export function ChatBots() {
           : session.retrieverSelection;
 
       handleSubmit({
+        customDocuments,
         input,
         chatHistory: session.chatHistory,
         setChatHistory: (newHistory) => {

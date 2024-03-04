@@ -1,5 +1,6 @@
 "use client";
 
+import CustomIngest from "@/components/main-tool/custom-ingest";
 import { Button } from "@/components/ui/button";
 import { Home, Trophy } from "lucide-react";
 import Link from "next/link";
@@ -25,9 +26,9 @@ export default function Header() {
           </Link>
         </div>
         <div className="flex items-center gap-6">
-          <a
-            href={redirectTo}
-          >
+          {isHomePage && <CustomIngest />}
+
+          <a href={redirectTo}>
             <Button variant="outline" size="icon" disabled={false}>
               {isHomePage ? (
                 <Trophy className="h-4 w-4" />

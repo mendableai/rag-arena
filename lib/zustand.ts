@@ -1,3 +1,4 @@
+import { DocumentInterface } from '@langchain/core/documents';
 import { Message } from 'ai';
 import { create } from 'zustand';
 
@@ -47,4 +48,15 @@ interface InProcessState {
 export const useInProcessStore = create<InProcessState>((set) => ({
     inProcess: false,
     setInProcess: (value: boolean) => set(() => ({ inProcess: value })),
+}))
+
+
+interface CustomDocumentState {
+    customDocuments: DocumentInterface<Record<string, any>>[];
+    setCustomDocuments: (value: DocumentInterface<Record<string, any>>[]) => void;
+}
+
+export const useCustomDocumentStore = create<CustomDocumentState>((set) => ({
+    customDocuments: [],
+    setCustomDocuments: (value: DocumentInterface<Record<string, any>>[]) => set(() => ({ customDocuments: value })),
 }))
