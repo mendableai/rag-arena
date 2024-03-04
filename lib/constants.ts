@@ -2,11 +2,11 @@ export const arrayOfRetrievers = [
     "vector-store",
     "contextual-compression",
     "multi-query",
-    "multi-vector",
+    // "multi-vector",
     "parent-document",
     "self-query",
     "similarity-score",
-    // "time-weighted",
+    "time-weighted",
   ];
   
   export const retrieverInfo = {

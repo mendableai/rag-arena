@@ -19,7 +19,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import aplyToast from "@/lib/aplyToaster";
 import { useCustomDocumentStore } from "@/lib/zustand";
-import { DocumentInterface } from "@langchain/core/documents";
+import { CharacterTextSplitter } from "langchain/text_splitter";
 import { Dot, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -30,23 +30,26 @@ async function createDocumentFromText(
   chunkSize: number,
   chunkOverlap: number
 ) {
-  const documentsWithMetadata = [];
+  
+  const splitter = new CharacterTextSplitter({
+    separator: "\n", 
+    chunkSize: chunkSize,
+    chunkOverlap: chunkOverlap,
+  });
 
-  for (let i = 0; i < text.length; i += chunkSize - chunkOverlap) {
-    const chunkText = text.substring(i, i + chunkSize);
-    const documentMetadata = metadata.reduce(
-      (acc: Record<string, string>, pair) => {
-        acc[pair.parameter] = pair.value;
-        return acc;
-      },
-      {}
-    );
-    const document: DocumentInterface<Record<string, any>> = {
-      pageContent: chunkText,
-      metadata: documentMetadata,
+  const splitDocuments = await splitter.createDocuments([text]);
+
+  const documentsWithMetadata = splitDocuments.map((doc) => {
+    const additionalMetadata = metadata.reduce((acc: Record<string, string>, { parameter, value }) => {
+      acc[parameter] = value;
+      return acc;
+    }, {});
+
+    return {
+      ...doc,
+      metadata: { ...doc.metadata, ...additionalMetadata },
     };
-    documentsWithMetadata.push(document);
-  }
+  });
 
   return documentsWithMetadata;
 }
@@ -61,6 +64,8 @@ export default function CustomIngest() {
   const [chunkOverlap, setChunkOverlap] = useState(25);
 
   const [popoverOpen, setPopoverOpen] = useState(false);
+
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     if (rawData.length > 3000) {
@@ -103,7 +108,7 @@ export default function CustomIngest() {
   };
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="secondary">
           <Dot
@@ -266,7 +271,9 @@ export default function CustomIngest() {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit" onClick={() => setDialogOpen(false)}>
+            Save changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
