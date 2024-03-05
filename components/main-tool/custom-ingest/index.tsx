@@ -70,7 +70,7 @@ export default function CustomIngest() {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
-    if (rawData.length > 3000) {
+    if (rawData.length > 32000) {
       aplyToast("Raw data is too long.");
       return;
     }
