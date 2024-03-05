@@ -6,7 +6,7 @@ export const arrayOfRetrievers = [
     "parent-document",
     // "self-query",
     "similarity-score",
-    "time-weighted",
+    // "time-weighted",
   ];
   
   export const retrieverInfo = {
