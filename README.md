@@ -1,6 +1,6 @@
-# Retrieval Arena
+# RAG Arena
 
-Retrieval Arena is an open-source Next.js project made my mendable.ai that interfaces with LangChain to provide a RAG chatbot experience where queries receive multiple responses. Users vote on these responses, which are then unblurred to reveal the Retriever used, differentiating the chatbots by their data retrieval methods. The project utilizes Supabase for database operations and features a real-time leaderboard displaying data from the database.
+RAG Arena is an open-source Next.js project made my mendable.ai that interfaces with LangChain to provide a RAG chatbot experience where queries receive multiple responses. Users vote on these responses, which are then unblurred to reveal the Retriever used, differentiating the chatbots by their data RAG methods. The project utilizes Supabase for database operations and features a real-time leaderboard displaying data from the database.
 
 ## Installation
 
@@ -13,13 +13,13 @@ npm install -g pnpm
 Clone the project repository:
 
 ```bash
-git clone https://github.com/leonardogrig/retrieval-arena
+git clone https://github.com/mendableai/rag-arena
 ```
 
 Navigate to the project directory and install the dependencies:
 
 ```bash
-cd retrieval-arena
+cd RAG-arena
 pnpm i
 ```
 
@@ -65,7 +65,7 @@ Open http://localhost:3000 with your browser to see the result.
 - **Description:** Dynamically selects and uses different retrievers based on user input to fetch relevant documents.
 - **Key Features:**
   - **Rate Limiting:** Implements rate limiting to manage the load and ensure fair usage.
-  - **Document Retrieval:** Retrieves documents that are most relevant to the user's query.
+  - **Document RAG:** Retrieves documents that are most relevant to the user's query.
   - **OpenAI Integration:** Interacts with OpenAI's API to enhance chat completions, powered by SupabaseVectorStore for document matching.
 
 ### Voting System
@@ -83,22 +83,23 @@ function calculateEloAdjustment(timesTested: number, averageTimesTested: number)
     const adjustmentFactor = timesTested / averageTimesTested;
     return (1 / adjustmentFactor) * 10;
 }
-``` 
+```
 
 ### Database Schema
 
 - **Table Name:** Leaderboard
 - **Contents:** Holds crucial data for each retriever, including `id`, `retriever`, `elo`, `votes`, `times_tested`, `full_name`, `description`, and `link`.
 
-## Retrieval Functions Overview
+## RAG Functions Overview
+
 (https://js.langchain.com/docs/modules/data_connection/retrievers/)
 
-This section outlines the various retrieval functions defined in `app/api/retrievers/dynamic-retriever/tools/functions.ts`, detailing their purpose and implementation within the project's architecture. These functions play a crucial role in the document retrieval process, leveraging different strategies and technologies to optimize performance and accuracy.
+This section outlines the various RAG functions defined in `app/api/retrievers/dynamic-retriever/tools/functions.ts`, detailing their purpose and implementation within the project's architecture. These functions play a crucial role in the document RAG process, leveraging different strategies and technologies to optimize performance and accuracy.
 
 ### Vector Store
 
 - **When to Use:** Ideal for beginners seeking a quick and straightforward solution.
-- **Description:** This function leverages the simplicity of creating embeddings for each text piece, making it the most accessible starting point for document retrieval.
+- **Description:** This function leverages the simplicity of creating embeddings for each text piece, making it the most accessible starting point for document RAG.
 
 ### Parent Document
 
@@ -123,18 +124,17 @@ This section outlines the various retrieval functions defined in `app/api/retrie
 ### Time Weighted
 
 - **When to Use:** Ideal for documents with associated timestamps, aiming to retrieve the most recent documents based on semantic similarity and recency.
-- **Description:** Retrieves documents by balancing semantic similarity with document timestamps, ensuring recent documents are prioritized in the retrieval process.
+- **Description:** Retrieves documents by balancing semantic similarity with document timestamps, ensuring recent documents are prioritized in the RAG process.
 
 ### Multi-Query Retriever
 
 - **When to Use:** Best for complex queries requiring multiple distinct pieces of information for a comprehensive response.
 - **Description:** Generates multiple queries from a single input, addressing the need for information across various topics to answer the original query fully. This approach fetches documents for each generated query, ensuring a thorough response.
 
-
 ## Contributing
 
 Contributions are welcome! Please follow the standard fork & pull request workflow. Ensure you adhere to the coding styles and patterns present in the project and write tests for new features or bug fixes.
 
 ## License
-Retrieval Arena is open source and released under the MIT License. See the LICENSE file for more information.
 
+RAG Arena is open source and released under the MIT License. See the LICENSE file for more information.

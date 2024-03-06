@@ -16,10 +16,10 @@ export async function POST(req: NextRequest) {
       {
         error: [
           "Ingest is not supported in demo mode.",
-          "Please set up your own version of the repo here: https://github.com/leonardogrig/retrieval-arena",
+          "Please set up your own version of the repo here: https://github.com/mendableai/rag-arena",
         ].join("\n"),
       },
-      { status: 403 },
+      { status: 403 }
     );
   }
 
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
     const splitDocuments = await splitter.createDocuments([text]);
 
-    const documentsWithMetadata = splitDocuments.map(doc => ({
+    const documentsWithMetadata = splitDocuments.map((doc) => ({
       ...doc,
       metadata: { ...doc.metadata, title, date, author },
     }));
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
         client: supabase,
         tableName: "documents",
         queryName: "match_documents",
-      },
+      }
     );
 
     return NextResponse.json({ ok: true }, { status: 200 });
