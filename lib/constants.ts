@@ -41,7 +41,7 @@ export const retrieverInfo = {
     link: "https://js.langchain.com/docs/modules/data_connection/retrievers/self_query",
   },
   "similarity-score": {
-    description: "Custom short description needed.",
+    description: "Scores documents based on similarity to user input.",
     fullName: "Similarity Score",
     link: "https://js.langchain.com/docs/modules/data_connection/retrievers/similarity-score-threshold-retriever",
   },
