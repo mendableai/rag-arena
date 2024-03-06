@@ -71,17 +71,17 @@ export function SelectRetrieverMenu({
                   Contextual Compression 🦜🔗
                 </SelectItem>
                 <SelectItem value="multi-query">Multi Query 🦜🔗</SelectItem>
-                <SelectItem value="multi-vector">Multi Vector 🦜🔗</SelectItem>
+                {/* <SelectItem value="multi-vector">Multi Vector 🦜🔗</SelectItem> */}
                 <SelectItem value="parent-document">
                   Parent Document 🦜🔗
                 </SelectItem>
-                <SelectItem value="self-query">Self Query 🦜🔗</SelectItem>
+                {/* <SelectItem value="self-query">Self Query 🦜🔗</SelectItem> */}
                 <SelectItem value="similarity-score">
                   Similarity Score 🦜🔗
                 </SelectItem>
-                <SelectItem value="time-weighted">
+                {/* <SelectItem value="time-weighted">
                   Time Weighted 🦜🔗
-                </SelectItem>
+                </SelectItem> */}
               </SelectGroup>
             </SelectContent>
           </Select>
