@@ -1,7 +1,7 @@
 import DocumentPopUp from "@/components/document-pop-up";
 import Footer from "@/components/theme/footer";
 import Header from "@/components/theme/header";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
@@ -10,8 +10,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Chatbot Arena",
-  description: "AI ChatBot Arena",
+  title: "RAG Arena",
+  description: "Evaluate Retreivers with RAG Arena",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
