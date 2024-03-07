@@ -40,10 +40,11 @@ export function ChatBots() {
 
   const { customDocuments } = useCustomDocumentStore();
 
-  const handleFormSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-
+  const submitChatSessions = async () => {
     setInProcess(true);
+
+    await new Promise(resolve => setTimeout(resolve, Math.random() * 500));
+
 
     const alreadySelectedRetrievers = chatSessions.map(
       (session) => session.retrieverSelection
@@ -98,6 +99,11 @@ export function ChatBots() {
     });
 
     setInput("");
+  };
+
+  const handleFormSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    submitChatSessions();
   };
 
   const handleKeyDown = (e: {

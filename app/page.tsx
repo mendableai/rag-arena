@@ -1,11 +1,104 @@
+"use client";
+
 import { ChatBots } from "@/components/main-tool";
+import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
+import { Button } from "@/components/ui/button";
+import {
+  DialogContent,
+  DialogPopUp,
+  DialogTrigger,
+  dialogClose
+} from "@/components/ui/dialogPopUp";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function Main() {
+  const [shouldShowDialog, setShouldShowDialog] = useState(false);
+
+  useEffect(() => {
+    const appStateRaw = localStorage.getItem('ragArenaAppState');
+    const appState = appStateRaw ? JSON.parse(appStateRaw) : {};
+    const now = new Date();
+
+    if (!appState.ragArenaVisitExpiry || new Date(appState.ragArenaVisitExpiry) < now) {
+      setShouldShowDialog(true);
+      const inTwoDays = new Date(now.getTime() + (2 * 24 * 60 * 60 * 1000));
+      appState.ragArenaVisitExpiry = inTwoDays.toISOString();
+      localStorage.setItem('ragArenaAppState', JSON.stringify(appState));
+    }
+  }, []);
+
   return (
     <>
       <div className="h-[700px] max-w-6xl border m-auto mt-24">
         <ChatBots />
+        {shouldShowDialog && (
+          <DialogPopUp defaultOpen={true}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="hidden"></Button>
+            </DialogTrigger>
+            <DialogContent>
+              <CardContainer className="inter-var">
+                <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  ">
+                  <CardItem
+                    translateZ="50"
+                    className="text-xl font-bold text-neutral-600 dark:text-white"
+                                   >
+                    Welcome to RAG Arena
+                  </CardItem>
+                  <CardItem
+                    as="p"
+                    translateZ="60"
+                    className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300"
+                  >
+                    RAG Arena is an open-source Next.js and LangChain project by{" "}
+                    <a className="font-bold" href="https://mendable.ai/">
+                      Mendable.ai
+                    </a>
+                    . It features a RAG chatbot that provides multiple answers
+                    for user queries. Users vote on these answers, revealing the
+                    underlying retrieval method upon voting.
+                  </CardItem>
+                  <CardItem translateZ="100" className="w-full mt-4">
+                    <Image
+                      src="/ragarena.jpg"
+                      height="1000"
+                      width="1000"
+                      className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl"
+                      alt="thumbnail"
+                    />
+                  </CardItem>
+                  <div className="flex justify-between items-center mt-10">
+                    <CardItem
+                      translateZ={20}
+                      as="button"
+                      className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white"
+                    >
+                      <a
+                        href="https://github.com/mendableai/rag-arena"
+                        target="_BLANK"
+                      >
+                        Visit Repository →
+                      </a>
+                    </CardItem>
+
+                    <span onClick={() => dialogClose()}>
+                      <CardItem
+                        translateZ={20}
+                        as="button"
+                        className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold"
+                      >
+                        Close
+                      </CardItem>
+                    </span>
+                  </div>
+                </CardBody>
+              </CardContainer>
+            </DialogContent>
+          </DialogPopUp>
+        )}
       </div>
     </>
   );
 }
+

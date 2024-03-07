@@ -1,5 +1,5 @@
 "use client";
-
+ 
 import { useEffect, useState } from "react";
 import { Card } from "../ui/card";
 import { InfiniteMovingCards } from "../ui/infinite-moving-cards";
@@ -8,16 +8,20 @@ export default function DocumentPopUp() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const hideUntil = localStorage.getItem("hideDocumentPopUpUntil");
-    if (!hideUntil || new Date(hideUntil) <= new Date()) {
+    const appStateRaw = localStorage.getItem("ragArenaAppState");
+    const appState = appStateRaw ? JSON.parse(appStateRaw) : {};
+    if (!appState.hideDocumentPopUpUntil || new Date(appState.hideDocumentPopUpUntil) <= new Date()) {
       setIsVisible(true);
     }
   }, []);
 
   const handleClose = () => {
     const hideUntil = new Date();
-    hideUntil.setHours(hideUntil.getHours() + 24); // Add 24 hours
-    localStorage.setItem("hideDocumentPopUpUntil", hideUntil.toString());
+    hideUntil.setHours(hideUntil.getHours() + 24); 
+    const appStateRaw = localStorage.getItem("ragArenaAppState");
+    const appState = appStateRaw ? JSON.parse(appStateRaw) : {};
+    appState.hideDocumentPopUpUntil = hideUntil.toString();
+    localStorage.setItem("ragArenaAppState", JSON.stringify(appState));
     setIsVisible(false);
   };
 

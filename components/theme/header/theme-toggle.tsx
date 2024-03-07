@@ -8,6 +8,8 @@ type CompProps = object;
 export default function ThemeToggle({}: CompProps) {
   const setTheme = (theme: string) => {
     const html = document.documentElement;
+    const appStateRaw = localStorage.getItem('ragArenaAppState');
+    const appState = appStateRaw ? JSON.parse(appStateRaw) : {};
 
     if (theme === "dark") {
       html.classList.add("dark");
@@ -15,11 +17,14 @@ export default function ThemeToggle({}: CompProps) {
       html.classList.remove("dark");
     }
 
-    localStorage.setItem("RAG-arena-theme", theme);
+    appState.theme = theme;
+    localStorage.setItem("ragArenaAppState", JSON.stringify(appState));
   };
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("RAG-arena-theme") ?? "light";
+    const appStateRaw = localStorage.getItem("ragArenaAppState");
+    const appState = appStateRaw ? JSON.parse(appStateRaw) : {};
+    const savedTheme = appState.theme ?? "light";
     setTheme(savedTheme);
   }, []);
 
