@@ -14,7 +14,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Main() {
-  const [shouldShowDialog, setShouldShowDialog] = useState(true);
+  const [shouldShowDialog, setShouldShowDialog] = useState(false);
 
   useEffect(() => {
     const appStateRaw = localStorage.getItem("ragArenaAppState");
