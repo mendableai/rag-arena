@@ -9,6 +9,7 @@ import {
   DialogTrigger,
   dialogClose,
 } from "@/components/ui/dialogPopUp";
+import { MemoizedStars } from "@/components/ui/text-reveal-card";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -48,13 +49,28 @@ export default function Main() {
                       translateZ="50"
                       className="flex justify-center items-center text-xl font-bold text-neutral-600 dark:text-white w-full"
                     >
-                      <Image
-                        src="/rag-arenalogo.png"
-                        width="80"
-                        height="80"
-                        className="object-cover rounded-xl group-hover/card:shadow-xl mb-6"
-                        alt="thumbnail"
-                      />
+                      <div className="relative inline-block w-full">
+                        {" "}
+                        {/* Adjusted for full width */}
+                        {/* Animated Sparkles */}
+                        <div className="absolute top-0 left-0 w-full h-full z-0">
+                          {" "}
+                          {/* Ensure stars span full width and are behind */}
+                          <MemoizedStars />
+                        </div>
+                        {/* Image */}
+                        <div className="z-10 relative flex justify-center">
+                          {" "}
+                          {/* Ensure image is centered */}
+                          <Image
+                            src="/rag-arenalogo.png"
+                            width="80"
+                            height="80"
+                            className="object-cover rounded-xl group-hover/card:shadow-xl mb-6"
+                            alt="thumbnail"
+                          />
+                        </div>
+                      </div>
                     </CardItem>
                     <CardItem
                       translateZ="50"
@@ -67,32 +83,45 @@ export default function Main() {
                       translateZ="60"
                       className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300 font-thin"
                     >
-                      <span className="text-neutral-600 font-bold"></span>
-                      RAG Arena is an open-source project by{" "}
+                      <span className="text-neutral-600 font-bold">
+                        RAG Arena
+                      </span>{" "}
+                      is an open-source project by{" "}
                       <a
-                        className="text-neutral-600 font-black"
+                        className="text-neutral-600 font-black underline"
                         href="https://mendable.ai/"
                       >
                         Mendable.ai
                       </a>{" "}
-                      with the goal of finding the best retreival methods.
+                      with the goal of finding the best RAG retrieval methods.
                       <br /> <br />{" "}
                       <span className="text-neutral-600 font-bold">
                         Instructions:
                       </span>{" "}
                       Ask a question and vote for the response with the most
                       relevant sources + answer. By default model is retrieving
-                      from Paul Graham&apos;s essays on startups which you can{" "}
-                      <a href="https://paulgraham.com/articles.html">
-                        find here.
+                      from{" "}
+                      <a
+                        className="text-neutral-600 font-bold underline"
+                        href="https://www.ycombinator.com/library/carousel/Essays%20by%20Paul%20Graham"
+                      >
+                        {" "}
+                        Paul Graham&apos;s essays on startups.
                       </a>{" "}
                       You can also add you own custom data to test on by
                       clicking Ingest Custom Data.
                       <br /> <br />
                       <span className="text-neutral-600 font-bold">
-                        Want to help us expand RAG Arena:
+                        Want to help us expand RAG Arena?
                       </span>{" "}
-                      We are looking for contributors. Feel free to submit a PR.
+                      We are looking for contributors. Feel free to{" "}
+                      <a
+                        className="text-neutral-600 font-bold underline"
+                        href="https://github.com/mendableai/rag-arena"
+                      >
+                        {" "}
+                        submit a PR.
+                      </a>{" "}
                       🚀
                     </CardItem>
 

@@ -90,22 +90,19 @@ export const InfiniteMovingCards = ({
       >
         {items.map((item, idx) => (
           <>
-          <CardHeader>
-            <Label className="mb-2">Article in Database: </Label>
-            <CardTitle className="tracking-wide">
-              {item.title}
-            </CardTitle>
-            <CardDescription>by {item.author}</CardDescription>
-          
+            <CardHeader>
+              <Label className="mb-2">Article in Database: </Label>
+              <CardTitle className="tracking-wide">{item.title}</CardTitle>
+              <CardDescription>by {item.author}</CardDescription>
+
               <Link
                 href={item.link}
                 target="_BLANK"
-                className="hover:cursor-pointer"
+                className="hover:cursor-pointer underline"
               >
                 Read More
               </Link>
             </CardHeader>
-            
           </>
 
           //       <li
