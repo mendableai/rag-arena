@@ -111,11 +111,6 @@ This section outlines the various RAG functions defined in `app/api/retrievers/d
 - **When to Use:** Suitable when you can extract more relevant information for indexing than the document's text itself.
 - **Description:** Creates multiple vectors for each document, with each vector potentially representing text summaries, hypothetical questions, or other forms of distilled information.
 
-### Self Query
-
-- **When to Use:** Effective for queries where answers are better served by documents fetched based on metadata rather than text similarity.
-- **Description:** Transforms user input into a semantic search string and a metadata filter, catering to queries focused on document metadata rather than content.
-
 ### Contextual Compression
 
 - **When to Use:** Useful when retrieved documents contain excessive irrelevant information, distracting from the core query response.
