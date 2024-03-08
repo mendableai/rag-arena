@@ -43,7 +43,7 @@ export function ChatBots() {
   const submitChatSessions = async () => {
     setInProcess(true);
 
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 500));
+    await new Promise(resolve => setTimeout(resolve, Math.random() * 1000));
 
 
     const alreadySelectedRetrievers = chatSessions.map(
