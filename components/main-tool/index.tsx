@@ -43,25 +43,32 @@ export function ChatBots() {
   const submitChatSessions = async () => {
     setInProcess(true);
 
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 1000));
+    // Determine the number of sessions that require a random retriever
+    const randomRetrieverSessions = chatSessions.filter(session => session.retrieverSelection === "random");
 
-
-    const alreadySelectedRetrievers = chatSessions.map(
-      (session) => session.retrieverSelection
-    );
-    chatSessions.forEach((session, index) => {
-      let excludeList = alreadySelectedRetrievers.filter(
-        (_, idx) => idx !== index
-      );
-
-      if (session.retrieverSelection !== "random") {
-        setAllRandom(false);
+    // Generate a list of unique random retrievers for the sessions that need them
+    let randomRetrievers: string[] | undefined = [];
+    while (randomRetrievers.length < randomRetrieverSessions.length) {
+      const newRetriever = getRandomSelection(arrayOfRetrievers, randomRetrievers);
+      if (!randomRetrievers.includes(newRetriever)) {
+        randomRetrievers.push(newRetriever);
       }
+    }
 
-      let newRetrieverSelection =
-        session.retrieverSelection === "random"
-          ? getRandomSelection(arrayOfRetrievers, excludeList)
-          : session.retrieverSelection;
+    // Check if at least one of the selected retrievers isn't "random"
+    const hasNonRandomSelection = chatSessions.some(session => session.retrieverSelection !== "random");
+    setAllRandom(!hasNonRandomSelection);
+
+    // Keep track of how many random retrievers have been assigned
+    let randomRetrieverIndex = 0;
+
+    chatSessions.forEach((session, index) => {
+      let newRetrieverSelection = session.retrieverSelection;
+
+      // Assign a unique random retriever if needed
+      if (session.retrieverSelection === "random") {
+        newRetrieverSelection = randomRetrievers[randomRetrieverIndex++];
+      }
 
       handleSubmit({
         customDocuments,
