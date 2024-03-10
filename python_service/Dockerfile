@@ -14,11 +14,12 @@ RUN pip install poetry
 RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
 
-# Make port  available to the world outside this container
+# Make port 80 available to the world outside this container
 EXPOSE 80
 
 # Define environment variable
 ENV FLASK_APP=app.py
 
-# Run app.py when the container launches
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Run app.py when the container launches, specifying port 80
+CMD ["flask", "run", "--host=0.0.0.0", "--port=80"]
+
