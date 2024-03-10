@@ -1,4 +1,6 @@
 from flask import Flask, jsonify, request
+from retrievers.hybrid_retriever import get_retriever
+from supabase_functions.get_documents import get_documents
 from retrievers import dummy_retriever
 
 app = Flask(__name__)
@@ -14,6 +16,9 @@ def graph_rag_li():
     data = dummy_retriever.dummy_retriever(query)
     return jsonify(data)
 
+get_retriever()
 
 if __name__ == '__main__':
+
     app.run(debug=True)
+    

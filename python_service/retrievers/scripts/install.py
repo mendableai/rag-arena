@@ -9,7 +9,8 @@ import os
 from llama_index.core import SimpleDirectoryReader
 from llama_index.core import KnowledgeGraphIndex
  
-os.environ["OPENAI_API_KEY"] = "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"
+
+os.environ["OPENAI_API_KEY"] = "REPLACE"
  
 import logging
 import sys

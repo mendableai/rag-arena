@@ -38,3 +38,6 @@ next-env.d.ts
 package-lock.json
 
 python_service/__pycache__/
+python_service/__pycache__/**/*
+
+*.pyc
