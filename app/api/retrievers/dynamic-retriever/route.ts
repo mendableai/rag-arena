@@ -82,13 +82,15 @@ export async function POST(req: NextRequest) {
         }
 
         const retriever = await dynamicRetrieverUtility(retrieverSelected, model, vectorstore, currentMessageContent);
-        
+        let retrievedDocs: DocumentInterface<Record<string, any>>[] = [];
+
         if(retriever instanceof CustomRetriever) {
-            return retriever.documents;
+            retrievedDocs = retriever.documents;
+        }else{
+            retrievedDocs = await retriever.getRelevantDocuments(
+                currentMessageContent,
+            );
         }
-        const retrievedDocs = await retriever.getRelevantDocuments(
-            currentMessageContent,
-        );
 
         const prompt = CONDENSE_QUESTION_TEMPLATE(previousMessages, currentMessageContent, retrievedDocs);
 
