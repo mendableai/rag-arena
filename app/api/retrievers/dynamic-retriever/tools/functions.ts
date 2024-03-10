@@ -163,13 +163,31 @@ export function MultiVector(
 
 }
 
-export async function GraphRAGLI({
-    query
-}:{
+export async function baseRequest({
+    query,
+    id
+}: {
     query: string,
+    id: string,
+}) {
+    return fetch(`${process.env.PYTHON_MICRO_SERVER}/api/query`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: query, id: id}),
+    });
+}
+
+export async function GraphRAGLI({
+    query,
+    retrieverId
+}:{
+    query: string, // what is pg?
+    retrieverId: string, // graph-rag-li 
 }) {
 
-    const serverResponse = await fetch('https://example.com/api/query', {
+    const serverResponse = await fetch(`${process.env.PYTHON_MICRO_SERVER}/api/query/${retrieverId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -188,5 +206,5 @@ export async function GraphRAGLI({
         metadata: doc.metadata,
     }));
 
-    return new CustomRetriever(true,[]);
+    return new CustomRetriever(true,documents);
 }

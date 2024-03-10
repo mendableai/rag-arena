@@ -58,6 +58,7 @@ export async function dynamicRetrieverUtility(
         case "graph-rag-li":
             return GraphRAGLI({
                 query: currentMessageContent,
+                retrieverId: "graph-rag-li",
             })
         default:
             throw new Error("Invalid retriever selection");
