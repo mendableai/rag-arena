@@ -82,6 +82,9 @@ export function SelectRetrieverMenu({
                 <SelectItem value="graph-rag-li">
                   Graph RAG 🦙
                 </SelectItem>
+                <SelectItem value="bm-25-li">
+                  BM 25 🦙
+                </SelectItem>
                 {/* <SelectItem value="time-weighted">
                   Time Weighted 🦜🔗
                 </SelectItem> */}

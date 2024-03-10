@@ -179,7 +179,7 @@ export async function baseRequest({
     });
 }
 
-export async function GraphRAGLI({
+export async function BaseRetrieverLI({
     query,
     retrieverId
 }:{

@@ -4,7 +4,7 @@ import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
 import { ChatOpenAI } from "@langchain/openai";
 import { Message as VercelChatMessage } from "ai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { ContextualCompression, GraphRAGLI, MultiQuery, MultiVector, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
+import { BaseRetrieverLI, ContextualCompression, MultiQuery, MultiVector, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
 import { BaseRetriever } from "@langchain/core/retrievers";
 import { CustomRetriever } from "@/lib/types";
 
@@ -56,9 +56,14 @@ export async function dynamicRetrieverUtility(
                 vectorstore,
             )
         case "graph-rag-li":
-            return GraphRAGLI({
+            return BaseRetrieverLI({
                 query: currentMessageContent,
                 retrieverId: "graph-rag-li",
+            })
+        case "bm-25-li":
+            return BaseRetrieverLI({
+                query: currentMessageContent,
+                retrieverId: "bm-25-li",
             })
         default:
             throw new Error("Invalid retriever selection");
