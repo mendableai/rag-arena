@@ -79,6 +79,9 @@ export function SelectRetrieverMenu({
                 <SelectItem value="similarity-score">
                   Similarity Score 🦜🔗
                 </SelectItem>
+                <SelectItem value="graph-rag-li">
+                  Graph RAG 🦙
+                </SelectItem>
                 {/* <SelectItem value="time-weighted">
                   Time Weighted 🦜🔗
                 </SelectItem> */}

@@ -10,6 +10,8 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from 'openai';
 import { dynamicRetrieverUtility } from "./tools/config";
 import { CONDENSE_QUESTION_TEMPLATE } from "./tools/variables";
+import { BaseRetriever } from "@langchain/core/retrievers";
+import { CustomRetriever } from "@/lib/types";
 
 export const runtime = "edge";
 
@@ -80,7 +82,10 @@ export async function POST(req: NextRequest) {
         }
 
         const retriever = await dynamicRetrieverUtility(retrieverSelected, model, vectorstore, currentMessageContent);
-
+        
+        if(retriever instanceof CustomRetriever) {
+            return retriever.documents;
+        }
         const retrievedDocs = await retriever.getRelevantDocuments(
             currentMessageContent,
         );

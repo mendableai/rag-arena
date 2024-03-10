@@ -66,7 +66,7 @@ export function ChatBots() {
       let newRetrieverSelection = session.retrieverSelection;
 
       // Assign a unique random retriever if needed
-      if (session.retrieverSelection === "random") {
+      if (session.retrieverSelection === "random" && randomRetrievers) {
         newRetrieverSelection = randomRetrievers[randomRetrieverIndex++];
       }
 

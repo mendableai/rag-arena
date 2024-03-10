@@ -4,14 +4,18 @@ import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
 import { ChatOpenAI } from "@langchain/openai";
 import { Message as VercelChatMessage } from "ai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { ContextualCompression, MultiQuery, MultiVector, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
+import { ContextualCompression, GraphRAGLI, MultiQuery, MultiVector, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
+import { BaseRetriever } from "@langchain/core/retrievers";
+import { CustomRetriever } from "@/lib/types";
+
+
 
 export async function dynamicRetrieverUtility(
     retrieverSelected: string,
     model: ChatOpenAI,
     vectorstore: SupabaseVectorStore | MemoryVectorStore,
     currentMessageContent: string,
-) {
+) : Promise<BaseRetriever | CustomRetriever> {
     switch (retrieverSelected) {
         case "contextual-compression":
             return ContextualCompression(
@@ -51,6 +55,10 @@ export async function dynamicRetrieverUtility(
             return MultiVector(
                 vectorstore,
             )
+        case "graph-rag-li":
+            return GraphRAGLI({
+                query: currentMessageContent,
+            })
         default:
             throw new Error("Invalid retriever selection");
     }
