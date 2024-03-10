@@ -10,6 +10,14 @@ const nextConfig = {
         },
       ],
     },
+    // async rewrites() {
+    //   return [
+    //     {
+    //       source: '/python-api/:path*',
+    //       destination: 'http://127.0.0.1:5328/:path*', // Proxy to Backend
+    //     },
+    //   ]
+    // },
   };
   
   export default nextConfig;

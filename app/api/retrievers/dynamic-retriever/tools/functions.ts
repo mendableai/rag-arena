@@ -14,6 +14,7 @@ import { InMemoryStore } from "langchain/storage/in_memory";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { attributeInfo } from "./variables";
+import { CustomRetriever } from "@/lib/types";
 
 export function ContextualCompression(
     model: ChatOpenAI,
@@ -160,4 +161,50 @@ export function MultiVector(
 
     });
 
+}
+
+export async function baseRequest({
+    query,
+    id
+}: {
+    query: string,
+    id: string,
+}) {
+    return fetch(`${process.env.PYTHON_MICRO_SERVER}/api/query`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: query, id: id}),
+    });
+}
+
+export async function GraphRAGLI({
+    query,
+    retrieverId
+}:{
+    query: string, // what is pg?
+    retrieverId: string, // graph-rag-li 
+}) {
+
+    const serverResponse = await fetch(`${process.env.PYTHON_MICRO_SERVER}/api/query/${retrieverId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: query }),
+    });
+
+    const data = await serverResponse.json();
+
+    if (!serverResponse.ok) {
+        throw new Error(`Error fetching server: ${data.message}`);
+    }
+
+    const documents = data.documents.map((doc:any) => ({
+        content: doc.content,
+        metadata: doc.metadata,
+    }));
+
+    return new CustomRetriever(true,documents);
 }
