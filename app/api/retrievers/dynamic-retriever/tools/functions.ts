@@ -187,7 +187,7 @@ export async function GraphRAGLI({
     retrieverId: string, // graph-rag-li 
 }) {
 
-    const serverResponse = await fetch(`${process.env.PYTHON_MICRO_SERVER}/api/query/${retrieverId}`, {
+    const serverResponse = await fetch(`${process.env.PYTHON_MICRO_SERVER}/api/python-retrievers/${retrieverId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -201,9 +201,11 @@ export async function GraphRAGLI({
         throw new Error(`Error fetching server: ${data.message}`);
     }
 
+    console.log('data', data)
+
     const documents = data.documents.map((doc:any) => ({
-        content: doc.content,
-        metadata: doc.metadata,
+        pageContent: doc.content,
+        metadata: doc.metadata ?? null
     }));
 
     return new CustomRetriever(true,documents);

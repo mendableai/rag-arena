@@ -1,3 +1,5 @@
-def dummy_retriever(query: str) -> list[any]:
+def dummy_retriever(query: str) -> dict:
     # Your code for retrieving users goes here.
-    return [query, "chunk 1", "chunk 2"]
+    
+    return { "documents" : [ {"content": "Eric Likes apples", "metadata": None } ] }
+
