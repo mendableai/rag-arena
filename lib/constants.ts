@@ -50,4 +50,9 @@ export const retrieverInfo = {
     fullName: "Time-Weighted Vectorstore",
     link: "https://js.langchain.com/docs/modules/data_connection/retrievers/time_weighted_vectorstore",
   },
-};
+  "bm-25-li": {
+    description: "BM25 is a ranking function used to estimate the relevance of documents to a given query.",
+    fullName: "BM 25",
+    link: "https://docs.llamaindex.ai/en/stable/examples/retrievers/bm25_retriever.html"
+  }
+}
