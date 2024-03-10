@@ -9,6 +9,10 @@ app = Flask(__name__)
 
 CORS(app)
 
+@app.route('/', methods=['GET'])
+def baseRoute():
+    return "Hello World"
+
 @app.route('/api/dummy')
 def get_dummy_data():
     data = dummy_retriever.dummy_retriever()

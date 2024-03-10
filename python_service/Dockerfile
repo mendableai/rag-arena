@@ -14,8 +14,8 @@ RUN pip install poetry
 RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
+# Make port  available to the world outside this container
+EXPOSE 80
 
 # Define environment variable
 ENV FLASK_APP=app.py
