@@ -10,10 +10,12 @@ from llama_index.llms.openai import OpenAI
 # from IPython.display import Markdown, display
 
 import os
+from dotenv import load_dotenv
 
-# os.environ["OPENAI_API_KEY"] = 'sk-...'
-neoURI = os.environ["NEO4J_URI"]
-neoPass = os.environ["NEO4J_PASSWORD"]
+load_dotenv()
+
+neoURI = os.getenv("NEO4J_URI")
+neoPass = os.getenv("NEO4J_PASSWORD")
 
 import logging
 import sys
