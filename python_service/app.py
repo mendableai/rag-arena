@@ -2,8 +2,17 @@ from flask import Flask, jsonify, request
 from retrievers.bm25_retriever import get_bm25_retriever
 from supabase_functions.get_documents import get_documents
 from retrievers import dummy_retriever
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+
+CORS(app)
+
+
+@app.route('/', methods=['GET'])
+def baseRoute():
+    return "Hello World"
 
 @app.route('/api/dummy')
 def get_dummy_data():
