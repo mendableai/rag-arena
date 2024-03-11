@@ -12,6 +12,8 @@ from llama_index.llms.openai import OpenAI
 import os
 
 # os.environ["OPENAI_API_KEY"] = 'sk-...'
+neoURI = os.environ["NEO4J_URI"]
+neoPass = os.environ["NEO4J_PASSWORD"]
 
 import logging
 import sys
@@ -28,8 +30,8 @@ Settings.chunk_size = 512
 # For Neo4j
 def create_neo4j_graph_store():
     username = "neo4j"
-    password = "r0LaoWLrG4aXrR2w09JjmKkLzHAi22Q0yQf4fl_0fkU"
-    url = "neo4j://6dc50c4e.databases.neo4j.io:7687"
+    password = neoPass
+    url = neoURI
     database = "neo4j"
     graph_store = Neo4jGraphStore(
         username=username,
@@ -53,8 +55,8 @@ def create_neo4j_graph_store():
 
 def get_neo4j_retriever(query):
     username = "neo4j"
-    password = "r0LaoWLrG4aXrR2w09JjmKkLzHAi22Q0yQf4fl_0fkU"
-    url = "neo4j+s://6dc50c4e.databases.neo4j.io"
+    password = neoPass
+    url = neoURI
     database = "neo4j"
     graph_store = Neo4jGraphStore(
         username=username,
