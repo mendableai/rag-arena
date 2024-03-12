@@ -41,3 +41,5 @@ python_service/__pycache__/
 python_service/__pycache__/**/*
 
 *.pyc
+
+/neo/storage

@@ -47,7 +47,7 @@ def create_neo4j_graph_store():
 
     # NOTE: can take a while!
     # documents = docs_to_llama_index(get_documents())
-    documents = SimpleDirectoryReader("/Users/nicolascamara/Documents/GitHub/arena-chatbot/python_service/retrievers/data/chunks", filename_as_id=True).load_data()
+    documents = SimpleDirectoryReader("./data/chunks", filename_as_id=True).load_data()
     # index = KnowledgeGraphIndex(
     #     documents,
     #     storage_context=storage_context,
@@ -58,9 +58,10 @@ def create_neo4j_graph_store():
     index = KnowledgeGraphIndex.from_documents(documents,
     storage_context=storage_context, max_triplets_per_chunk=2,
     include_embeddings=True
-)
+    )
+    print("finished saving nodes")
     index.storage_context.persist(persist_dir="neo/storage")
-
+    print("index_saved")
     # query_engine = index.as_query_engine(
     #     include_text=True,
     #     response_mode="tree_summarize",
@@ -78,59 +79,11 @@ def create_neo4j_graph_store():
 def get_neo4j_retriever(query):
     print("Using NEO4j")
     print(query)
-    username = "neo4j"
-    password = neoPass
-    url = neoURI
-    database = "neo4j"
-    graph_store = Neo4jGraphStore(
-        username=username,
-        password=password,
-        url=url,
-        database=database,
-    )
 
-    storage_context = StorageContext.from_defaults(persist_dir="neo/storage")
-    DEFAULT_KG_RESPONSE_ANSWER_PROMPT_TMPL = """
-    The original question is given below.
-    This question has been translated into a Graph Database query.
-    Both the Graph query and the response are given below.
-    Given the Graph Query response, synthesise a response to the original question.
+    storage_context = StorageContext.from_defaults(persist_dir="retrievers/neo/storage")
+   
 
-    Original question: {query_str}
-    Graph query: {kg_query_str}
-    Graph response: {kg_response_str}
-    Response:
-    """
-
-    
-    DEFAULT_NEO4J_NL2CYPHER_PROMPT_TMPL = (
-    "Task:Generate Cypher statement to query a graph database.\n"
-    "Instructions:\n"
-    "Use only the provided relationship types and properties in the schema.\n"
-    "Do not use any other relationship types or properties that are not provided.\n"
-    "Schema:\n"
-    "{schema}\n"
-    "Note: Do not include any explanations or apologies in your responses.\n"
-    "Do not respond to any questions that might ask anything else than for you "
-    "to construct a Cypher statement. \n"
-    "Do not include any text except the generated Cypher statement.\n"
-    "\n"
-    "The question is:\n"
-    "{query_str}\n"
-    )
-
-    DEFAULT_NEO4J_NL2CYPHER_PROMPT = PromptTemplate(
-        DEFAULT_NEO4J_NL2CYPHER_PROMPT_TMPL,
-        prompt_type=PromptType.TEXT_TO_GRAPH_QUERY,
-    )
-    
-    # query_engine = KnowledgeGraphQueryEngine(
-    #     storage_context=storage_context,
-    #     graph_query_synthesis_prompt=DEFAULT_NEO4J_NL2CYPHER_PROMPT,
-    #     # graph_response_answer_prompt=DEFAULT_KG_RESPONSE_ANSWER_PROMPT,
-    #     llm=OpenAI(temperature=0, model="gpt-4-0125-preview"),
-    #     verbose=True,
-    # )
+  
 
     index = load_index_from_storage(storage_context=storage_context)
     query_engine = index.as_query_engine(
@@ -142,6 +95,10 @@ def get_neo4j_retriever(query):
    
 
     response = query_engine.query(query)
+    
+    print("sources ", response.get_formatted_sources())
+    # print("metadata: ", response.metadata)
+    # print("Attributes and methods of 'response' object: ", dir(response))
 
 
     content_metadata_pairs = [

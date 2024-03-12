@@ -5,43 +5,45 @@ import { Card } from "../ui/card";
 import { InfiniteMovingCards } from "../ui/infinite-moving-cards";
 
 export default function DocumentPopUp() {
-  const [isVisible, setIsVisible] = useState(false);
+  // const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const appStateRaw = localStorage.getItem("ragArenaAppState");
-    const appState = appStateRaw ? JSON.parse(appStateRaw) : {};
-    if (!appState.hideDocumentPopUpUntil || new Date(appState.hideDocumentPopUpUntil) <= new Date()) {
-      setIsVisible(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const appStateRaw = localStorage.getItem("ragArenaAppState");
+  //   const appState = appStateRaw ? JSON.parse(appStateRaw) : {};
+  //   if (!appState.hideDocumentPopUpUntil || new Date(appState.hideDocumentPopUpUntil) <= new Date()) {
+  //     setIsVisible(true);
+  //   }
+  // }, []);
 
-  const handleClose = () => {
-    const hideUntil = new Date();
-    hideUntil.setHours(hideUntil.getHours() + 24); 
-    const appStateRaw = localStorage.getItem("ragArenaAppState");
-    const appState = appStateRaw ? JSON.parse(appStateRaw) : {};
-    appState.hideDocumentPopUpUntil = hideUntil.toString();
-    localStorage.setItem("ragArenaAppState", JSON.stringify(appState));
-    setIsVisible(false);
-  };
+  // const handleClose = () => {
+  //   const hideUntil = new Date();
+  //   hideUntil.setHours(hideUntil.getHours() + 24); 
+  //   const appStateRaw = localStorage.getItem("ragArenaAppState");
+  //   const appState = appStateRaw ? JSON.parse(appStateRaw) : {};
+  //   appState.hideDocumentPopUpUntil = hideUntil.toString();
+  //   localStorage.setItem("ragArenaAppState", JSON.stringify(appState));
+  //   setIsVisible(false);
+  // };
 
-  if (!isVisible) {
-    return null;
-  }
+  // if (!isVisible) {
+  //   return null;
+  // }
 
   return (
     <Card className="w-[250px] dark:bg-[#8559f4] dark:bg-opacity-40 absolute bottom-10 left-10 text-center hover:scale-105">
       <span
-        onClick={handleClose}
-        className="absolute top-0 right-0 -mt-5 -mr-2 hover:cursor-pointer text-2xl shadow-2xl"
+        // onClick={handleClose}
+        className="hover:cursor-pointer text-sm shadow-2xl"
       >
-        x
+        Sourced from <a href="https://paulgraham.com/articles.html" target="_blank" className="underline">Paul Graham's essays</a>
       </span>
-      <InfiniteMovingCards
+
+      
+      {/* <InfiniteMovingCards
         items={testimonials}
         direction="right"
         speed="normal"
-      />
+      /> */}
     </Card>
   );
 }
