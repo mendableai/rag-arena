@@ -43,3 +43,11 @@ python_service/__pycache__/**/*
 *.pyc
 
 /neo/storage
+
+/storage/
+/storage/**/*
+python_service/retrievers/neo/storage/default__vector_store.json
+python_service/retrievers/neo/storage/docstore.json
+python_service/retrievers/neo/storage/graph_store.json
+python_service/retrievers/neo/storage/image__vector_store.json
+python_service/retrievers/neo/storage/index_store.json
