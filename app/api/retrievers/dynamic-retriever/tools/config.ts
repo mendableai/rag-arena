@@ -1,12 +1,12 @@
+import { CustomRetriever } from "@/lib/types";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { Document } from "@langchain/core/documents";
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
+import { BaseRetriever } from "@langchain/core/retrievers";
 import { ChatOpenAI } from "@langchain/openai";
 import { Message as VercelChatMessage } from "ai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { BaseRetrieverLI, ContextualCompression, MultiQuery, MultiVector, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
-import { BaseRetriever } from "@langchain/core/retrievers";
-import { CustomRetriever } from "@/lib/types";
 
 
 
@@ -15,7 +15,15 @@ export async function dynamicRetrieverUtility(
     model: ChatOpenAI,
     vectorstore: SupabaseVectorStore | MemoryVectorStore,
     currentMessageContent: string,
-) : Promise<BaseRetriever | CustomRetriever> {
+): Promise<BaseRetriever | CustomRetriever> {
+
+    if (retrieverSelected.includes("li")) {
+        return BaseRetrieverLI({
+            query: currentMessageContent,
+            retrieverId: retrieverSelected,
+        })
+    }
+
     switch (retrieverSelected) {
         case "contextual-compression":
             return ContextualCompression(
@@ -55,16 +63,6 @@ export async function dynamicRetrieverUtility(
             return MultiVector(
                 vectorstore,
             )
-        case "graph-rag-li":
-            return BaseRetrieverLI({
-                query: currentMessageContent,
-                retrieverId: "graph-rag-li",
-            })
-        case "bm-25-li":
-            return BaseRetrieverLI({
-                query: currentMessageContent,
-                retrieverId: "bm-25-li",
-            })
         default:
             throw new Error("Invalid retriever selection");
     }

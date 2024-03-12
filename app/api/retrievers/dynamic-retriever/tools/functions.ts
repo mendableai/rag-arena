@@ -1,4 +1,5 @@
 import supabase from "@/lib/supabase";
+import { CustomRetriever } from "@/lib/types";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { ContextualCompressionRetriever } from "langchain/retrievers/contextual_compression";
@@ -14,7 +15,6 @@ import { InMemoryStore } from "langchain/storage/in_memory";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { attributeInfo } from "./variables";
-import { CustomRetriever } from "@/lib/types";
 
 export function ContextualCompression(
     model: ChatOpenAI,
@@ -183,8 +183,8 @@ export async function BaseRetrieverLI({
     query,
     retrieverId
 }:{
-    query: string, // what is pg?
-    retrieverId: string, // graph-rag-li 
+    query: string, 
+    retrieverId: string, 
 }) {
 
     const serverResponse = await fetch(`${process.env.PYTHON_MICRO_SERVER}/api/python-retrievers/${retrieverId}`, {

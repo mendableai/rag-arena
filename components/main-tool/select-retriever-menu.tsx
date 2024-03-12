@@ -85,9 +85,15 @@ export function SelectRetrieverMenu({
                 <SelectItem value="bm-25-li">
                   BM 25 🦙
                 </SelectItem>
-                {/* <SelectItem value="time-weighted">
-                  Time Weighted 🦜🔗
-                </SelectItem> */}
+                <SelectItem value="vector-store-li">
+                  llama Vector Store 🦙
+                </SelectItem>
+                <SelectItem value="reciprocal-rerank-fusion-li">
+                  Reciprocal Rerank Fusion 🦙
+                </SelectItem>
+                <SelectItem value="auto-merging-retriever-li">
+                  Auto Merging Retriever 🦙
+                </SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
