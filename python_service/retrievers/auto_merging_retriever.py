@@ -3,13 +3,8 @@ import os
 import openai
 from llama_index.core import (Settings, StorageContext, VectorStoreIndex,
                               get_response_synthesizer)
-from llama_index.core.node_parser import (HierarchicalNodeParser,
-                                          SentenceSplitter, get_leaf_nodes,
-                                          get_root_nodes)
-from llama_index.core.query_engine import RetrieverQueryEngine
-from llama_index.core.retrievers import (AutoMergingRetriever,
-                                         QueryFusionRetriever,
-                                         RecursiveRetriever)
+from llama_index.core.node_parser import HierarchicalNodeParser, get_leaf_nodes
+from llama_index.core.retrievers import AutoMergingRetriever
 from llama_index.core.storage.docstore import SimpleDocumentStore
 from llama_index.llms.openai import OpenAI
 from llama_index.retrievers.bm25 import BM25Retriever

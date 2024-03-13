@@ -3,9 +3,6 @@ import os
 import openai
 from llama_index.core import VectorStoreIndex
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.core.retrievers import QueryFusionRetriever
-from llama_index.llms.openai import OpenAI
-from llama_index.retrievers.bm25 import BM25Retriever
 from supabase_functions.get_documents import get_documents
 from transformations.docs_to_llama_index import docs_to_llama_index
 
@@ -16,7 +13,7 @@ def get_vector_retriever(query):
     documents = docs_to_llama_index(get_documents())
     index = VectorStoreIndex.from_documents(documents, transformations=[splitter])
 
-    retriever = index.as_retriever(similarity_top_k=2)
+    retriever = index.as_retriever(similarity_top_k=4)
     
     retrieved_nodes = retriever.retrieve(query)
     
