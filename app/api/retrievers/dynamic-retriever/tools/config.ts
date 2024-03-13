@@ -17,7 +17,7 @@ export async function dynamicRetrieverUtility(
     currentMessageContent: string,
 ): Promise<BaseRetriever | CustomRetriever> {
 
-    if (retrieverSelected.includes("li")) {
+    if (retrieverSelected.includes("-li")) {
         return BaseRetrieverLI({
             query: currentMessageContent,
             retrieverId: retrieverSelected,

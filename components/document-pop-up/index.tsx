@@ -1,8 +1,6 @@
 "use client";
  
-import { useEffect, useState } from "react";
 import { Card } from "../ui/card";
-import { InfiniteMovingCards } from "../ui/infinite-moving-cards";
 
 export default function DocumentPopUp() {
   // const [isVisible, setIsVisible] = useState(false);
@@ -35,7 +33,7 @@ export default function DocumentPopUp() {
         // onClick={handleClose}
         className="hover:cursor-pointer text-sm shadow-2xl"
       >
-        Sourced from <a href="https://paulgraham.com/articles.html" target="_blank" className="underline">Paul Graham's essays</a>
+        Sourced from <a href="https://paulgraham.com/articles.html" target="_blank" className="underline">Paul Grahams essays</a>
       </span>
 
       

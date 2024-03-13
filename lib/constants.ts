@@ -51,8 +51,29 @@ export const retrieverInfo = {
     link: "https://js.langchain.com/docs/modules/data_connection/retrievers/time_weighted_vectorstore",
   },
   "bm-25-li": {
-    description: "BM25 is a ranking function used to estimate the relevance of documents to a given query.",
+    description: "BM25 is a ranking function used to estimate the relevance of documents.",
     fullName: "BM 25",
     link: "https://docs.llamaindex.ai/en/stable/examples/retrievers/bm25_retriever.html"
+  },
+  "vector-store-li": {
+    description: "Vector stores contain embedding vectors of ingested document chunks.",
+    fullName: "Llama Vector Store",
+    link: "https://docs.llamaindex.ai/en/latest/examples/vector_stores/AsyncIndexCreationDemo.html",
+  },
+  "reciprocal-rerank-fusion-li": {
+    description: "Retrieved nodes will be reranked according to the Reciprocal Rerank Fusion.",
+    fullName: "Reciprocal Rerank Fusion",
+    link: "https://docs.llamaindex.ai/en/stable/examples/retrievers/reciprocal_rerank_fusion.html"
+  },
+  "auto-merging-retriever-li": {
+    description: "Looks at a set of leaf nodes and recursively “merges” subsets of leaf nodes.",
+    fullName: "Auto Merging Retriever",
+    link: "https://docs.llamaindex.ai/en/stable/examples/retrievers/auto_merging_retriever.html"
+  },
+  "graph-rag-li": {
+    description: "Knowledge-enabled RAG approach to retrieve information from Knowledge Graph.",
+    fullName: "Knowledge Graph RAG",
+    link: "https://docs.llamaindex.ai/en/stable/examples/query_engine/knowledge_graph_rag_query_engine.html"
   }
+
 }
