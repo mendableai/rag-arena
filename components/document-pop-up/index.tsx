@@ -28,7 +28,7 @@ export default function DocumentPopUp() {
   // }
 
   return (
-    <Card className="w-[250px] dark:bg-[#8559f4] dark:bg-opacity-40 absolute bottom-10 left-10 text-center hover:scale-105">
+    <Card className="w-[250px] dark:bg-[#8559f4] dark:bg-opacity-40 absolute invisible md:visible md:bottom-10 md:left-10 text-center hover:scale-105">
       <span
         // onClick={handleClose}
         className="hover:cursor-pointer text-sm shadow-2xl"

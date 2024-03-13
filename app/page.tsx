@@ -10,6 +10,7 @@ import {
   dialogClose,
 } from "@/components/ui/dialogPopUp";
 import { MemoizedStars } from "@/components/ui/text-reveal-card";
+import { useSmallScreenStore } from "@/lib/zustand";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -32,9 +33,11 @@ export default function Main() {
     }
   }, []);
 
+  const { isSmallScreen } = useSmallScreenStore();
+
   return (
     <>
-      <div className="h-[700px] max-w-6xl border m-auto mt-24">
+      <div className={`${isSmallScreen ? "md:h-[850px]" : "md:h-[700px]"} max-w-6xl border m-auto mt-24 h-[1000px]`}>
         <ChatBots />
         {shouldShowDialog && (
           <DialogPopUp defaultOpen={true}>
@@ -50,18 +53,10 @@ export default function Main() {
                       className="flex justify-center items-center text-xl font-bold text-neutral-600 dark:text-white w-full"
                     >
                       <div className="relative inline-block w-full">
-                        {" "}
-                        {/* Adjusted for full width */}
-                        {/* Animated Sparkles */}
                         <div className="absolute top-0 left-0 w-full h-full z-0">
-                          {" "}
-                          {/* Ensure stars span full width and are behind */}
                           <MemoizedStars />
                         </div>
-                        {/* Image */}
                         <div className="z-10 relative flex justify-center">
-                          {" "}
-                          {/* Ensure image is centered */}
                           <Image
                             src="/rag-arenalogo.png"
                             width="80"

@@ -8,10 +8,12 @@ import {
   useChatSessionsStore,
   useCustomDocumentStore,
   useInProcessStore,
+  useSmallScreenStore,
   useVoteStore,
 } from "@/lib/zustand";
 import { Message } from "ai";
-import React, { useState } from "react";
+import { FlipHorizontal, FlipVertical } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import {
   ResizableHandle,
@@ -32,40 +34,56 @@ export interface ChatSession {
 
 export function ChatBots() {
   const [input, setInput] = useState<string>("");
-  const { chatSessions, setChatSessions } = useChatSessionsStore();
+  // Initialize isSmallScreen with a default value that doesn't rely on window
+  const { isSmallScreen, setIsSmallScreen } = useSmallScreenStore();
 
+  const { chatSessions, setChatSessions } = useChatSessionsStore();
   const { setAllRandom } = useAllRandomStore();
   const { hasVoted } = useVoteStore();
   const { setInProcess } = useInProcessStore();
-
   const { customDocuments } = useCustomDocumentStore();
+
+  useEffect(() => {
+    // Now we can safely access window because this code runs in the browser
+    setIsSmallScreen(window.innerWidth < 768);
+
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const submitChatSessions = async () => {
     setInProcess(true);
 
-    // Determine the number of sessions that require a random retriever
-    const randomRetrieverSessions = chatSessions.filter(session => session.retrieverSelection === "random");
+    const randomRetrieverSessions = chatSessions.filter(
+      (session) => session.retrieverSelection === "random"
+    );
 
-    // Generate a list of unique random retrievers for the sessions that need them
     let randomRetrievers: string[] | undefined = [];
     while (randomRetrievers.length < randomRetrieverSessions.length) {
-      const newRetriever = getRandomSelection(arrayOfRetrievers, randomRetrievers);
+      const newRetriever = getRandomSelection(
+        arrayOfRetrievers,
+        randomRetrievers
+      );
       if (!randomRetrievers.includes(newRetriever)) {
         randomRetrievers.push(newRetriever);
       }
     }
 
-    // Check if at least one of the selected retrievers isn't "random"
-    const hasNonRandomSelection = chatSessions.some(session => session.retrieverSelection !== "random");
+    const hasNonRandomSelection = chatSessions.some(
+      (session) => session.retrieverSelection !== "random"
+    );
     setAllRandom(!hasNonRandomSelection);
 
-    // Keep track of how many random retrievers have been assigned
     let randomRetrieverIndex = 0;
 
     chatSessions.forEach((session, index) => {
       let newRetrieverSelection = session.retrieverSelection;
 
-      // Assign a unique random retriever if needed
       if (session.retrieverSelection === "random" && randomRetrievers) {
         newRetrieverSelection = randomRetrievers[randomRetrieverIndex++];
       }
@@ -126,9 +144,21 @@ export function ChatBots() {
 
   return (
     <TooltipProvider delayDuration={0}>
-      <ResizablePanelGroup direction="vertical">
+      <ResizablePanelGroup direction={"vertical"} className="relative">
+        <Button
+          onClick={() => {
+            isSmallScreen ? setIsSmallScreen(false) : setIsSmallScreen(true);
+          }}
+          size="sm"
+          variant={"ghost"}
+          className="ml-auto text-white absolute invisible md:bottom-5 md:left-4 md:visible"
+        >
+          {isSmallScreen ? <FlipHorizontal /> : <FlipVertical />}
+        </Button>
         <ResizablePanel defaultSize={80}>
-          <ResizablePanelGroup direction="horizontal">
+          <ResizablePanelGroup
+            direction={isSmallScreen ? "vertical" : "horizontal"}
+          >
             {chatSessions.map((session, index) => (
               <React.Fragment key={index}>
                 <ResizablePanel defaultSize={50} className="min-w-72">

@@ -110,8 +110,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                     m.role !== "user" ? "text-left" : "text-right"
                   }`}
                 >
-                  <strong>{m.role === "user" ? "" : "AI: "}</strong>
-                  {m.content}
+                  
                   {m.annotations && m.annotations.length ? (
                     <div className=" mt-2 dark:bg-slate-900 bg-slate-100 px-3 py-2 drop-shadow-lg rounded-md">
                       <span >🔍 Sources:</span>
@@ -134,6 +133,8 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                   ) : (
                     ""
                   )}
+                  {/* <strong className="mt-4">{m.role === "user" ? "" : "AI: "}</strong> */}
+                  <p className="mt-4">{m.content}</p>
                 </div>
                 <div className="text-xs text-muted-foreground min-w-20 text-right">
                   {m?.createdAt?.toLocaleTimeString()}
@@ -152,3 +153,4 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
 MessageDisplay.displayName = "MessageDisplay";
 
 export { MessageDisplay };
+

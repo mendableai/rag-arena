@@ -1,4 +1,5 @@
 import supabase from "@/lib/supabase";
+import { CustomRetriever } from "@/lib/types";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { DocumentInterface } from "@langchain/core/documents";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
@@ -10,8 +11,6 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from 'openai';
 import { dynamicRetrieverUtility } from "./tools/config";
 import { CONDENSE_QUESTION_TEMPLATE } from "./tools/variables";
-import { BaseRetriever } from "@langchain/core/retrievers";
-import { CustomRetriever } from "@/lib/types";
 
 export const runtime = "edge";
 

@@ -119,7 +119,8 @@ export default function CustomIngest() {
             } -ml-3`}
             size={40}
           />
-          Ingest Custom Data
+          <span className="hidden sm:inline">Ingest Custom Data</span>
+          <span className="sm:hidden">Ingest</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl justify-center">
