@@ -1,6 +1,7 @@
 import supabase from "@/lib/supabase";
 import { CustomRetriever } from "@/lib/types";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
+import { DocumentInterface } from "@langchain/core/documents";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { ContextualCompressionRetriever } from "langchain/retrievers/contextual_compression";
 import { LLMChainExtractor } from "langchain/retrievers/document_compressors/chain_extract";
@@ -163,28 +164,14 @@ export function MultiVector(
 
 }
 
-export async function baseRequest({
-    query,
-    id
-}: {
-    query: string,
-    id: string,
-}) {
-    return fetch(`${process.env.PYTHON_MICRO_SERVER}/api/query`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query: query, id: id}),
-    });
-}
-
 export async function BaseRetrieverLI({
     query,
-    retrieverId
+    retrieverId,
+    customDocuments
 }:{
     query: string, 
     retrieverId: string, 
+    customDocuments: DocumentInterface<Record<string, any>>[]
 }) {
 
     const serverResponse = await fetch(`${process.env.PYTHON_MICRO_SERVER}/api/python-retrievers/${retrieverId}`, {
@@ -192,7 +179,7 @@ export async function BaseRetrieverLI({
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: query }),
+        body: JSON.stringify({ query, customDocuments }),
     });
 
     const data = await serverResponse.json();
@@ -200,8 +187,6 @@ export async function BaseRetrieverLI({
     if (!serverResponse.ok) {
         throw new Error(`Error fetching server: ${data.message}`);
     }
-
-    console.log('data', data)
 
     const documents = data.documents.map((doc:any) => ({
         pageContent: doc.content,

@@ -54,35 +54,40 @@ def baseRoute():
 @app.route("/api/python-retrievers/graph-rag-li", methods=["POST"])
 def graph_rag_li():
     query = request.json.get("query", "")
-    data = get_neo4j_retriever(query, cached_index)
+    customDocuments = request.json.get("customDocuments", "")
+    data = get_neo4j_retriever(query, cached_index, customDocuments)
     return jsonify(data)
 
 
 @app.route("/api/python-retrievers/bm-25-li", methods=["POST"])
 def bm_25_li():
     query = request.json.get("query", "")
-    data = get_bm25_retriever(query)
+    customDocuments = request.json.get("customDocuments", "")
+    data = get_bm25_retriever(query, customDocuments)
     return jsonify(data)
 
 
 @app.route("/api/python-retrievers/vector-store-li", methods=["POST"])
 def vector_retriever_li():
     query = request.json.get("query", "")
-    data = get_vector_retriever(query)
+    customDocuments = request.json.get("customDocuments", "")
+    data = get_vector_retriever(query, customDocuments)
     return jsonify(data)
 
 
 @app.route("/api/python-retrievers/reciprocal-rerank-fusion-li", methods=["POST"])
 def reciprocal_rerank_fusion():
     query = request.json.get("query", "")
-    data = get_reciprocal_rerank_fusion(query)
+    customDocuments = request.json.get("customDocuments", "")
+    data = get_reciprocal_rerank_fusion(query, customDocuments)
     return jsonify(data)
 
 
 @app.route("/api/python-retrievers/auto-merging-retriever-li", methods=["POST"])
 def auto_merging_retriever():
     query = request.json.get("query", "")
-    data = get_auto_merging_retriever(query)
+    customDocuments = request.json.get("customDocuments", "")
+    data = get_auto_merging_retriever(query, customDocuments)
     return jsonify(data)
 
 

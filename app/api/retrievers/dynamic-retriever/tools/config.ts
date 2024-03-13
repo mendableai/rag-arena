@@ -1,6 +1,6 @@
 import { CustomRetriever } from "@/lib/types";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
-import { Document } from "@langchain/core/documents";
+import { Document, DocumentInterface } from "@langchain/core/documents";
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
 import { BaseRetriever } from "@langchain/core/retrievers";
 import { ChatOpenAI } from "@langchain/openai";
@@ -15,12 +15,14 @@ export async function dynamicRetrieverUtility(
     model: ChatOpenAI,
     vectorstore: SupabaseVectorStore | MemoryVectorStore,
     currentMessageContent: string,
+    customDocuments: DocumentInterface<Record<string, any>>[]
 ): Promise<BaseRetriever | CustomRetriever> {
 
     if (retrieverSelected.includes("-li")) {
         return BaseRetrieverLI({
             query: currentMessageContent,
             retrieverId: retrieverSelected,
+            customDocuments,
         })
     }
 

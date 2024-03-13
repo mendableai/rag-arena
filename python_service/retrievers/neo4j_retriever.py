@@ -6,6 +6,7 @@ from llama_index.core import (KnowledgeGraphIndex, SimpleDirectoryReader,
                               StorageContext, load_index_from_storage)
 from llama_index.graph_stores.neo4j import Neo4jGraphStore
 from llama_index.llms.openai import OpenAI
+from transformations.docs_to_llama_index import custom_docs_to_llama_index
 
 env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
@@ -56,12 +57,30 @@ def create_neo4j_graph_store():
     print("index_saved")
 
 
-def get_neo4j_retriever(query, index):
-    query_engine = index.as_query_engine(
-        include_text=True,
-        response_mode="tree_summarize",
-        embedding_mode="hybrid",
-    )
+def get_neo4j_retriever(query, index, customDocuments):
+
+    if len(customDocuments) > 0:
+
+        documents = custom_docs_to_llama_index(customDocuments)
+
+        index = KnowledgeGraphIndex.from_documents(
+            documents,
+            max_triplets_per_chunk=2,
+            include_embeddings=True,
+        )
+
+        query_engine = index.as_query_engine(
+            include_text=True,
+            response_mode="tree_summarize",
+            embedding_mode="hybrid",
+        )
+
+    else:
+        query_engine = index.as_query_engine(
+            include_text=True,
+            response_mode="tree_summarize",
+            embedding_mode="hybrid",
+        )
 
     response = query_engine.query(query)
 
@@ -69,6 +88,7 @@ def get_neo4j_retriever(query, index):
         {"content": response.response, "metadata": response.get_formatted_sources()}
     ]
     return {"documents": content_metadata_pairs}
+
 
 # should uncomment bellow if the files are already in the correct directory.
 

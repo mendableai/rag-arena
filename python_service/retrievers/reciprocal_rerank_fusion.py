@@ -6,12 +6,18 @@ from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core.retrievers import QueryFusionRetriever
 from llama_index.retrievers.bm25 import BM25Retriever
 from supabase_functions.get_documents import get_documents
-from transformations.docs_to_llama_index import docs_to_llama_index
+from transformations.docs_to_llama_index import (custom_docs_to_llama_index,
+                                                 docs_to_llama_index)
 
 
-def get_reciprocal_rerank_fusion(query):
+def get_reciprocal_rerank_fusion(query, customDocuments):
     splitter = SentenceSplitter(chunk_size=1024)
-    documents = docs_to_llama_index(get_documents())
+    
+    if len(customDocuments) > 0 :
+        documents = custom_docs_to_llama_index(customDocuments)
+    else:
+        documents = docs_to_llama_index(get_documents())
+        
     index = VectorStoreIndex.from_documents(documents, transformations=[splitter])
 
     vector_retriever = index.as_retriever(similarity_top_k=5)

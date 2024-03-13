@@ -9,13 +9,17 @@ from llama_index.core.storage.docstore import SimpleDocumentStore
 from llama_index.llms.openai import OpenAI
 from llama_index.retrievers.bm25 import BM25Retriever
 from supabase_functions.get_documents import get_documents
-from transformations.docs_to_llama_index import docs_to_llama_index
+from transformations.docs_to_llama_index import (custom_docs_to_llama_index,
+                                                 docs_to_llama_index)
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
-def get_auto_merging_retriever(query):
+def get_auto_merging_retriever(query, customDocuments):
     
-    documents = docs_to_llama_index(get_documents())
+    if len(customDocuments) > 0 :
+        documents = custom_docs_to_llama_index(customDocuments)
+    else:
+        documents = docs_to_llama_index(get_documents())
     
     node_parser = HierarchicalNodeParser.from_defaults()
     nodes = node_parser.get_nodes_from_documents(documents)
