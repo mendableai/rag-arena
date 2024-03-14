@@ -7,8 +7,8 @@ from supabase import Client, create_client
 env_path = Path(__file__).resolve().parent.parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
-SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
-SUPABASE_PRIVATE_KEY = os.getenv("NEXT_PUBLIC_SUPABASE_PRIVATE_KEY")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_PRIVATE_KEY = os.getenv("SUPABASE_PRIVATE_KEY")
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_PRIVATE_KEY)
 
