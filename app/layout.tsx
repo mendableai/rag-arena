@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className="manrope san html-body">
         <Header />
-        <div className="content-grow">{children}</div>
+        <div className="content-grow px-4">{children}</div>
         <Analytics />
         <Footer />
         <DocumentPopUp />

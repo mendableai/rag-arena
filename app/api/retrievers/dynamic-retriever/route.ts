@@ -1,4 +1,5 @@
 import supabase from "@/lib/supabase";
+import { CustomRetriever } from "@/lib/types";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { DocumentInterface } from "@langchain/core/documents";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest) {
 
         const model = new ChatOpenAI({
             modelName: "gpt-3.5-turbo-1106",
-            temperature: 0.2,
+            temperature: 0,
             streaming: true,
         });
 
@@ -79,11 +80,16 @@ export async function POST(req: NextRequest) {
             });
         }
 
-        const retriever = await dynamicRetrieverUtility(retrieverSelected, model, vectorstore, currentMessageContent);
+        const retriever = await dynamicRetrieverUtility(retrieverSelected, model, vectorstore, currentMessageContent, customDocuments);
+        let retrievedDocs: DocumentInterface<Record<string, any>>[] = [];
 
-        const retrievedDocs = await retriever.getRelevantDocuments(
-            currentMessageContent,
-        );
+        if(retriever instanceof CustomRetriever) {
+            retrievedDocs = retriever.documents;
+        }else{
+            retrievedDocs = await retriever.getRelevantDocuments(
+                currentMessageContent,
+            );
+        }
 
         const prompt = CONDENSE_QUESTION_TEMPLATE(previousMessages, currentMessageContent, retrievedDocs);
 

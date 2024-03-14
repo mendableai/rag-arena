@@ -1,10 +1,7 @@
 import {
   ArrowLeftSquare,
   ArrowRightSquare,
-  Images,
-  ListRestart,
-  RefreshCcw,
-  Trash2,
+  RefreshCcw
 } from "lucide-react";
 
 import {
@@ -19,7 +16,6 @@ import {
   useVoteStore,
 } from "@/lib/zustand";
 import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 import { retrieverInfo } from "@/lib/constants";
@@ -177,7 +173,7 @@ export function SelectionMenu() {
               variant={!hasVoted ? "outline" : "default"}
               className={`${
                 !hasVoted ? "" : "text-white"
-              } w-fit px-2 h-10 gap-2`}
+              } w-fit px-2 h-10 gap-2 mt-[310px] md:mt-0`}
               size="icon"
               disabled={false}
             >

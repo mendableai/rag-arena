@@ -1,17 +1,31 @@
+import { CustomRetriever } from "@/lib/types";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
-import { Document } from "@langchain/core/documents";
+import { Document, DocumentInterface } from "@langchain/core/documents";
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
+import { BaseRetriever } from "@langchain/core/retrievers";
 import { ChatOpenAI } from "@langchain/openai";
 import { Message as VercelChatMessage } from "ai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { ContextualCompression, MultiQuery, MultiVector, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
+import { BaseRetrieverLI, ContextualCompression, MultiQuery, MultiVector, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
+
+
 
 export async function dynamicRetrieverUtility(
     retrieverSelected: string,
     model: ChatOpenAI,
     vectorstore: SupabaseVectorStore | MemoryVectorStore,
     currentMessageContent: string,
-) {
+    customDocuments: DocumentInterface<Record<string, any>>[]
+): Promise<BaseRetriever | CustomRetriever> {
+
+    if (retrieverSelected.includes("-li")) {
+        return BaseRetrieverLI({
+            query: currentMessageContent,
+            retrieverId: retrieverSelected,
+            customDocuments,
+        })
+    }
+
     switch (retrieverSelected) {
         case "contextual-compression":
             return ContextualCompression(

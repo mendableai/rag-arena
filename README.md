@@ -38,14 +38,43 @@ UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 
 PRODUCTION=false
+
+PYTHON_MICRO_SERVER=
 ```
 
-Start the development server:
+Start the development (nextjs) web server:
 
 ```bash
 pnpm dev
 ```
 
+## Running the python server
+
+```bash
+cd python_service
+```
+```bash
+poetry install
+```
+*(if you don't have poetry just add id using pip install poetry)
+
+### Activating the Neo4j Graph Store
+For the Graph Rag retriever you'll need to have the graph store built, or let the server automatically run the 'create_neo4j_graph_store' function (localized in `/python_service/retrievers/neo4j_retriever.py`) by uncommenting the lines:
+
+```
+# if not os.path.exists(storage_dir) or not os.listdir(storage_dir):
+# create_neo4j_graph_store()
+```
+This will take a while depending on the data used in `data/chunks`. At the end you will have your `neo/storage` directory populated with persisted data for the graph store locally.
+
+### Loading index for the first time
+
+You will need the index loaded and cached so that the Graph RAG can be used. The `load_index()` function does that for you inside `python_service/app.py`. So in your very first execution it may take a while to create the cached .pkl file placed in `python_service/index/cache`.
+
+### Run the flask server locally with debug mode
+```bash
+poetry run flask run --debug
+```
 Open http://localhost:3000 with your browser to see the result.
 
 # Architecture Overview

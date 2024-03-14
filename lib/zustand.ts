@@ -60,3 +60,14 @@ export const useCustomDocumentStore = create<CustomDocumentState>((set) => ({
     customDocuments: [],
     setCustomDocuments: (value: DocumentInterface<Record<string, any>>[]) => set(() => ({ customDocuments: value })),
 }))
+
+interface SmallScreenState {
+    isSmallScreen: boolean;
+    setIsSmallScreen: (value: boolean) => void;
+}
+
+export const useSmallScreenStore = create<SmallScreenState>((set) => ({
+    isSmallScreen: false,
+    setIsSmallScreen: (value: boolean) => set(() => ({ isSmallScreen: value })),
+}))
+

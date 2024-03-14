@@ -1,0 +1,18 @@
+116 Ramen Profitable
+
+
+Want to start a startup? Get funded by Y Combinator.
+
+July 2009
+
+Now that the term "ramen profitable" has become widespread, I ought to explain precisely what the idea entails.
+
+Ramen profitable means a startup makes just enough to pay the founders' living expenses. This is a different form of profitability than startups have traditionally aimed for. Traditional profitability means a big bet is finally paying off, whereas the main importance of ramen profitability is that it buys you time. [1]
+
+In the past, a startup would usually become profitable only after raising and spending quite a lot of money. A company making computer hardware might not become profitable for 5 years, during which they spent $50 million. But when they did they might have revenues of $50 million a year. This kind of profitability means the startup has succeeded.
+
+Ramen profitability is the other extreme: a startup that becomes profitable after 2 months, even though its revenues are only $3000 a month, because the only employees are a couple 25 year old founders who can live on practically nothing. Revenues of $3000 a month do not mean the company has succeeded. But it does share something with the one that's profitable in the traditional way: they don't need to raise money to survive.
+
+Ramen profitability is an unfamiliar idea to most people because it only recently became feasible. It's still not feasible for a lot of startups; it would not be for most biotech startups, for example; but it is for many software startups because they're now so cheap. For many, the only real cost is the founders' living expenses.
+
+The main significance of this type of profitability is that you're no longer at the mercy of investors. If you're still losing money, then eventually you'll either have to raise more or shut down. Once you're ramen profitable this painful choice goes away. You can still raise money, but you don't have to do it now.
