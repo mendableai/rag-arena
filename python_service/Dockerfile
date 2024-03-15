@@ -13,6 +13,6 @@ RUN poetry config virtualenvs.create false \
 
 COPY . /app
 
-CMD ["poetry", "run", "gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "--timeout", "800", "app:app"]
+CMD ["poetry", "run", "gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "--timeout", "800", "--log-level", "debug", "app:app"]
 
 
