@@ -2,7 +2,7 @@
 
 import CustomIngest from "@/components/main-tool/custom-ingest";
 import { Button } from "@/components/ui/button";
-import { Home, Trophy } from "lucide-react";
+import { Home, Trophy, Github } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Logo from "./logo";
@@ -39,6 +39,11 @@ export default function Header() {
           </a>
 
           <ThemeToggle />
+          <a href="https://github.com/mendableai/rag-arena">
+            <Button variant="outline" size="icon" disabled={false}>
+              <Github className="h-4 w-4" />
+            </Button>
+          </a>
         </div>
       </nav>
     </div>
