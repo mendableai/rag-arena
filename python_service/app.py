@@ -18,7 +18,6 @@ CACHE_FILE_PATH = "./index/cache/index_cache.pkl"
 
 cached_index = None
 
-
 def load_index():
     global cached_index
     if cached_index is None:

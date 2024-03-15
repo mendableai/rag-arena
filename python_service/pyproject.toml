@@ -17,6 +17,7 @@ flask-cors = "^4.0.0"
 gunicorn = "^21.2.0"
 llama-index-graph-stores-neo4j = "^0.1.2"
 python-dotenv = "^1.0.1"
+gdown = "^5.1.0"
 
 
 [build-system]

@@ -1,4 +1,5 @@
 import os
+import zipfile
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -17,6 +18,7 @@ neoPass = os.getenv("NEO4J_PASSWORD")
 import logging
 import sys
 
+import gdown
 from llama_index.core import Settings
 from llama_index.llms.openai import OpenAI
 
@@ -26,7 +28,19 @@ llm = OpenAI(temperature=0, model="gpt-3.5-turbo", api_key=os.getenv("OPENAI_API
 Settings.llm = llm
 Settings.chunk_size = 512
 
+def download_and_extract_file_from_google_drive(gdrive_url, destination, extract_to):
+    # Use gdown to download the file
+    gdown.download(gdrive_url, destination, quiet=False)
 
+    print("File downloaded successfully")
+
+    with zipfile.ZipFile(destination, 'r') as zip_ref:
+        zip_ref.extractall(extract_to)
+    print("File extracted successfully")
+
+    os.remove(destination)
+    print("Zip file removed")
+    
 def create_neo4j_graph_store():
     username = "neo4j"
     password = neoPass
@@ -89,9 +103,11 @@ def get_neo4j_retriever(query, index, customDocuments):
     ]
     return {"documents": content_metadata_pairs}
 
-
-# should uncomment bellow if the files are already in the correct directory.
-
 storage_dir = "./retrievers/neo/storage"
-# if not os.path.exists(storage_dir) or not os.listdir(storage_dir):
-# create_neo4j_graph_store()
+if not os.path.exists(storage_dir) or not os.listdir(storage_dir):
+    if os.getenv("CREATE_NEO4J_GRAPH_STORE") == "true":
+        create_neo4j_graph_store()
+    else:
+        gdrive_url = 'https://drive.google.com/uc?id=1ZsA3cfKOSPrQI9WKCVF85UsNPxqf4s3z'
+        destination = os.path.join(storage_dir, 'neo4j_graph_store.zip')  # Assuming the file is a zip
+        download_and_extract_file_from_google_drive(gdrive_url, destination, storage_dir)
