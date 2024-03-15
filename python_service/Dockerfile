@@ -8,8 +8,6 @@ WORKDIR /app
 # Only necessary if you need Poetry for runtime operations besides `poetry install`
 RUN pip install poetry
 
-RUN poetry install
-
 # Copy the project files into the container
 COPY . /app
 
