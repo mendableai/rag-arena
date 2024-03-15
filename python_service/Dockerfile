@@ -7,6 +7,9 @@ WORKDIR /app
 # Install Poetry
 RUN pip install poetry
 
+# Install Gunicorn
+RUN pip install gunicorn
+
 # Copy the Poetry configuration files into the container
 COPY pyproject.toml poetry.lock* /app/
 
@@ -18,6 +21,6 @@ RUN poetry config virtualenvs.create false \
 # Copy the rest of your application code into the container
 COPY . /app
 
-# Specify the command to run your app using Poetry to ensure
+# Specify the command to run your app using Gunicorn to ensure
 # it runs within the context that includes all dependencies
-CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
