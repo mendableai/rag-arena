@@ -1,5 +1,5 @@
 # Use the official Python base image
-FROM python:3.10.11 as builder
+FROM python:3.10.11
 
 # Set the working directory in the container
 WORKDIR /app
@@ -7,28 +7,17 @@ WORKDIR /app
 # Install Poetry
 RUN pip install poetry
 
-# Copy only the files needed for poetry install
+# Copy the Poetry configuration files into the container
 COPY pyproject.toml poetry.lock* /app/
 
-# Disable the creation of a virtual environment and export dependencies to requirements.txt
-# Note: The '--without-hashes' option is used for compatibility with pip
+# Configure Poetry: Disable the creation of a virtual environment
+# and install the dependencies directly
 RUN poetry config virtualenvs.create false \
-    && poetry export -f requirements.txt --output requirements.txt --without-hashes
+    && poetry install --no-interaction --no-ansi
 
-# Start a new build stage
-FROM python:3.10.11
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy the requirements.txt file from the builder stage
-COPY --from=builder /app/requirements.txt /app/
-
-# Install dependencies using requirements.txt
-RUN pip install -r requirements.txt
-
-# Copy the rest of your application code
+# Copy the rest of your application code into the container
 COPY . /app
 
-# The command to run your app (this is just a placeholder, since you use a custom start command)
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Specify the command to run your app using Poetry to ensure
+# it runs within the context that includes all dependencies
+CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0"]
