@@ -7,6 +7,11 @@ export const arrayOfRetrievers = [
   // "self-query",
   "similarity-score",
   // "time-weighted",
+  "bm-25-li",
+  "vector-store-li",
+  "reciprocal-rerank-fusion-li",
+  "auto-merging-retriever-li",
+  "graph-rag-li"
 ];
 
 export const retrieverInfo = {
