@@ -30,6 +30,8 @@ Settings.chunk_size = 512
 
 def download_and_extract_file_from_google_drive(gdrive_url, destination, extract_to):
     # Use gdown to download the file
+    os.makedirs(extract_to, exist_ok=True)
+
     gdown.download(gdrive_url, destination, quiet=False)
 
     print("File downloaded successfully")
