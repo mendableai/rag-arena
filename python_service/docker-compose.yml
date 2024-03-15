@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - NEO4J_PASSWORD
+      - NEO4J_URI
+      - OPENAI_API_KEY
+      - SUPABASE_PRIVATE_KEY
+      - SUPABASE_URL
+      - CREATE_NEO4J_GRAPH_STORE
+    volumes:
+      - .:/app

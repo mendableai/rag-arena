@@ -5,7 +5,6 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from retrievers.auto_merging_retriever import get_auto_merging_retriever
 from retrievers.bm25_retriever import get_bm25_retriever
-# Import the necessary functions and classes for loading the index
 from retrievers.neo4j_retriever import (StorageContext, get_neo4j_retriever,
                                         load_index_from_storage)
 from retrievers.reciprocal_rerank_fusion import get_reciprocal_rerank_fusion
@@ -17,7 +16,6 @@ CORS(app)
 CACHE_FILE_PATH = "./index/cache/index_cache.pkl"
 
 cached_index = None
-
 
 def load_index():
     global cached_index
