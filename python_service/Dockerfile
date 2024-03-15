@@ -3,8 +3,7 @@ FROM python:3.10.11
 WORKDIR /app
 
 RUN pip install poetry
-
-RUN pip install gunicorn
+RUN pip install waitress
 
 COPY pyproject.toml poetry.lock* /app/
 
@@ -13,4 +12,4 @@ RUN poetry config virtualenvs.create false \
 
 COPY . /app
 
-CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0"]
+CMD ["python", "waitress_server.py"]
