@@ -5,14 +5,11 @@ FROM python:3.9
 WORKDIR /app
 
 # Install Poetry
+# Only necessary if you need Poetry for runtime operations besides `poetry install`
 RUN pip install poetry
 
 # Copy the project files into the container
 COPY . /app
 
-# Use Poetry to install dependencies
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi
-
-# Specify the command to run your app
-CMD ["poetry", "run", "flask", "run"]
+# The CMD is not needed if you specify the start command in Railway's panel
+# CMD ["poetry", "run", "flask", "run"]
