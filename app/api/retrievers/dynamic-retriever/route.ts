@@ -12,7 +12,7 @@ import OpenAI from 'openai';
 import { Stream } from "openai/streaming.mjs";
 import { dynamicRetrieverUtility } from "./tools/config";
 import { CONDENSE_QUESTION_TEMPLATE } from "./tools/variables";
-
+//test
 export const runtime = "edge";
 
 function getClientIp(req: NextRequest) {
