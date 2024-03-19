@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { TableCell, TableRow } from "@/components/ui/table";
 import supabase from "@/lib/supabase";
@@ -28,7 +29,7 @@ export default function RealTimeScore({
   retriever: Retriever[];
 }) {
   const [retrieverList, setRetrieverList] = useState<Retriever[]>(
-    [...retriever].sort((a, b) => b.votes - a.votes)
+    [...retriever].sort((a, b) => b.elo - a.elo)
   );
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function RealTimeScore({
                 ? (payload.new as Retriever)
                 : item
             );
-            return updatedList.sort((a, b) => b.votes - a.votes);
+            return updatedList.sort((a, b) => b.elo - a.elo);
           });
         }
       )

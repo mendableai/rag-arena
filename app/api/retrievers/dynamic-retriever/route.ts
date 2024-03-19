@@ -11,19 +11,13 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from 'openai';
 import { Stream } from "openai/streaming.mjs";
 import { dynamicRetrieverUtility } from "./tools/config";
-import { CONDENSE_QUESTION_TEMPLATE } from "./tools/variables";
-//test
+import { CONDENSE_QUESTION_TEMPLATE, VALID_MODELS } from "./tools/variables";
+
 export const runtime = "edge";
 
 function getClientIp(req: NextRequest) {
     return req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for') ?? req.ip;
 }
-
-const VALID_MODELS: { [key: string]: { apiKeyEnv: string, modelName: string } } = {
-    'mistral': { apiKeyEnv: 'GROQ_API_KEY', modelName: 'mixtral-8x7b-32768' },
-    'gpt-3.5-turbo': { apiKeyEnv: 'OPENAI_API_KEY', modelName: 'gpt-3.5-turbo-1106' },
-    'command-r': { apiKeyEnv: 'COHERE_API_KEY', modelName: 'command-r' },
-};
 
 export async function POST(req: NextRequest) {
     const identifier = getClientIp(req);
@@ -79,7 +73,7 @@ export async function POST(req: NextRequest) {
         const retrieverSelected = body.retrieverSelection;
 
         const model = new ChatOpenAI({
-            modelName: modelConfig.modelName === 'command-r' ? 'gpt-3.5-turbo-1106' : modelConfig.modelName,
+            modelName: 'gpt-3.5-turbo-1106',
             temperature: 0,
             streaming: true,
         });
@@ -117,7 +111,6 @@ export async function POST(req: NextRequest) {
         let stream: ReadableStream<any> | null = null;
 
 
-
         if (modelConfig.modelName === 'command-r') {
 
             const bodyResponse = JSON.stringify({
@@ -130,8 +123,6 @@ export async function POST(req: NextRequest) {
                 citation_quality: "accurate",
                 documents: retrievedDocs.map(doc => ({ pageContent: doc.pageContent }))
             })
-
-            console.log(bodyResponse);
 
 
             try {
