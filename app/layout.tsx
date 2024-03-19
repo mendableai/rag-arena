@@ -1,4 +1,4 @@
-import DocumentPopUp from "@/components/document-pop-up";
+import DocumentPopUp from "@/components/theme/document-pop-up";
 import Footer from "@/components/theme/footer";
 import Header from "@/components/theme/header";
 import { Analytics } from "@vercel/analytics/react";

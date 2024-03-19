@@ -71,3 +71,13 @@ export const useSmallScreenStore = create<SmallScreenState>((set) => ({
     setIsSmallScreen: (value: boolean) => set(() => ({ isSmallScreen: value })),
 }))
 
+
+
+interface ChosenModelState {
+    chosenModel: string;
+    setChosenModel: (value: string) => void;
+}
+export const useChosenModelStore = create<ChosenModelState>((set) => ({
+    chosenModel: "mistral",
+    setChosenModel: (value: string) => set(() => ({ chosenModel: value })),
+}))

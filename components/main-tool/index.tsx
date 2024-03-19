@@ -6,6 +6,7 @@ import { getRandomSelection } from "@/lib/utils";
 import {
   useAllRandomStore,
   useChatSessionsStore,
+  useChosenModelStore,
   useCustomDocumentStore,
   useInProcessStore,
   useSmallScreenStore,
@@ -42,6 +43,8 @@ export function ChatBots() {
   const { hasVoted } = useVoteStore();
   const { setInProcess } = useInProcessStore();
   const { customDocuments } = useCustomDocumentStore();
+
+  const { chosenModel } = useChosenModelStore();
 
   useEffect(() => {
     // Now we can safely access window because this code runs in the browser
@@ -120,6 +123,7 @@ export function ChatBots() {
             })
           );
         },
+        chosenModel,
       });
     });
 

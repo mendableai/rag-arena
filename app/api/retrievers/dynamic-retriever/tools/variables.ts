@@ -21,7 +21,7 @@ export const attributeInfo: AttributeInfo[] = [
 
 
 export const CONDENSE_QUESTION_TEMPLATE = (chat_history: any[], question: string, sources: DocumentInterface<Record<string, any>>[]) => {
-  return `Given the chat history and the sources found, answer the current input in English. If an answer is not found or derivable from the sources, try your best to answer based on the sources. YOU MUST USE THE SOURCES TO FORMULATE YOUR ANSWER, they are the only source of truth! 
+  return `Given the chat history and the sources found, answer the current input in English. Be concise in your answer. If an answer is not found or derivable from the sources, try your best to answer based on the sources. YOU MUST USE THE SOURCES TO FORMULATE YOUR ANSWER, they are the only source of truth! 
 
   Here are the sources found (The only source of truth, no matter what, use them to answer the question):
 

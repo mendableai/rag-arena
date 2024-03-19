@@ -61,10 +61,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
         onClick={async () => {
           if (hasVoted || message.length === 0 || !allRandom || loading) return;
 
-          console.log(retriever);
-
           const addTestCount = await addTimesTestedForBoth(retriever);
-          console.log(addTestCount);
 
           if (!addTestCount) {
             aplyToast("Error adding test count");
