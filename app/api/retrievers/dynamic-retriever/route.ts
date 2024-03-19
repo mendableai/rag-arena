@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
         }
 
         const prompt = CONDENSE_QUESTION_TEMPLATE(previousMessages, currentMessageContent, retrievedDocs);
-
+        
         let response: Stream<OpenAI.Chat.Completions.ChatCompletionChunk> | null = null;
 
         let stream: ReadableStream<any> | null = null;

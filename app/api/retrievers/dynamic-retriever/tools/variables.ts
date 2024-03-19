@@ -37,8 +37,10 @@ export const CONDENSE_QUESTION_TEMPLATE = (chat_history: any[], question: string
   <Sources>
   ${!sources ?? "No sources found."}
   ${sources.map((source, index) => {
-    return `${index}: source content: ${source.pageContent}\n
-    source metadata: ${JSON.stringify(source.metadata, null, 2)}`
+    const cleanedContent = source.pageContent.replace(/> Source \(Doc id: [^\)]+\): /g, '> Source: ');
+    const cleanedMetadata = typeof source.metadata === 'string' ? (source.metadata as string).replace(/Doc id: [^\)]+\)/g, '') : source.metadata;
+    return `${index}: source content: ${cleanedContent}\n
+    source metadata: ${JSON.stringify(cleanedMetadata, null, 2)}`
   }).join("\n")}
   </Sources>
 
