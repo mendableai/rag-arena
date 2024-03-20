@@ -139,33 +139,7 @@ export function SelectionMenu() {
           <TooltipContent>Vote Right</TooltipContent>
         </Tooltip>
       </div>
-      <div className="absolute right-0 flex items-center gap-2 pr-4">
-        {/*<Tooltip open={hasVoted}>
-          <TooltipTrigger asChild>
-            <Button
-              variant={!hasVoted ? "outline" : "default"}
-              size="icon"
-              disabled={!hasVoted}
-              onClick={() => refresh()}
-              className="transition-all duration-300"
-            >
-              <ListRestart className="h-4 w-4" />
-              <span className="sr-only">New Round</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>New Round</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="outline" size="icon" disabled={!message.length}>
-              <Images className="h-4 w-4" />
-              <span className="sr-only">Print Result</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Print Result</TooltipContent>
-        </Tooltip>
-            */}
-        {/* <Separator orientation="vertical" className="mx-1 h-6" /> */}
+      <div className="absolute sm:right-0 flex items-center gap-2 pr-4 ml-2">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button

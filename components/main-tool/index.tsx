@@ -189,7 +189,7 @@ export function ChatBots() {
         <ResizablePanel defaultSize={20} className="min-h-40 max-h-96">
           <div className="p-4 max-w-3xl m-auto">
             <form onSubmit={handleFormSubmit}>
-              <div className="gap-4 flex items-center">
+              <div className="gap-4 flex items-center relative">
                 <Textarea
                   className="p-4"
                   placeholder={
