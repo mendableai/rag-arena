@@ -6,6 +6,7 @@ import { getRandomSelection } from "@/lib/utils";
 import {
   useAllRandomStore,
   useChatSessionsStore,
+  useChosenModelStore,
   useCustomDocumentStore,
   useInProcessStore,
   useSmallScreenStore,
@@ -42,6 +43,8 @@ export function ChatBots() {
   const { hasVoted } = useVoteStore();
   const { setInProcess } = useInProcessStore();
   const { customDocuments } = useCustomDocumentStore();
+
+  const { chosenModel } = useChosenModelStore();
 
   useEffect(() => {
     // Now we can safely access window because this code runs in the browser
@@ -120,6 +123,7 @@ export function ChatBots() {
             })
           );
         },
+        chosenModel,
       });
     });
 
@@ -185,7 +189,7 @@ export function ChatBots() {
         <ResizablePanel defaultSize={20} className="min-h-40 max-h-96">
           <div className="p-4 max-w-3xl m-auto">
             <form onSubmit={handleFormSubmit}>
-              <div className="gap-4 flex items-center">
+              <div className="gap-4 flex items-center relative">
                 <Textarea
                   className="p-4"
                   placeholder={

@@ -8,9 +8,10 @@ interface HandleSubmitParams {
     setChatHistory: (newHistory: Message[] | ((currentHistory: Message[]) => Message[])) => void;
     retrieverSelection: string;
     setLoading: (isLoading: boolean) => void;
+    chosenModel: string;
 }
 
-export async function handleSubmit({ customDocuments, input, chatHistory, setChatHistory, retrieverSelection, setLoading }: HandleSubmitParams) {
+export async function handleSubmit({ customDocuments, input, chatHistory, setChatHistory, retrieverSelection, setLoading, chosenModel }: HandleSubmitParams) {
     setLoading(true);
 
     const newUserEntry: Message = {
@@ -36,6 +37,7 @@ export async function handleSubmit({ customDocuments, input, chatHistory, setCha
                 messages: newChatHistory,
                 retrieverSelection,
                 customDocuments,
+                chosenModel
             }),
         });
 

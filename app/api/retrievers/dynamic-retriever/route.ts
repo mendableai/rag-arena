@@ -5,22 +5,19 @@ import { DocumentInterface } from "@langchain/core/documents";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import { OpenAIStream, StreamingTextResponse } from 'ai';
+import { CohereStream, OpenAIStream, StreamingTextResponse } from 'ai';
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from 'openai';
+import { Stream } from "openai/streaming.mjs";
 import { dynamicRetrieverUtility } from "./tools/config";
-import { CONDENSE_QUESTION_TEMPLATE } from "./tools/variables";
+import { CONDENSE_QUESTION_TEMPLATE, VALID_MODELS } from "./tools/variables";
 
 export const runtime = "edge";
 
 function getClientIp(req: NextRequest) {
     return req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for') ?? req.ip;
 }
-
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY!,
-});
 
 export async function POST(req: NextRequest) {
     const identifier = getClientIp(req);
@@ -48,6 +45,22 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const messages = body.messages ?? [];
 
+        if (!(body.chosenModel in VALID_MODELS)) {
+            return NextResponse.json({ error: 'Invalid model selected' }, { status: 400 });
+        }
+
+        const modelConfig = VALID_MODELS[body.chosenModel];
+        const apiKey = process.env[modelConfig.apiKeyEnv];
+
+        if (!apiKey) {
+            return NextResponse.json({ error: 'API key not found for selected model' }, { status: 500 });
+        }
+
+        const openai = new OpenAI({
+            apiKey: apiKey!,
+            baseURL: body.chosenModel === 'mistral' ? 'https://api.groq.com/openai/v1' : undefined,
+        });
+
         const customDocuments: DocumentInterface<Record<string, any>>[] = body.customDocuments ?? [];
 
         if (messages.length > 5) {
@@ -60,7 +73,7 @@ export async function POST(req: NextRequest) {
         const retrieverSelected = body.retrieverSelection;
 
         const model = new ChatOpenAI({
-            modelName: "gpt-3.5-turbo-1106",
+            modelName: 'gpt-3.5-turbo-1106',
             temperature: 0,
             streaming: true,
         });
@@ -83,26 +96,63 @@ export async function POST(req: NextRequest) {
         const retriever = await dynamicRetrieverUtility(retrieverSelected, model, vectorstore, currentMessageContent, customDocuments);
         let retrievedDocs: DocumentInterface<Record<string, any>>[] = [];
 
-        if(retriever instanceof CustomRetriever) {
+        if (retriever instanceof CustomRetriever) {
             retrievedDocs = retriever.documents;
-        }else{
+        } else {
             retrievedDocs = await retriever.getRelevantDocuments(
                 currentMessageContent,
             );
         }
 
         const prompt = CONDENSE_QUESTION_TEMPLATE(previousMessages, currentMessageContent, retrievedDocs);
+        
+        let response: Stream<OpenAI.Chat.Completions.ChatCompletionChunk> | null = null;
 
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            stream: true,
-            messages: [
-                { "role": "system", "content": "You are a helpful assistant." },
-                { "role": "system", "content": prompt }
-            ],
-        });
+        let stream: ReadableStream<any> | null = null;
 
-        const stream = OpenAIStream(response);
+
+        if (modelConfig.modelName === 'command-r') {
+
+            const bodyResponse = JSON.stringify({
+                model: "command-r",
+                message: currentMessageContent,
+                temperature: 0.2,
+                chat_history: [{ "role": "SYSTEM", "message": "You are a helpful assistant." }, { "role": "USER", "message": prompt }],
+                prompt_truncation: "AUTO",
+                stream: true,
+                citation_quality: "accurate",
+                documents: retrievedDocs.map(doc => ({ pageContent: doc.pageContent }))
+            })
+
+
+            try {
+                const response = await fetch('https://api.cohere.ai/v1/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${process.env.COHERE_API_KEY}`
+                    },
+                    body: bodyResponse
+                })
+
+                stream = CohereStream(response);
+            } catch (e) {
+                console.log(e);
+                return NextResponse.json({ error: "Error with Cohere" }, { status: 500 });
+            }
+
+        } else {
+            response = await openai.chat.completions.create({
+                model: modelConfig.modelName,
+                stream: true,
+                messages: [
+                    { "role": "system", "content": "You are a helpful assistant." },
+                    { "role": "system", "content": prompt }
+                ],
+            });
+
+            stream = OpenAIStream(response);
+        }
 
         let serializedSources = "";
         try {
