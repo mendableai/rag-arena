@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { useSmallScreenStore } from "@/lib/zustand";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Home, Trophy } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "react-query";
 import Logo from "./logo";
 import MobileDropdown from "./mobile-dropdown.tsx";
 import ThemeToggle from "./theme-toggle";
@@ -15,9 +15,20 @@ import ThemeToggle from "./theme-toggle";
 export default function Header() {
   const [isHomePage, setIsHomePage] = useState(false);
 
-  useEffect(() => {
-    setIsHomePage(window.location.pathname === "/");
-  }, []);
+  const {
+    data: stargazersCount,
+    isLoading,
+    error,
+  } = useQuery(
+    "stargazers",
+    () =>
+      fetch("/api/github")
+        .then((res) => res.json())
+        .then((data) => data.stargazers_count),
+    {
+      refetchInterval: 1000 * 60 * 60,
+    }
+  );
 
   const redirectTo = isHomePage ? "/leaderboard" : "/";
 
@@ -25,11 +36,11 @@ export default function Header() {
 
   return (
     <div className="supports-backdrop-blur:bg-background/60 fixed left-0 right-0 top-0 z-20 border-b bg-background/95 backdrop-blur">
-      <nav className="flex h-20 items-center justify-between px-4 xl:px-60">
+      <nav className="flex h-16 items-center justify-between px-4 xl:px-60">
         <div className="lg:block">
-          <Link href={"/"}>
+          <a href={"/"}>
             <Logo />
-          </Link>
+          </a>
         </div>
 
         {isSmallScreen ? (
@@ -52,8 +63,13 @@ export default function Header() {
 
             <ThemeToggle />
             <a href="https://github.com/mendableai/rag-arena">
-              <Button variant="outline" size="icon" disabled={false}>
-                <GitHubLogoIcon className="h-4 w-4" />
+              <Button
+                variant="outline"
+                size="icon"
+                disabled={false}
+                className="px-2 w-16"
+              >
+                <GitHubLogoIcon className="h-4 w-4 mr-2" /> {stargazersCount}
               </Button>
             </a>
           </div>

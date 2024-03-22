@@ -159,7 +159,7 @@ export function ChatBots() {
         >
           {isSmallScreen ? <FlipHorizontal /> : <FlipVertical />}
         </Button>
-        <ResizablePanel defaultSize={80}>
+        <ResizablePanel defaultSize={85}>
           <ResizablePanelGroup
             direction={isSmallScreen ? "vertical" : "horizontal"}
           >
@@ -186,7 +186,7 @@ export function ChatBots() {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <SelectionMenu />
-        <ResizablePanel defaultSize={20} className="min-h-40 max-h-96">
+        <ResizablePanel defaultSize={15} className="min-h-28 max-h-96">
           <div className="p-4 max-w-3xl m-auto">
             <form onSubmit={handleFormSubmit}>
               <div className="gap-4 flex items-center relative">
