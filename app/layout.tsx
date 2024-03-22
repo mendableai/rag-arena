@@ -1,4 +1,3 @@
-import DocumentPopUp from "@/components/theme/document-pop-up";
 import Footer from "@/components/theme/footer";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
@@ -22,11 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="manrope san html-body">
-        
         <div className="content-grow px-4">{children}</div>
         <Analytics />
         <Footer />
-        <DocumentPopUp />
         <Toaster />
       </body>
     </html>

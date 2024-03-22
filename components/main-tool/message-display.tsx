@@ -93,7 +93,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
           <Separator />
           <div
             ref={scrollContainerRef}
-            className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[350px] overflow-y-scroll gap-6 flex flex-col"
+            className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[425px] overflow-y-scroll gap-6 flex flex-col"
           >
             {message.map((m) => (
               <div

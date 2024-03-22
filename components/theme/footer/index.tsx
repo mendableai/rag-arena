@@ -1,6 +1,4 @@
-import {
-  TextRevealCard
-} from "@/components/ui/text-reveal-card";
+import { TextRevealCard } from "@/components/ui/text-reveal-card";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -16,6 +14,8 @@ export default function Footer() {
           ></TextRevealCard>
         </div>
 
+        
+
         <div className="flex gap-5">
           <Link
             className="dark:text-white hover:opacity-80 ease-in-out transition-all duration-300 pr-1 "
@@ -30,6 +30,7 @@ export default function Footer() {
               height={23}
             />
           </Link>
+          
           <Link
             className="dark:text-white hover:opacity-80 ease-in-out transition-all duration-300"
             href={"https://www.langchain.com/"}
