@@ -17,7 +17,7 @@ export default function Main() {
         <div
           className={`${
             isSmallScreen ? "md:h-[850px]" : "md:h-[750px]"
-          } max-w-7xl border m-auto mt-20 h-[1000px]`}
+          } max-w-7xl border m-auto mt-20`}
         >
           <ChatBots />
           <InitialPopUp />

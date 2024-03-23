@@ -163,10 +163,10 @@ export function ChatBots() {
         direction={"vertical"}
         className={`relative max-w-7xl m-auto 
       
-      ${isSmallScreen ? "max-h-[1400px]" : "max-h-[900px]"} `}
-      style={{height: "1400px"}}
+      ${isSmallScreen ? "max-h-[1300px]" : "max-h-[900px]"} `}
+      style={{height: "1300px"}}
       >
-        <ResizablePanel defaultSize={70}>
+        <ResizablePanel defaultSize={75}>
           <ResizablePanelGroup
             direction={isSmallScreen ? "vertical" : "horizontal"}
           >
@@ -193,7 +193,7 @@ export function ChatBots() {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <SelectionMenu />
-        <ResizablePanel defaultSize={30} className="min-h-28 max-h-96">
+        <ResizablePanel defaultSize={25} className="min-h-28 max-h-96">
           <div className="p-4 max-w-3xl m-auto">
             <form
               onSubmit={handleFormSubmit}

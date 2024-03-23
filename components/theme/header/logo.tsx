@@ -1,4 +1,4 @@
-export default function Logo() {
+export function Logo() {
   return (
     <h1 className="font-black tracking-widest text-xl">
       RAG

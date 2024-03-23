@@ -12,7 +12,6 @@ import {
 } from "@/lib/zustand";
 import { Message } from "ai";
 import React, { useEffect, useRef } from "react";
-import { Separator } from "../ui/separator";
 import { SelectRetrieverMenu } from "./select-retriever-menu";
 
 interface MessageDisplayProps {
@@ -87,10 +86,8 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
           setRetrieverSelection={setRetrieverSelection}
           retrieverSelection={retrieverSelection}
         />
-        <Separator />
 
         <div className="flex flex-1 flex-col">
-          <Separator />
           <div
             ref={scrollContainerRef}
             className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[425px] overflow-y-scroll gap-6 flex flex-col"
@@ -140,7 +137,6 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
             ))}
             <div />
           </div>
-          <Separator className="mt-auto" />
         </div>
       </div>
     );

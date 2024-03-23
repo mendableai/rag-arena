@@ -8,7 +8,7 @@ import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Home, Trophy } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import Logo from "./logo";
+import { Logo } from "./logo";
 import MobileDropdown from "./mobile-dropdown.tsx";
 import ThemeToggle from "./theme-toggle";
 
@@ -35,46 +35,44 @@ export default function Header() {
   const { isSmallScreen } = useSmallScreenStore();
 
   return (
-    <div className="supports-backdrop-blur:bg-background/60 fixed left-0 right-0 top-0 z-20 border-b bg-background/95 backdrop-blur">
-      <nav className="flex h-16 items-center justify-between px-4 xl:px-60">
-        <div className="lg:block">
-          <a href={"/"}>
-            <Logo />
+    <>
+      <div className="lg:block">
+        <a href={"/"}>
+          <Logo />
+        </a>
+      </div>
+
+      {isSmallScreen ? (
+        <MobileDropdown isHomePage={isHomePage} />
+      ) : (
+        <div className="flex items-center gap-4">
+          {isHomePage && <LlmSelector />}
+
+          {isHomePage && <CustomIngest />}
+
+          <a href={redirectTo}>
+            <Button variant="outline" size="icon" disabled={false}>
+              {isHomePage ? (
+                <Trophy className="h-4 w-4" />
+              ) : (
+                <Home className="h-4 w-4" />
+              )}
+            </Button>
+          </a>
+
+          <ThemeToggle />
+          <a href="https://github.com/mendableai/rag-arena">
+            <Button
+              variant="outline"
+              size="icon"
+              disabled={false}
+              className="px-2 w-16"
+            >
+              <GitHubLogoIcon className="h-4 w-4 mr-2" /> {stargazersCount}
+            </Button>
           </a>
         </div>
-
-        {isSmallScreen ? (
-          <MobileDropdown isHomePage={isHomePage} />
-        ) : (
-          <div className="flex items-center gap-4">
-            {isHomePage && <LlmSelector />}
-
-            {isHomePage && <CustomIngest />}
-
-            <a href={redirectTo}>
-              <Button variant="outline" size="icon" disabled={false}>
-                {isHomePage ? (
-                  <Trophy className="h-4 w-4" />
-                ) : (
-                  <Home className="h-4 w-4" />
-                )}
-              </Button>
-            </a>
-
-            <ThemeToggle />
-            <a href="https://github.com/mendableai/rag-arena">
-              <Button
-                variant="outline"
-                size="icon"
-                disabled={false}
-                className="px-2 w-16"
-              >
-                <GitHubLogoIcon className="h-4 w-4 mr-2" /> {stargazersCount}
-              </Button>
-            </a>
-          </div>
-        )}
-      </nav>
-    </div>
+      )}
+    </>
   );
 }
