@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -5,15 +7,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  BookIcon,
-  CircleUser,
-  Settings2Icon,
-  Swords,
-  TerminalSquareIcon,
-  Trophy,
-} from "lucide-react";
+import { CircleUser, Swords, TerminalSquareIcon, Trophy } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "../header/theme-toggle";
 
@@ -39,6 +35,7 @@ export default function LeftMenu() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
+              <Link href="/" passHref legacyBehavior>
               <Button
                 aria-label="Arena"
                 className={`rounded-lg ${isActive("/") ? "bg-muted" : ""}`}
@@ -48,6 +45,7 @@ export default function LeftMenu() {
               >
                 <Swords className="size-5" />
               </Button>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
               Arena
@@ -55,25 +53,7 @@ export default function LeftMenu() {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                aria-label="Playground"
-                className={`rounded-lg ${
-                  isActive("/playground") ? "bg-muted" : ""
-                }`}
-                size="icon"
-                variant="ghost"
-                disabled={isActive("/playground")}
-              >
-                <TerminalSquareIcon className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right" sideOffset={5}>
-              Playground
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <a href="/leaderboard">
+              <Link href="/leaderboard" passHref legacyBehavior>
                 <Button
                   aria-label="Leaderboard"
                   className={`rounded-lg ${
@@ -85,46 +65,29 @@ export default function LeftMenu() {
                 >
                   <Trophy className="size-5" />
                 </Button>
-              </a>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
               Leaderboard
             </TooltipContent>
           </Tooltip>
+
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                aria-label="Documentation"
+                aria-label="Playground"
                 className={`rounded-lg ${
-                  isActive("/documentation") ? "bg-muted" : ""
+                  isActive("/playground") ? "bg-muted" : ""
                 }`}
                 size="icon"
                 variant="ghost"
-                disabled={isActive("/documentation")}
+                disabled
               >
-                <BookIcon className="size-5" />
+                <TerminalSquareIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
-              Documentation
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                aria-label="Settings"
-                className={`rounded-lg ${
-                  isActive("/settings") ? "bg-muted" : ""
-                }`}
-                size="icon"
-                variant="ghost"
-                disabled={isActive("/settings")}
-              >
-                <Settings2Icon className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right" sideOffset={5}>
-              Settings
+              Playground
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

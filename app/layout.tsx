@@ -1,3 +1,4 @@
+import LeftMenu from "@/components/theme/left-menu";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -20,7 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="manrope san html-body">
-        <div className="content-grow px-4">{children}</div>
+        <div className="content-grow px-4">
+          <div className="grid min-h-[calc(100vh-7.0rem)] w-full pl-[53px]">
+            <LeftMenu />
+            <div className="flex flex-col">{children}</div>
+          </div>
+        </div>
         <Analytics />
         <Toaster />
       </body>
