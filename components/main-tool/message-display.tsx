@@ -1,6 +1,4 @@
-import {
-  useChatSessionsStore
-} from "@/lib/zustand";
+import { useChatSessionsStore } from "@/lib/zustand";
 import { Message } from "ai";
 import React, { useEffect, useRef } from "react";
 import { SelectRetrieverMenu } from "./select-retriever-menu";
@@ -14,7 +12,13 @@ interface MessageDisplayProps {
 }
 
 const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
-  ({ message, setRetrieverSelection, retrieverSelection, loading, chatIndex }) => {
+  ({
+    message,
+    setRetrieverSelection,
+    retrieverSelection,
+    loading,
+    chatIndex,
+  }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -40,14 +44,13 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
     
        ${loading && "hover:animate-pulse"}`}
       >
-
         <SelectRetrieverMenu
           setRetrieverSelection={setRetrieverSelection}
           retrieverSelection={retrieverSelection}
           chatIndex={chatIndex}
         />
 
-        <div className="flex flex-1 flex-col  mt-20">
+        <div className="flex flex-1 flex-col">
           <div
             ref={scrollContainerRef}
             className="flex-1 whitespace-pre-wrap p-4 text-sm   gap-6 flex flex-col"
@@ -86,7 +89,6 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                   ) : (
                     ""
                   )}
-                  {/* <strong className="mt-4">{m.role === "user" ? "" : "AI: "}</strong> */}
                   <p className="mt-4">{m.content}</p>
                 </div>
                 <div className="text-xs text-muted-foreground min-w-20 text-right">

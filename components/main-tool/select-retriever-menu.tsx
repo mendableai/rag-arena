@@ -41,18 +41,22 @@ export function SelectRetrieverMenu({
 
   return (
     <div className="flex items-center p-2 self-center gap-4 justify-between">
-      <Badge variant="outline" className="-ml-20 absolute sm:-ml-28 z-50 bg-secondary">
+      <Badge
+        variant="outline"
+        className="left-0 sm:left-auto absolute sm:-ml-28 z-50 bg-secondary"
+      >
         {chatIndex === 0 ? "chat 1" : "chat 2"}
+        <PuffLoader
+          color="#df8191"
+          loading={isLoading}
+          size={20}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+          className="left-0"
+          style={{ position: "absolute" }}
+        />
       </Badge>
-      <PuffLoader
-        color="#df8191"
-        loading={isLoading}
-        size={20}
-        aria-label="Loading Spinner"
-        data-testid="loader"
-        className="-mt-5 -ml-5"
-        style={{ position: "absolute" }}
-      />
+
       <div className="flex items-center gap-2">
         <Select
           defaultValue="random"
