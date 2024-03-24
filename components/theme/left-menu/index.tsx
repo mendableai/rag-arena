@@ -35,7 +35,7 @@ export default function LeftMenu() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link href="/" passHref legacyBehavior>
+              <Link href="/" passHref>
               <Button
                 aria-label="Arena"
                 className={`rounded-lg ${isActive("/") ? "bg-muted" : ""}`}
@@ -53,7 +53,7 @@ export default function LeftMenu() {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link href="/leaderboard" passHref legacyBehavior>
+              <Link href="/leaderboard" passHref>
                 <Button
                   aria-label="Leaderboard"
                   className={`rounded-lg ${

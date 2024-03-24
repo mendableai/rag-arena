@@ -29,7 +29,7 @@ export default function RealTimeScore({
   retriever: Retriever[];
 }) {
   const [retrieverList, setRetrieverList] = useState<Retriever[]>(
-    [...retriever].sort((a, b) => b.elo - a.elo)
+    [...retriever].sort((a, b) => ((b.votes / b.times_tested) * 1000) - ((a.votes / a.times_tested) * 1000))
   );
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function RealTimeScore({
                 ? (payload.new as Retriever)
                 : item
             );
-            return updatedList.sort((a, b) => b.elo - a.elo);
+            return updatedList.sort((a, b) => ((b.votes / b.times_tested) * 1000) - ((a.votes / a.times_tested) * 1000));
           });
         }
       )
@@ -80,7 +80,10 @@ export default function RealTimeScore({
               {entry.full_name}
             </a>
           </TableCell>
-          <TableCell className="text-center">{entry.elo}</TableCell>
+          {/* <TableCell className="text-center">{entry.elo}</TableCell> */}
+          <TableCell className="text-center">
+            {((entry.votes / entry.times_tested)*1000).toFixed(0)}
+          </TableCell>
           <TableCell className="text-center">{entry.votes}</TableCell>
           <TableCell className="text-center">{entry.times_tested}</TableCell>
           <TableCell>{entry.description}</TableCell>

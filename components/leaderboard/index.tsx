@@ -12,7 +12,7 @@ import RealTimeScore from "./realtime-score";
 export default async function MainLeaderboard() {
   const { data } = await supabase.from("leaderboard").select();
   return (
-    <div className="w-full max-w-4xl mx-auto mt-10 min-h-[calc(100vh-16.3rem)]">
+    <div className="w-full max-w-4xl mx-auto mt-4 min-h-[calc(100vh-16.3rem)]">
       <Table className="divide-y divide-gray-200 dark:divide-gray-800">
         <TableHeader>
           <TableRow className="text-left">
