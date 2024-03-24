@@ -1,14 +1,5 @@
 import {
-  addTimesTestedForBoth,
-  voteFunction,
-} from "@/app/actions/voting-system";
-import aplyToast from "@/lib/aplyToaster";
-import { retrieverInfo } from "@/lib/constants";
-import {
-  useAllRandomStore,
-  useChatSessionsStore,
-  useInProcessStore,
-  useVoteStore,
+  useChatSessionsStore
 } from "@/lib/zustand";
 import { Message } from "ai";
 import React, { useEffect, useRef } from "react";
@@ -19,15 +10,12 @@ interface MessageDisplayProps {
   setRetrieverSelection: (value: string) => void;
   retrieverSelection: string;
   loading: boolean;
+  chatIndex?: number;
 }
 
 const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
-  ({ message, setRetrieverSelection, retrieverSelection, loading }) => {
+  ({ message, setRetrieverSelection, retrieverSelection, loading, chatIndex }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-    const { inProcess, setInProcess } = useInProcessStore();
-    const { hasVoted, setHasVoted } = useVoteStore();
-    const { allRandom } = useAllRandomStore();
 
     useEffect(() => {
       if (scrollContainerRef.current) {
@@ -49,42 +37,14 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
     return (
       <div
         className={`flex h-full flex-col overflow-y-scroll
-      ${
-        message.length > 0 &&
-        inProcess &&
-        allRandom &&
-        !loading &&
-        "hover:border-yellow-200 cursor-pointer ease-linear transition-all duration-100 hover:bg-green-400 hover:bg-opacity-50"
-      }
+    
        ${loading && "hover:animate-pulse"}`}
-        onClick={async () => {
-          if (hasVoted || message.length === 0 || !allRandom || loading) return;
-
-          const addTestCount = await addTimesTestedForBoth(retriever);
-
-          if (!addTestCount) {
-            aplyToast("Error adding test count");
-            return;
-          }
-
-          const response = voteFunction(retrieverSelection);
-          setInProcess(false);
-          if (!response) {
-            aplyToast("Error voting");
-            return;
-          }
-          aplyToast(
-            `Vote recorded for ${
-              retrieverInfo[retrieverSelection as keyof typeof retrieverInfo]
-                ?.fullName
-            }!`
-          );
-          setHasVoted(true);
-        }}
       >
+
         <SelectRetrieverMenu
           setRetrieverSelection={setRetrieverSelection}
           retrieverSelection={retrieverSelection}
+          chatIndex={chatIndex}
         />
 
         <div className="flex flex-1 flex-col  mt-20">
@@ -104,10 +64,9 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                     m.role !== "user" ? "text-left" : "text-right"
                   }`}
                 >
-                  
                   {m.annotations && m.annotations.length ? (
                     <div className=" mt-2 dark:bg-slate-900 bg-slate-100 px-3 py-2 drop-shadow-lg rounded-md">
-                      <span >🔍 Sources:</span>
+                      <span>🔍 Sources:</span>
                       <span className="mt-1 mr-2 px-2 py-1 rounded text-xs">
                         {m.annotations?.map((source: any, i) => (
                           <div className="mt-3" key={"source:" + i}>

@@ -164,7 +164,7 @@ export function ChatBots() {
         className={`relative max-w-7xl m-auto 
       
       ${isSmallScreen ? "max-h-[1300px]" : "max-h-[900px]"} `}
-      style={{height: "1300px"}}
+        style={{ height: "1300px" }}
       >
         <ResizablePanel defaultSize={75}>
           <ResizablePanelGroup
@@ -182,6 +182,7 @@ export function ChatBots() {
                     }}
                     retrieverSelection={session.retrieverSelection}
                     loading={session.loading}
+                    chatIndex={index}
                   />
                 </ResizablePanel>
                 {index < chatSessions.length - 1 && (
@@ -193,7 +194,7 @@ export function ChatBots() {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <SelectionMenu />
-        <ResizablePanel defaultSize={25} className="min-h-28 max-h-96">
+        <ResizablePanel defaultSize={25} className="min-h-24 max-h-96">
           <div className="p-4 max-w-3xl m-auto">
             <form
               onSubmit={handleFormSubmit}
@@ -247,15 +248,27 @@ export function ChatBots() {
                 </TooltipProvider>
               </div>
             </form>
-            <span className="hover:cursor-pointer text-sm shadow-2xl text-gray-600">
-              Sourced from{" "}
-              <a
-                href="https://paulgraham.com/articles.html"
-                target="_blank"
-                className="underline"
-              >
-                Paul Grahams essays
-              </a>
+            <span className="hover:cursor-pointer text-sm shadow-2xl mt-1 text-gray-600 flex justify-between">
+              <div>
+                Sourced from{" "}
+                <a
+                  href="https://paulgraham.com/articles.html"
+                  target="_blank"
+                  className="underline"
+                >
+                  Paul Grahams essays
+                </a>
+              </div>
+              <div>
+              Powered by{" "}
+                <a
+                  href="https://mendable.ai/"
+                  target="_blank"
+                  className="underline"
+                >
+                  Mendable.ai
+                </a>
+              </div>
             </span>
           </div>
         </ResizablePanel>

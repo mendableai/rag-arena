@@ -36,15 +36,15 @@ export default function LeftMenu() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link href="/" passHref>
-              <Button
-                aria-label="Arena"
-                className={`rounded-lg ${isActive("/") ? "bg-muted" : ""}`}
-                size="icon"
-                variant="ghost"
-                disabled={isActive("/")}
-              >
-                <Swords className="size-5" />
-              </Button>
+                <Button
+                  aria-label="Arena"
+                  className={`rounded-lg ${isActive("/") ? "bg-muted" : ""}`}
+                  size="icon"
+                  variant="ghost"
+                  disabled={isActive("/")}
+                >
+                  <Swords className="size-5" />
+                </Button>
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
@@ -53,7 +53,7 @@ export default function LeftMenu() {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link href="/leaderboard" passHref>
+              <a href="/leaderboard">
                 <Button
                   aria-label="Leaderboard"
                   className={`rounded-lg ${
@@ -65,7 +65,7 @@ export default function LeftMenu() {
                 >
                   <Trophy className="size-5" />
                 </Button>
-              </Link>
+              </a>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
               Leaderboard
@@ -88,6 +88,57 @@ export default function LeftMenu() {
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
               Playground
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                className="dark:text-white hover:opacity-80 ease-in-out transition-all duration-300 pr-1 "
+                href={"https://mendable.ai/"}
+                target="_BLANK"
+              >
+                <Button
+                  aria-label="Playground"
+                  className={`rounded-lg`}
+                  size="icon"
+                  variant="ghost"
+                >
+                  <Image
+                    src="/images/mendable_logo_transparent.png"
+                    alt="Mendable Logo"
+                    className="rounded-md"
+                    width={23}
+                    height={23}
+                  />
+                </Button>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right" sideOffset={5}>
+              Mendable
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                className="dark:text-white hover:opacity-80 ease-in-out transition-all duration-300 pr-1 "
+                href={"https://www.langchain.com/"}
+                target="_BLANK"
+              >
+                <Button
+                  aria-label="Playground"
+                  className={`rounded-lg`}
+                  size="icon"
+                  variant="ghost"
+                >
+                  <span className="ml">🦜</span>
+                  <span className="-ml-2">🔗</span>
+                </Button>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right" sideOffset={5}>
+              Langchain
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

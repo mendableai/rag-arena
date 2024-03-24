@@ -6,6 +6,7 @@ import {
 } from "@/lib/zustand";
 import Link from "next/link";
 import PuffLoader from "react-spinners/PuffLoader";
+import { Badge } from "../ui/badge";
 import {
   Select,
   SelectContent,
@@ -19,9 +20,11 @@ import {
 export function SelectRetrieverMenu({
   setRetrieverSelection,
   retrieverSelection,
+  chatIndex,
 }: {
   setRetrieverSelection: (value: string) => void;
   retrieverSelection: string;
+  chatIndex?: number;
 }) {
   const { allRandom } = useAllRandomStore();
   const { inProcess } = useInProcessStore();
@@ -37,14 +40,17 @@ export function SelectRetrieverMenu({
   const isLoading = getLoadingStateForCurrentSelection();
 
   return (
-    <div className="flex items-center p-2 self-center fixed gap-4">
+    <div className="flex items-center p-2 self-center gap-4 justify-between">
+      <Badge variant="outline" className="-ml-20 absolute sm:-ml-28 z-50 bg-secondary">
+        {chatIndex === 0 ? "chat 1" : "chat 2"}
+      </Badge>
       <PuffLoader
         color="#df8191"
         loading={isLoading}
         size={20}
         aria-label="Loading Spinner"
         data-testid="loader"
-        className="-mt-4"
+        className="-mt-5 -ml-5"
         style={{ position: "absolute" }}
       />
       <div className="flex items-center gap-2">
@@ -54,12 +60,13 @@ export function SelectRetrieverMenu({
           onValueChange={setRetrieverSelection}
         >
           <SelectTrigger
-            className={`md:w-[280px] w-full ${allRandom && inProcess && "blur-xl"}`}
+            className={`md:w-[280px] w-full ${
+              allRandom && inProcess && "opacity-0"
+            }`}
             disabled={allRandom && inProcess}
+            id="select-retriever"
           >
-            <SelectValue
-              placeholder="Select a retriever"
-            />
+            <SelectValue placeholder="Select a retriever" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -70,11 +77,9 @@ export function SelectRetrieverMenu({
                 Contextual Compression 🦜🔗
               </SelectItem>
               <SelectItem value="multi-query">Multi Query 🦜🔗</SelectItem>
-              {/* <SelectItem value="multi-vector">Multi Vector 🦜🔗</SelectItem> */}
               <SelectItem value="parent-document">
                 Parent Document 🦜🔗
               </SelectItem>
-              {/* <SelectItem value="self-query">Self Query 🦜🔗</SelectItem> */}
               <SelectItem value="similarity-score">
                 Similarity Score 🦜🔗
               </SelectItem>

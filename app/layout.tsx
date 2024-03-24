@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className="manrope san html-body">
         <div className="content-grow px-4">
-          <div className="grid min-h-[calc(100vh-7.0rem)] w-full pl-[53px]">
+          <div className="grid w-full pl-[53px]">
             <LeftMenu />
             <div className="flex flex-col">{children}</div>
           </div>
