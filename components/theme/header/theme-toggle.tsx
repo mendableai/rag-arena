@@ -31,7 +31,7 @@ export default function ThemeToggle({}: CompProps) {
   return (
     <div>
       <Button
-        variant="outline"
+        variant="ghost"
         size="icon"
         onClick={() =>
           document.documentElement.classList.contains("dark")

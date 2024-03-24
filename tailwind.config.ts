@@ -23,9 +23,9 @@ const config = {
       },
       colors: {
       
-        primary: '#b23481',
-        secondary: '#483793',
-        third: '#141921',
+        primary: '#df8191',
+        secondary: '#13191d',
+        third: '#353156',
 
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

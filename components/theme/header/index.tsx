@@ -10,7 +10,6 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { Logo } from "./logo";
 import MobileDropdown from "./mobile-dropdown.tsx";
-import ThemeToggle from "./theme-toggle";
 
 export default function Header() {
   const [isHomePage, setIsHomePage] = useState(false);
@@ -46,9 +45,9 @@ export default function Header() {
         <MobileDropdown isHomePage={isHomePage} />
       ) : (
         <div className="flex items-center gap-4">
-          {isHomePage && <LlmSelector />}
+          <LlmSelector />
 
-          {isHomePage && <CustomIngest />}
+          <CustomIngest />
 
           <a href={redirectTo}>
             <Button variant="outline" size="icon" disabled={false}>
@@ -60,8 +59,8 @@ export default function Header() {
             </Button>
           </a>
 
-          <ThemeToggle />
-          <a href="https://github.com/mendableai/rag-arena">
+          
+          <a href="https://github.com/mendableai/rag-arena" target="_BLANK">
             <Button
               variant="outline"
               size="icon"

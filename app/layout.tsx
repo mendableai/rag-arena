@@ -1,4 +1,3 @@
-import Footer from "@/components/theme/footer";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -23,7 +22,6 @@ export default function RootLayout({
       <body className="manrope san html-body">
         <div className="content-grow px-4">{children}</div>
         <Analytics />
-        <Footer />
         <Toaster />
       </body>
     </html>
