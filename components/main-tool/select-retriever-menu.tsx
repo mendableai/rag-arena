@@ -42,8 +42,8 @@ export function SelectRetrieverMenu({
   return (
     <div className="flex items-center p-2 self-center gap-4 justify-between">
       <Badge
-        variant="outline"
-        className="left-0 sm:left-auto absolute sm:-ml-28 z-50 bg-secondary"
+        variant="secondary"
+        className="left-0 sm:left-auto absolute sm:-ml-28 z-50"
       >
         {chatIndex === 0 ? "chat 1" : "chat 2"}
         <PuffLoader

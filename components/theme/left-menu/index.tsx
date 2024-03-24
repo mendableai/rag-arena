@@ -91,6 +91,8 @@ export default function LeftMenu() {
             </TooltipContent>
           </Tooltip>
 
+          <hr />
+
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
