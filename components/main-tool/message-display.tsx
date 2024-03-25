@@ -31,8 +31,6 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
       }
     }, [message]);
 
-    console.log(message);
-
     const { chatSessions } = useChatSessionsStore();
 
     let retriever: any = [];

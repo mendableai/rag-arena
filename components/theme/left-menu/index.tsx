@@ -7,6 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { CircleUser, Swords, TerminalSquareIcon, Trophy } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,7 +18,7 @@ export default function LeftMenu() {
   const pathname = usePathname();
 
   const isActive = (path: string) => pathname === path;
-
+  const { user } = useUser();
   return (
     <aside className="inset-y fixed  left-0 z-20 flex h-full flex-col border-r">
       <div className="border-b p-2">
@@ -159,11 +160,18 @@ export default function LeftMenu() {
                 variant="ghost"
                 disabled={isActive("/account")}
               >
-                <CircleUser className="size-5" />
+                {/*  */}
+                {user ? (
+                  <UserButton afterSignOutUrl="/" />
+                ) : (
+                  <SignInButton mode="modal">
+                    <CircleUser className="size-5" />
+                  </SignInButton>
+                )}
               </Button>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
-              Profile
+              {user ? 'Profile' : 'Login'}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

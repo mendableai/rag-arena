@@ -1,4 +1,6 @@
 import LeftMenu from "@/components/theme/left-menu";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -19,17 +21,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="manrope san html-body">
-        <div className="content-grow px-4">
-          <div className="grid w-full pl-[53px]">
-            <LeftMenu />
-            <div className="flex flex-col">{children}</div>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: "#df8191",
+          colorBackground: "#13191d",
+          colorText: "#fff",
+        },
+      }}
+    >
+      <html lang="en" className="dark">
+        <body className="manrope san html-body">
+          <div className="content-grow px-4">
+            <div className="grid w-full pl-[53px]">
+              <LeftMenu />
+              <div className="flex flex-col">{children}</div>
+            </div>
           </div>
-        </div>
-        <Analytics />
-        <Toaster />
-      </body>
-    </html>
+          <Analytics />
+          <Toaster />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
