@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
-import { CustomError } from '../dynamic-retriever/tools/config';
-import { VALID_MODELS } from '../dynamic-retriever/tools/variables';
+import { CustomError } from './config';
+import { VALID_MODELS } from './variables';
 
 export function initializeOpenAI(body: any) {
     if (!(body.chosenModel in VALID_MODELS)) {

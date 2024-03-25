@@ -2,8 +2,6 @@ import { DocumentInterface } from "@langchain/core/documents";
 import { CohereStream, OpenAIStream } from 'ai';
 import OpenAI from 'openai';
 
-// Assuming `openai` has a type, import it or define it
-
 export async function handleCohere(
     currentMessageContent: string,
     prompt: string,
