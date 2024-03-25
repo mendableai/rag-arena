@@ -82,20 +82,22 @@ export default function LeftMenu() {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                aria-label="Rag Testers"
-                className={`rounded-lg ${
-                  isActive("/ragtesters") ? "bg-muted" : ""
-                }`}
-                size="icon"
-                variant="ghost"
-                disabled={isActive("/ragtesters")}
-              >
-                <Sparkles className="size-5" />
-              </Button>
+              <a href="/voters">
+                <Button
+                  aria-label="Rag Voters"
+                  className={`rounded-lg ${
+                    isActive("/voters") ? "bg-muted" : ""
+                  }`}
+                  size="icon"
+                  variant="ghost"
+                  disabled={isActive("/voters")}
+                >
+                  <Sparkles className="size-5" />
+                </Button>
+              </a>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
-              Rag Testers
+              Rag Voters
             </TooltipContent>
           </Tooltip>
 

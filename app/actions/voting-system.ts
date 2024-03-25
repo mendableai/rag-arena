@@ -60,7 +60,7 @@ export async function voteFunction(retriever: string) {
 export async function incrementVoteForGitHubUser(githubUser: string) {
     try {
         const { error } = await supabase
-            .rpc('increment_or_create_vote', { github_username: githubUser });
+            .rpc('increment_or_create_vote', { github_param: githubUser });
 
         if (error) {
             console.error(error);
@@ -73,4 +73,3 @@ export async function incrementVoteForGitHubUser(githubUser: string) {
         return false;
     }
 }
-

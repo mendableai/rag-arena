@@ -4,6 +4,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import supabase from "@/lib/supabase";
 import { TrophyIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import styles from './realtime-score.module.css';
 
 type Retriever = {
   id: number;
@@ -19,7 +20,7 @@ type Retriever = {
 const renderTrophy = (index: number) => {
   const colors = ["#D4AF37", "#C0C0C0", "#CD7F32"];
   return index < 3 ? (
-    <TrophyIcon className={`text-[${colors[index]}] w-5 h-5`} />
+    <TrophyIcon style={{ color: colors[index], width: '20px', height: '20px' }} />
   ) : null;
 };
 
@@ -65,14 +66,12 @@ export default function RealTimeScore({
       {retrieverList.map((entry, index) => (
         <TableRow
           key={entry.id}
-          className={`bg-${index % 2 === 0 ? "gray-100" : "white"} dark:bg-${
-            index % 2 === 0 ? "gray-800" : "gray-900"
-          }`}
+          className={index % 2 === 0 ? styles.evenRow : styles.oddRow}
         >
-          <TableCell className="text-center">{index + 1}</TableCell>
+          <TableCell className={styles.centerText}>{index + 1}</TableCell>
           <TableCell>
             <a
-              style={{ textDecoration: "underline" }}
+              className={styles.link}
               href={entry.link}
               target="_blank"
               rel="noopener noreferrer"
@@ -80,12 +79,11 @@ export default function RealTimeScore({
               {entry.full_name}
             </a>
           </TableCell>
-          {/* <TableCell className="text-center">{entry.elo}</TableCell> */}
-          <TableCell className="text-center">
+          <TableCell className={styles.centerText}>
             {((entry.votes / entry.times_tested)*1000).toFixed(0)}
           </TableCell>
-          <TableCell className="text-center">{entry.votes}</TableCell>
-          <TableCell className="text-center">{entry.times_tested}</TableCell>
+          <TableCell className={styles.centerText}>{entry.votes}</TableCell>
+          <TableCell className={styles.centerText}>{entry.times_tested}</TableCell>
           <TableCell>{entry.description}</TableCell>
 
           <TableCell>{renderTrophy(index)}</TableCell>
