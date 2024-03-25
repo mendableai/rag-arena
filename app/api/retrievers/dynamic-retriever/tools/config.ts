@@ -8,7 +8,15 @@ import { Message as VercelChatMessage } from "ai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { BaseRetrieverLI, ContextualCompression, MultiQuery, MultiVector, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
 
+export class CustomError extends Error {
+    status: number;
 
+    constructor(message: string, status: number) {
+        super(message);
+        this.status = status;
+        this.name = "CustomError";
+    }
+}
 
 export async function dynamicRetrieverUtility(
     retrieverSelected: string,
