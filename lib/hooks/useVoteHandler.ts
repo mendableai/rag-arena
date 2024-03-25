@@ -3,14 +3,14 @@ import aplyToast from "@/lib/aplyToaster";
 import { retrieverInfo } from "@/lib/constants";
 import { useInProcessStore, useVoteStore } from "@/lib/zustand";
 
-export const useVoteHandler = (retriever: any, allRandom: boolean) => {
+export const useVoteHandler = (retriever: any, allRandom: boolean, user: any) => {
     const { hasVoted, setHasVoted } = useVoteStore();
     const { setInProcess } = useInProcessStore();
 
     const handleVote = async (retrieverIndex: number) => {
         if (hasVoted || !allRandom) return;
 
-        const addTestCount = await addTimesTestedForBoth(retriever);
+        const addTestCount = await addTimesTestedForBoth(retriever, user);
 
         if (!addTestCount) {
             aplyToast("Error adding test count");

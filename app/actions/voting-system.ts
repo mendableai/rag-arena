@@ -13,7 +13,7 @@ export type Retriever = {
     link: string,
 }
 
-export async function addTimesTestedForBoth(retrievers: string[]) {
+export async function addTimesTestedForBoth(retrievers: string[], user: any) {
     if (retrievers.length !== 2 || retrievers[0] === retrievers[1]) {
         console.error("Invalid input: Array must contain two different retrievers.");
         return false;
@@ -26,6 +26,10 @@ export async function addTimesTestedForBoth(retrievers: string[]) {
         if (error) {
             console.error(error);
             throw error;
+        }
+
+        if (user) {
+            incrementVoteForGitHubUser(user);
         }
 
         return true;
@@ -52,4 +56,21 @@ export async function voteFunction(retriever: string) {
     }
 }
 
+
+export async function incrementVoteForGitHubUser(githubUser: string) {
+    try {
+        const { error } = await supabase
+            .rpc('increment_or_create_vote', { github_username: githubUser });
+
+        if (error) {
+            console.error(error);
+            throw error;
+        }
+
+        return true;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
 

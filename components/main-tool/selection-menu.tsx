@@ -3,20 +3,19 @@ import { ArrowLeftSquare, ArrowRightSquare, RefreshCcw } from "lucide-react";
 import {
   useAllRandomStore,
   useChatSessionsStore,
-  useInProcessStore,
-  useVoteStore,
+  useVoteStore
 } from "@/lib/zustand";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 import { useRefresher } from "@/lib/hooks/useRefresher";
 import { useVoteHandler } from "@/lib/hooks/useVoteHandler";
+import { useUser } from "@clerk/nextjs";
 
 export function SelectionMenu() {
-  const { hasVoted, setHasVoted } = useVoteStore();
-  const { setInProcess } = useInProcessStore();
+  const { hasVoted } = useVoteStore();
   const { allRandom } = useAllRandomStore();
-
+  const { user } = useUser();
   const { chatSessions } = useChatSessionsStore();
 
   const refresh = useRefresher();
@@ -32,7 +31,8 @@ export function SelectionMenu() {
 
     retriever.push(session.retrieverSelection);
   });
-  const handleVote = useVoteHandler(retriever, allRandom);
+  
+  const handleVote = useVoteHandler(retriever, allRandom, user?.username);
   return (
     <div className="relative w-full flex items-center p-2 self-center gap-2">
       <div className="w-full flex justify-center items-center gap-2 ">

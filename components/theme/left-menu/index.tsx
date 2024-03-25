@@ -8,7 +8,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
-import { CircleUser, Swords, TerminalSquareIcon, Trophy } from "lucide-react";
+import {
+  CircleUser,
+  Sparkles,
+  Swords,
+  TerminalSquareIcon,
+  Trophy,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,6 +25,7 @@ export default function LeftMenu() {
 
   const isActive = (path: string) => pathname === path;
   const { user } = useUser();
+
   return (
     <aside className="inset-y fixed  left-0 z-20 flex h-full flex-col border-r">
       <div className="border-b p-2">
@@ -70,6 +77,25 @@ export default function LeftMenu() {
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
               Leaderboard
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                aria-label="Rag Testers"
+                className={`rounded-lg ${
+                  isActive("/ragtesters") ? "bg-muted" : ""
+                }`}
+                size="icon"
+                variant="ghost"
+                disabled={isActive("/ragtesters")}
+              >
+                <Sparkles className="size-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" sideOffset={5}>
+              Rag Testers
             </TooltipContent>
           </Tooltip>
 
@@ -171,7 +197,7 @@ export default function LeftMenu() {
               </Button>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
-              {user ? 'Profile' : 'Login'}
+              {user ? "Profile" : "Login"}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

@@ -11,6 +11,9 @@ dependencies:
   '@clerk/themes':
     specifier: ^1.7.10
     version: 1.7.10(react@18.2.0)
+  '@clerk/types':
+    specifier: ^3.62.1
+    version: 3.62.1
   '@langchain/community':
     specifier: ^0.0.30
     version: 0.0.30(@supabase/supabase-js@2.39.7)(@upstash/redis@1.28.4)(cohere-ai@7.8.0)

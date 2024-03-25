@@ -11,6 +11,7 @@
   "dependencies": {
     "@clerk/nextjs": "^4.29.9",
     "@clerk/themes": "^1.7.10",
+    "@clerk/types": "^3.62.1",
     "@langchain/community": "^0.0.30",
     "@langchain/core": "^0.1.30",
     "@langchain/openai": "^0.0.14",
