@@ -6,7 +6,7 @@ import { BaseRetriever } from "@langchain/core/retrievers";
 import { ChatOpenAI } from "@langchain/openai";
 import { Message as VercelChatMessage } from "ai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { BaseRetrieverLI, ContextualCompression, MultiQuery, MultiVector, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
+import { BaseRetrieverLI, ContextualCompression, MultiQuery, ParentDocument, SelfQuery, SimilarityScore, TimeWeighted, VectorStore } from "./functions";
 
 export class CustomError extends Error {
     status: number;
@@ -67,10 +67,6 @@ export async function dynamicRetrieverUtility(
             );
         case "vector-store":
             return VectorStore(
-                vectorstore,
-            )
-        case "multi-vector":
-            return MultiVector(
                 vectorstore,
             )
         default:

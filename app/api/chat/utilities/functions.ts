@@ -6,7 +6,6 @@ import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { ContextualCompressionRetriever } from "langchain/retrievers/contextual_compression";
 import { LLMChainExtractor } from "langchain/retrievers/document_compressors/chain_extract";
 import { MultiQueryRetriever } from "langchain/retrievers/multi_query";
-import { MultiVectorRetriever } from "langchain/retrievers/multi_vector";
 import { ParentDocumentRetriever } from "langchain/retrievers/parent_document";
 import { ScoreThresholdRetriever } from "langchain/retrievers/score_threshold";
 import { SelfQueryRetriever } from "langchain/retrievers/self_query";
@@ -25,7 +24,7 @@ export function ContextualCompression(
 
     return new ContextualCompressionRetriever({
         baseCompressor,
-        baseRetriever: vectorstore.asRetriever(),
+        baseRetriever: vectorstore.asRetriever(25),
 
     })
 }
@@ -37,7 +36,7 @@ export function MultiQuery(
 
     return MultiQueryRetriever.fromLLM({
         llm: model,
-        retriever: vectorstore.asRetriever(),
+        retriever: vectorstore.asRetriever(25),
         verbose: false,
 
     });
@@ -69,7 +68,7 @@ export async function ParentDocument(
         parentK: 5,
     });
 
-    const vstoreRetriever = vectorstore.asRetriever();
+    const vstoreRetriever = vectorstore.asRetriever(25);
 
     const parentDocuments = await vstoreRetriever.getRelevantDocuments(
         currentMessageContent,
@@ -87,7 +86,7 @@ export async function SelfQuery(
     currentMessageContent: string,
 ) {
 
-    const vstoreRetriever = vectorstore.asRetriever();
+    const vstoreRetriever = vectorstore.asRetriever(25);
     const embeddings = new OpenAIEmbeddings();
     const documents = await vstoreRetriever.getRelevantDocuments(
         currentMessageContent,
@@ -132,7 +131,7 @@ export async function TimeWeighted(
         searchKwargs: 2,
     });
 
-    const vstoreRetriever = vectorstore.asRetriever();
+    const vstoreRetriever = vectorstore.asRetriever(25);
 
     const documents = await vstoreRetriever.getRelevantDocuments(
         currentMessageContent,
@@ -148,20 +147,7 @@ export function VectorStore(
     vectorstore: SupabaseVectorStore | MemoryVectorStore
 ) {
 
-    return vectorstore.asRetriever();
-}
-
-export function MultiVector(
-    vectorstore: SupabaseVectorStore | MemoryVectorStore,
-) {
-    const byteStore = new InMemoryStore<Uint8Array>();
-
-    return new MultiVectorRetriever({
-        vectorstore,
-        byteStore,
-
-    });
-
+    return vectorstore.asRetriever(25);
 }
 
 export async function BaseRetrieverLI({
