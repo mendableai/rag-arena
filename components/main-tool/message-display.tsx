@@ -31,6 +31,8 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
       }
     }, [message]);
 
+    console.log(message);
+
     const { chatSessions } = useChatSessionsStore();
 
     let retriever: any = [];
@@ -69,15 +71,24 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                 >
                   {m.annotations && m.annotations.length ? (
                     <div className=" mt-2 dark:bg-slate-900 bg-slate-100 px-3 py-2 drop-shadow-lg rounded-md">
-                      <span>🔍 Sources:</span>
+                      <span>🔍 Chunks Retrieved:</span>
                       <span className="mt-1 mr-2 px-2 py-1 rounded text-xs">
                         {m.annotations?.map((source: any, i) => (
                           <div className="mt-3" key={"source:" + i}>
                             {i + 1}. &quot;{source.pageContent}&quot;
-                            {source.metadata?.loc?.lines !== undefined ? (
-                              <div className="mt-1">
-                                - (Lines {source.metadata?.loc?.lines?.from} to{" "}
-                                {source.metadata?.loc?.lines?.to})
+                            {(source.metadata.title !== undefined) ? (
+                              <div className="mt-1 flex flex-col">
+                                <a
+                                  href={source.metadata.link}
+                                  target="_blank"
+                                  className="text-primary"
+                                >
+                                  Link to source: ({source.metadata.title})
+                                </a>
+                                <span>
+                                  from line: {source.metadata.from_line} to
+                                  line: {source.metadata.to_line}
+                                </span>
                               </div>
                             ) : (
                               ""

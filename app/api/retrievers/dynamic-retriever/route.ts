@@ -124,7 +124,6 @@ export async function POST(req: NextRequest) {
                 documents: retrievedDocs.map(doc => ({ pageContent: doc.pageContent }))
             })
 
-
             try {
                 const response = await fetch('https://api.cohere.ai/v1/chat', {
                     method: 'POST',
@@ -160,7 +159,7 @@ export async function POST(req: NextRequest) {
                 JSON.stringify(
                     retrievedDocs.map((doc) => {
                         return {
-                            pageContent: doc.pageContent.slice(0, 100) + "...",
+                            pageContent: doc.pageContent.slice(0, 150) + "...",
                             metadata: doc.metadata,
                         };
                     }),
