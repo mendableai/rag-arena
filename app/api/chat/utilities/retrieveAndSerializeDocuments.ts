@@ -33,7 +33,7 @@ export async function retrieveAndSerializeDocuments(retriever: any, currentMessa
         console.error("Error reranking documents with Cohere.", e);
         retrievedDocs = retrievedDocs.slice(0, 3);
     }
-
+ 
     let serializedSources = "";
     try {
         serializedSources = Buffer.from(
