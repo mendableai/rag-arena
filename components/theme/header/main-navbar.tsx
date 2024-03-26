@@ -33,10 +33,13 @@ export default function MainNavbar() {
     <>
       <div className="lg:block">
         {isHomePage && (
-          <h1 className="text-xl font-semibold">Retriever Arena</h1>
+          <h1 className="text-lg font-semibold">Retriever Arena</h1>
         )}
         {pathname === "/leaderboard" && (
-          <h1 className="text-xl font-semibold">Leaderboard</h1>
+          <h1 className="text-lg font-semibold">Leaderboard</h1>
+        )}
+        {pathname === "/voters" && (
+          <h1 className="text-lg font-semibold">Top Voters by Github Username</h1>
         )}
       </div>
 

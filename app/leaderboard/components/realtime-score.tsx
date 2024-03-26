@@ -4,7 +4,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import supabase from "@/lib/supabase";
 import { TrophyIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import styles from './realtime-score.module.css';
+import styles from "./realtime-score.module.css";
 
 type Retriever = {
   id: number;
@@ -20,7 +20,9 @@ type Retriever = {
 const renderTrophy = (index: number) => {
   const colors = ["#D4AF37", "#C0C0C0", "#CD7F32"];
   return index < 3 ? (
-    <TrophyIcon style={{ color: colors[index], width: '20px', height: '20px' }} />
+    <TrophyIcon
+      style={{ color: colors[index], width: "20px", height: "20px" }}
+    />
   ) : null;
 };
 
@@ -30,7 +32,10 @@ export default function RealTimeScore({
   retriever: Retriever[];
 }) {
   const [retrieverList, setRetrieverList] = useState<Retriever[]>(
-    [...retriever].sort((a, b) => ((b.votes / b.times_tested) * 1000) - ((a.votes / a.times_tested) * 1000))
+    [...retriever].sort(
+      (a, b) =>
+        (b.votes / b.times_tested) * 1000 - (a.votes / a.times_tested) * 1000
+    )
   );
 
   useEffect(() => {
@@ -50,7 +55,11 @@ export default function RealTimeScore({
                 ? (payload.new as Retriever)
                 : item
             );
-            return updatedList.sort((a, b) => ((b.votes / b.times_tested) * 1000) - ((a.votes / a.times_tested) * 1000));
+            return updatedList.sort(
+              (a, b) =>
+                (b.votes / b.times_tested) * 1000 -
+                (a.votes / a.times_tested) * 1000
+            );
           });
         }
       )
@@ -64,10 +73,7 @@ export default function RealTimeScore({
   return (
     <>
       {retrieverList.map((entry, index) => (
-        <TableRow
-          key={entry.id}
-          className={index % 2 === 0 ? styles.evenRow : styles.oddRow}
-        >
+        <TableRow key={entry.id}>
           <TableCell className={styles.centerText}>{index + 1}</TableCell>
           <TableCell>
             <a
@@ -80,10 +86,12 @@ export default function RealTimeScore({
             </a>
           </TableCell>
           <TableCell className={styles.centerText}>
-            {((entry.votes / entry.times_tested)*1000).toFixed(0)}
+            {((entry.votes / entry.times_tested) * 1000).toFixed(0)}
           </TableCell>
           <TableCell className={styles.centerText}>{entry.votes}</TableCell>
-          <TableCell className={styles.centerText}>{entry.times_tested}</TableCell>
+          <TableCell className={styles.centerText}>
+            {entry.times_tested}
+          </TableCell>
           <TableCell>{entry.description}</TableCell>
 
           <TableCell>{renderTrophy(index)}</TableCell>

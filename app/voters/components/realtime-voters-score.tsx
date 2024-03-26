@@ -61,7 +61,6 @@ export default function RealTimeVotersScore({
       {retrieverList.map((entry, index) => (
         <TableRow
           key={entry.id}
-          className={index % 2 === 0 ? styles.evenRow : styles.oddRow}
         >
           <TableCell className={styles.centerText}>{index + 1}</TableCell>
           <TableCell className={styles.centerText}>
