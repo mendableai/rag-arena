@@ -72,9 +72,9 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                       <span>🔍 Chunks Retrieved:</span>
                       <span className="mt-1 mr-2 px-2 py-1 rounded text-xs">
                         {m.annotations?.map((source: any, i) => (
-                          <div className="mt-3" key={"source:" + i}>
+                          <div className="mt-10" key={"source:" + i}>
                             {i + 1}. &quot;{source.pageContent}&quot;
-                            {(source.metadata.title !== undefined) ? (
+                            {source.metadata.title !== undefined ? (
                               <div className="mt-1 flex flex-col">
                                 <a
                                   href={source.metadata.link}
@@ -91,6 +91,12 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                             ) : (
                               ""
                             )}
+                            <span className="float-right text-primary">
+                             Score:{" "}
+                              {(
+                                parseFloat(source.metadata.relevanceScore) * 100
+                              ).toFixed(2)}
+                            </span>
                           </div>
                         ))}
                       </span>
