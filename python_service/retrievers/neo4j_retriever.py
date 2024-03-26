@@ -89,6 +89,7 @@ def get_neo4j_retriever(query, index, customDocuments):
             include_text=True,
             response_mode="tree_summarize",
             embedding_mode="hybrid",
+            similarity_top_k=5,
         )
 
     else:
@@ -96,6 +97,7 @@ def get_neo4j_retriever(query, index, customDocuments):
             include_text=True,
             response_mode="tree_summarize",
             embedding_mode="hybrid",
+            similarity_top_k=5,
         )
 
     response = query_engine.query(query)
@@ -111,5 +113,5 @@ if not os.path.exists(storage_dir) or not os.listdir(storage_dir):
         create_neo4j_graph_store()
     else:
         gdrive_url = 'https://drive.google.com/uc?id=1ZsA3cfKOSPrQI9WKCVF85UsNPxqf4s3z'
-        destination = os.path.join(storage_dir, 'neo4j_graph_store.zip')  # Assuming the file is a zip
+        destination = os.path.join(storage_dir, 'neo4j_graph_store.zip')
         download_and_extract_file_from_google_drive(gdrive_url, destination, storage_dir)
