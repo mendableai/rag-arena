@@ -39,7 +39,7 @@ export async function retrieveAndSerializeDocuments(retriever: any, currentMessa
         serializedSources = Buffer.from(
             JSON.stringify(
                 retrievedDocs.map((doc) => ({
-                    pageContent: doc.pageContent.slice(0, 150) + "...",
+                    pageContent: doc.pageContent,
                     metadata: {
                         ...doc.metadata,
                         relevanceScore: doc.metadata.relevanceScore, 

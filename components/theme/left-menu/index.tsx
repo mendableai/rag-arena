@@ -10,10 +10,10 @@ import {
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import {
   CircleUser,
-  Sparkles,
   Swords,
   TerminalSquareIcon,
   Trophy,
+  Users
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -84,7 +84,7 @@ export default function LeftMenu() {
             <TooltipTrigger asChild>
               <a href="/voters">
                 <Button
-                  aria-label="Rag Voters"
+                  aria-label="Top Voters"
                   className={`rounded-lg ${
                     isActive("/voters") ? "bg-muted" : ""
                   }`}
@@ -92,12 +92,12 @@ export default function LeftMenu() {
                   variant="ghost"
                   disabled={isActive("/voters")}
                 >
-                  <Sparkles className="size-5" />
+                  <Users className="size-5" />
                 </Button>
               </a>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
-              Rag Voters
+              Top Voters
             </TooltipContent>
           </Tooltip>
 

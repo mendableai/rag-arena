@@ -1,6 +1,6 @@
 import { useChatSessionsStore } from "@/lib/zustand";
 import { Message } from "ai";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SelectRetrieverMenu } from "./select-retriever-menu";
 
 interface MessageDisplayProps {
@@ -20,6 +20,9 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
     chatIndex,
   }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    // Use a state object to track expanded state of each source
+    const [expandedSources, setExpandedSources] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
       if (scrollContainerRef.current) {
@@ -71,34 +74,59 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                     <div className=" mt-2 dark:bg-slate-900 bg-slate-100 px-3 py-2 drop-shadow-lg rounded-md">
                       <span>🔍 Chunks Retrieved:</span>
                       <span className="mt-1 mr-2 px-2 py-1 rounded text-xs">
-                        {m.annotations?.map((source: any, i) => (
-                          <div className="mt-10" key={"source:" + i}>
-                            {i + 1}. &quot;{source.pageContent}&quot;
-                            {source.metadata.title !== undefined ? (
-                              <div className="mt-1 flex flex-col">
-                                <a
-                                  href={source.metadata.link}
-                                  target="_blank"
-                                  className="text-primary"
+                        {m.annotations?.map((source: any, i) => {
+                          
+                          const indexKey = `source:${i}`; // Unique key for each source
+                          const isExpanded = expandedSources[indexKey];
+                          const toggleExpand = () => setExpandedSources(prevState => ({
+                            ...prevState,
+                            [indexKey]: !prevState[indexKey],
+                          }));
+                          const contentPreview = source.pageContent.slice(0, 100).replace(/\n/g, ' ');
+                          const isContentLong = source.pageContent.length > 100;
+
+                          return (
+                            <div className="mt-10" key={indexKey}>
+                              {i + 1}. &quot;
+                              {isExpanded ? (
+                                <span dangerouslySetInnerHTML={{ __html: source.pageContent.replace(/\n/g, ' ') }} />
+                              ) : (
+                                `${contentPreview}${isContentLong ? '...' : ''}`
+                              )} &quot;
+                              {isContentLong && (
+                                <button
+                                  onClick={() => toggleExpand()} // Pass the unique key
+                                  className="ml-2 text-white font-semibold text-[11px]"
                                 >
-                                  Link to source: ({source.metadata.title})
-                                </a>
-                                <span>
-                                  from line: {source.metadata.from_line} to
-                                  line: {source.metadata.to_line}
-                                </span>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                            <span className="float-right text-primary">
-                             Score:{" "}
-                              {(
-                                parseFloat(source.metadata.relevanceScore) * 100
-                              ).toFixed(2)}
-                            </span>
-                          </div>
-                        ))}
+                                  {isExpanded ? 'Show Less' : 'Show More'}
+                                </button>
+                              )}
+                              {source.metadata.title !== undefined ? (
+                                <div className="mt-1 flex flex-col">
+                                  <a
+                                    href={source.metadata.link}
+                                    target="_blank"
+                                    className="text-primary"
+                                  >
+                                    Link to source: ({source.metadata.title})
+                                  </a>
+                                  <span>
+                                    from line: {source.metadata.from_line} to
+                                    line: {source.metadata.to_line}
+                                  </span>
+                                </div>
+                              ) : (
+                                ""
+                              )}
+                              <span className="float-right text-primary">
+                               Relevance Score:{" "}
+                                {(
+                                  parseFloat(source.metadata.relevanceScore) * 100
+                                ).toFixed(2)}
+                              </span>
+                            </div>
+                          );
+                        })}
                       </span>
                     </div>
                   ) : (
