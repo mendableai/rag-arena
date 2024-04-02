@@ -33,7 +33,7 @@ export async function dynamicRetrieverUtility(
             customDocuments,
         })
     }
-
+ 
     switch (retrieverSelected) {
         case "contextual-compression":
             return ContextualCompression(
