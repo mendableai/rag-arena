@@ -14,7 +14,6 @@ build==1.1.1 ; python_version >= "3.9" and python_version < "4.0"
 cachetools==5.3.3 ; python_version >= "3.9" and python_version < "4.0"
 certifi==2024.2.2 ; python_version >= "3.9" and python_version < "4.0"
 charset-normalizer==3.3.2 ; python_version >= "3.9" and python_version < "4.0"
-chroma-hnswlib==0.7.3 ; python_version >= "3.9" and python_version < "4.0"
 chromadb==0.4.24 ; python_version >= "3.9" and python_version < "4.0"
 click==8.1.7 ; python_version >= "3.9" and python_version < "4.0"
 colorama==0.4.6 ; python_version >= "3.9" and python_version < "4.0" and (platform_system == "Windows" or os_name == "nt" or sys_platform == "win32")

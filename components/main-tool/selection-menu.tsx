@@ -1,31 +1,21 @@
-import {
-  ArrowLeftSquare,
-  ArrowRightSquare,
-  RefreshCcw
-} from "lucide-react";
+import { ArrowLeftSquare, ArrowRightSquare, RefreshCcw } from "lucide-react";
 
-import {
-  addTimesTestedForBoth,
-  voteFunction,
-} from "@/app/actions/voting-system";
-import aplyToast from "@/lib/aplyToaster";
 import {
   useAllRandomStore,
   useChatSessionsStore,
-  useInProcessStore,
-  useVoteStore,
+  useVoteStore
 } from "@/lib/zustand";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
-import { retrieverInfo } from "@/lib/constants";
 import { useRefresher } from "@/lib/hooks/useRefresher";
+import { useVoteHandler } from "@/lib/hooks/useVoteHandler";
+import { useUser } from "@clerk/nextjs";
 
 export function SelectionMenu() {
-  const { hasVoted, setHasVoted } = useVoteStore();
-  const { setInProcess } = useInProcessStore();
+  const { hasVoted } = useVoteStore();
   const { allRandom } = useAllRandomStore();
-
+  const { user } = useUser();
   const { chatSessions } = useChatSessionsStore();
 
   const refresh = useRefresher();
@@ -41,7 +31,8 @@ export function SelectionMenu() {
 
     retriever.push(session.retrieverSelection);
   });
-
+  
+  const handleVote = useVoteHandler(retriever, allRandom, user?.username);
   return (
     <div className="relative w-full flex items-center p-2 self-center gap-2">
       <div className="w-full flex justify-center items-center gap-2 ">
@@ -50,45 +41,23 @@ export function SelectionMenu() {
             <Button
               variant="outline"
               size="icon"
-              className="w-fit px-2 h-10 gap-2 items-center"
-              onClick={async () => {
-                if (hasVoted || !allRandom) return;
-
-                const addTestCount = await addTimesTestedForBoth(retriever);
-
-                if (!addTestCount) {
-                  aplyToast("Error adding test count");
-                  return;
-                }
-                const response = await voteFunction(retriever[0]);
-                setInProcess(false);
-                if (!response) {
-                  aplyToast("Error voting");
-                  return;
-                }
-                aplyToast(
-                  `Vote recorded for ${
-                    retrieverInfo[retriever[0] as keyof typeof retrieverInfo]
-                      ?.fullName
-                  }!`
-                );
-                setHasVoted(true);
-              }}
+              className="w-fit px-2 h-10 gap-2 items-center animate-pulse hover:bg-green-400 hover:bg-opacity-50"
+              onClick={() => handleVote(0)}
               disabled={!message.length || hasVoted}
             >
               <ArrowLeftSquare className="h-4 w-4" />
-              Left is better
-              <span className="sr-only">Vote Left</span>
+              Chat 1 is better
+              <span className="sr-only">Vote on Chat 1</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Vote Left</TooltipContent>
+          <TooltipContent>Vote on Chat 1</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               variant="outline"
               size="icon"
-              className="w-fit px-2 h-10 gap-2 items-center"
+              className="w-fit px-2 h-10 gap-2 items-center animate-pulse hover:bg-green-400 hover:bg-opacity-50"
               onClick={() => refresh()}
               disabled={!message.length || hasVoted}
             >
@@ -103,40 +72,16 @@ export function SelectionMenu() {
             <Button
               variant="outline"
               size="icon"
-              className="w-fit px-2 h-10 gap-2 items-center"
-              onClick={async () => {
-                if (hasVoted || !allRandom) return;
-
-                if (hasVoted || !allRandom) return;
-                const addTestCount = await addTimesTestedForBoth(retriever);
-
-                if (!addTestCount) {
-                  aplyToast("Error adding test count");
-                  return;
-                }
-
-                const response = voteFunction(retriever[1]);
-                setInProcess(false);
-                if (!response) {
-                  aplyToast("Error voting");
-                  return;
-                }
-                aplyToast(
-                  `Vote recorded for ${
-                    retrieverInfo[retriever[1] as keyof typeof retrieverInfo]
-                      ?.fullName
-                  }!`
-                );
-                setHasVoted(true);
-              }}
+              className="w-fit px-2 h-10 gap-2 items-center animate-pulse hover:bg-green-400 hover:bg-opacity-50"
+              onClick={() => handleVote(1)}
               disabled={!message.length || hasVoted}
             >
-              Right is better
+              Chat 2 is better
               <ArrowRightSquare className="h-4 w-4" />
-              <span className="sr-only">Vote Right</span>
+              <span className="sr-only">Vote Chat 2</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Vote Right</TooltipContent>
+          <TooltipContent>Vote Chat 2</TooltipContent>
         </Tooltip>
       </div>
       <div className="absolute sm:right-0 flex items-center gap-2 pr-4 ml-2">

@@ -1,18 +1,6 @@
-import {
-  addTimesTestedForBoth,
-  voteFunction,
-} from "@/app/actions/voting-system";
-import aplyToast from "@/lib/aplyToaster";
-import { retrieverInfo } from "@/lib/constants";
-import {
-  useAllRandomStore,
-  useChatSessionsStore,
-  useInProcessStore,
-  useVoteStore,
-} from "@/lib/zustand";
+import { useChatSessionsStore } from "@/lib/zustand";
 import { Message } from "ai";
-import React, { useEffect, useRef } from "react";
-import { Separator } from "../ui/separator";
+import React, { useEffect, useRef, useState } from "react";
 import { SelectRetrieverMenu } from "./select-retriever-menu";
 
 interface MessageDisplayProps {
@@ -20,15 +8,21 @@ interface MessageDisplayProps {
   setRetrieverSelection: (value: string) => void;
   retrieverSelection: string;
   loading: boolean;
+  chatIndex?: number;
 }
 
 const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
-  ({ message, setRetrieverSelection, retrieverSelection, loading }) => {
+  ({
+    message,
+    setRetrieverSelection,
+    retrieverSelection,
+    loading,
+    chatIndex,
+  }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    const { inProcess, setInProcess } = useInProcessStore();
-    const { hasVoted, setHasVoted } = useVoteStore();
-    const { allRandom } = useAllRandomStore();
+    // Use a state object to track expanded state of each source
+    const [expandedSources, setExpandedSources] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
       if (scrollContainerRef.current) {
@@ -49,51 +43,20 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
 
     return (
       <div
-        className={`flex h-full flex-col
-      ${
-        message.length > 0 &&
-        inProcess &&
-        allRandom &&
-        !loading &&
-        "hover:border-yellow-200 cursor-pointer ease-linear transition-all duration-100 hover:bg-green-400 hover:bg-opacity-50"
-      }
+        className={`flex h-full flex-col overflow-y-scroll
+    
        ${loading && "hover:animate-pulse"}`}
-        onClick={async () => {
-          if (hasVoted || message.length === 0 || !allRandom || loading) return;
-
-          const addTestCount = await addTimesTestedForBoth(retriever);
-
-          if (!addTestCount) {
-            aplyToast("Error adding test count");
-            return;
-          }
-
-          const response = voteFunction(retrieverSelection);
-          setInProcess(false);
-          if (!response) {
-            aplyToast("Error voting");
-            return;
-          }
-          aplyToast(
-            `Vote recorded for ${
-              retrieverInfo[retrieverSelection as keyof typeof retrieverInfo]
-                ?.fullName
-            }!`
-          );
-          setHasVoted(true);
-        }}
       >
         <SelectRetrieverMenu
           setRetrieverSelection={setRetrieverSelection}
           retrieverSelection={retrieverSelection}
+          chatIndex={chatIndex}
         />
-        <Separator />
 
         <div className="flex flex-1 flex-col">
-          <Separator />
           <div
             ref={scrollContainerRef}
-            className="flex-1 whitespace-pre-wrap p-4 text-sm max-h-[350px] overflow-y-scroll gap-6 flex flex-col"
+            className="flex-1 whitespace-pre-wrap p-4 text-sm   gap-6 flex flex-col"
           >
             {message.map((m) => (
               <div
@@ -107,30 +70,68 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                     m.role !== "user" ? "text-left" : "text-right"
                   }`}
                 >
-                  
                   {m.annotations && m.annotations.length ? (
                     <div className=" mt-2 dark:bg-slate-900 bg-slate-100 px-3 py-2 drop-shadow-lg rounded-md">
-                      <span >🔍 Sources:</span>
+                      <span>🔍 Chunks Retrieved:</span>
                       <span className="mt-1 mr-2 px-2 py-1 rounded text-xs">
-                        {m.annotations?.map((source: any, i) => (
-                          <div className="mt-3" key={"source:" + i}>
-                            {i + 1}. &quot;{source.pageContent}&quot;
-                            {source.metadata?.loc?.lines !== undefined ? (
-                              <div className="mt-1">
-                                - (Lines {source.metadata?.loc?.lines?.from} to{" "}
-                                {source.metadata?.loc?.lines?.to})
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        ))}
+                        {m.annotations?.map((source: any, i) => {
+                          
+                          const indexKey = `source:${i}`; // Unique key for each source
+                          const isExpanded = expandedSources[indexKey];
+                          const toggleExpand = () => setExpandedSources(prevState => ({
+                            ...prevState,
+                            [indexKey]: !prevState[indexKey],
+                          }));
+                          const contentPreview = source.pageContent.slice(0, 100).replace(/\n/g, ' ');
+                          const isContentLong = source.pageContent.length > 100;
+
+                          return (
+                            <div className="mt-10" key={indexKey}>
+                              {i + 1}. &quot;
+                              {isExpanded ? (
+                                <span dangerouslySetInnerHTML={{ __html: source.pageContent.replace(/\n/g, ' ') }} />
+                              ) : (
+                                `${contentPreview}${isContentLong ? '...' : ''}`
+                              )} &quot;
+                              {isContentLong && (
+                                <button
+                                  onClick={() => toggleExpand()} // Pass the unique key
+                                  className="ml-2 text-white font-semibold text-[11px]"
+                                >
+                                  {isExpanded ? 'Show Less' : 'Show More'}
+                                </button>
+                              )}
+                              {source.metadata.title !== undefined ? (
+                                <div className="mt-1 flex flex-col">
+                                  <a
+                                    href={source.metadata.link}
+                                    target="_blank"
+                                    className="text-primary"
+                                  >
+                                    Link to source: ({source.metadata.title})
+                                  </a>
+                                  <span>
+                                    from line: {source.metadata.from_line} to
+                                    line: {source.metadata.to_line}
+                                  </span>
+                                </div>
+                              ) : (
+                                ""
+                              )}
+                              <span className="float-right text-primary">
+                               Relevance Score:{" "}
+                                {(
+                                  parseFloat(source.metadata.relevanceScore) * 100
+                                ).toFixed(2)}
+                              </span>
+                            </div>
+                          );
+                        })}
                       </span>
                     </div>
                   ) : (
                     ""
                   )}
-                  {/* <strong className="mt-4">{m.role === "user" ? "" : "AI: "}</strong> */}
                   <p className="mt-4">{m.content}</p>
                 </div>
                 <div className="text-xs text-muted-foreground min-w-20 text-right">
@@ -140,7 +141,6 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
             ))}
             <div />
           </div>
-          <Separator className="mt-auto" />
         </div>
       </div>
     );

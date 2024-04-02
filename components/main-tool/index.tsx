@@ -13,16 +13,22 @@ import {
   useVoteStore,
 } from "@/lib/zustand";
 import { Message } from "ai";
-import { FlipHorizontal, FlipVertical } from "lucide-react";
+import { CornerDownLeftIcon, FlipHorizontal, FlipVertical } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "../ui/resizable";
 import { Textarea } from "../ui/textarea";
-import { TooltipProvider } from "../ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 import { MessageDisplay } from "./message-display";
 import { SelectionMenu } from "./selection-menu";
 
@@ -132,6 +138,11 @@ export function ChatBots() {
 
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+
+    if (input.trim() === "") {
+      return;
+    }
+
     submitChatSessions();
   };
 
@@ -148,24 +159,20 @@ export function ChatBots() {
 
   return (
     <TooltipProvider delayDuration={0}>
-      <ResizablePanelGroup direction={"vertical"} className="relative">
-        <Button
-          onClick={() => {
-            isSmallScreen ? setIsSmallScreen(false) : setIsSmallScreen(true);
-          }}
-          size="sm"
-          variant={"ghost"}
-          className="ml-auto text-white absolute invisible md:bottom-5 md:left-4 md:visible"
-        >
-          {isSmallScreen ? <FlipHorizontal /> : <FlipVertical />}
-        </Button>
-        <ResizablePanel defaultSize={80}>
+      <ResizablePanelGroup
+        direction={"vertical"}
+        className={`relative max-w-7xl m-auto 
+      
+      ${isSmallScreen ? "max-h-[1300px]" : "max-h-[900px]"} `}
+        style={{ height: "1300px" }}
+      >
+        <ResizablePanel defaultSize={75}>
           <ResizablePanelGroup
             direction={isSmallScreen ? "vertical" : "horizontal"}
           >
             {chatSessions.map((session, index) => (
               <React.Fragment key={index}>
-                <ResizablePanel defaultSize={50} className="min-w-72">
+                <ResizablePanel defaultSize={50} className="min-w-72 h-7xl">
                   <MessageDisplay
                     message={session.chatHistory}
                     setRetrieverSelection={(newSelection) => {
@@ -175,6 +182,7 @@ export function ChatBots() {
                     }}
                     retrieverSelection={session.retrieverSelection}
                     loading={session.loading}
+                    chatIndex={index}
                   />
                 </ResizablePanel>
                 {index < chatSessions.length - 1 && (
@@ -186,31 +194,82 @@ export function ChatBots() {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <SelectionMenu />
-        <ResizablePanel defaultSize={20} className="min-h-40 max-h-96">
+        <ResizablePanel defaultSize={25} className="min-h-24 max-h-96">
           <div className="p-4 max-w-3xl m-auto">
-            <form onSubmit={handleFormSubmit}>
-              <div className="gap-4 flex items-center relative">
-                <Textarea
-                  className="p-4"
-                  placeholder={
-                    customDocuments.length > 0
-                      ? "Ask a question about your custom data"
-                      : "Ask a question about Paul Graham's essays on startups..."
-                  }
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  disabled={hasVoted}
-                />
-                <Button
-                  size="sm"
-                  className="ml-auto text-white"
-                  disabled={hasVoted}
-                >
-                  Send
-                </Button>
+            <form
+              onSubmit={handleFormSubmit}
+              className="relative overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring lg:col-span-3 max-w-[800px] max-h-[140px]"
+            >
+              <Label className="sr-only" htmlFor="message">
+                Message
+              </Label>
+              <Textarea
+                className="min-h-20 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
+                placeholder={
+                  customDocuments.length > 0
+                    ? "Ask a question about your custom data"
+                    : "Ask a question about Paul Graham's essays on startups..."
+                }
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                disabled={hasVoted}
+              />
+              <div className="flex items-center p-3 pt-0">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        onClick={() => {
+                          isSmallScreen
+                            ? setIsSmallScreen(false)
+                            : setIsSmallScreen(true);
+                        }}
+                        size="icon"
+                        className="size-4"
+                        variant={"ghost"}
+                        type="button"
+                      >
+                        {isSmallScreen ? <FlipHorizontal /> : <FlipVertical />}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">Change Layout</TooltipContent>
+                  </Tooltip>
+
+                  <Button
+                    className="ml-auto gap-1.5"
+                    size="sm"
+                    type="submit"
+                    disabled={hasVoted}
+                  >
+                    Send Message
+                    <CornerDownLeftIcon className="size-3.5" />
+                  </Button>
+                </TooltipProvider>
               </div>
             </form>
+            <span className="hover:cursor-pointer text-sm shadow-2xl mt-1 text-gray-600 flex justify-between">
+              <div>
+                Sourced from{" "}
+                <a
+                  href="https://paulgraham.com/articles.html"
+                  target="_blank"
+                  className="underline"
+                >
+                  Paul Grahams essays
+                </a>
+              </div>
+              <div>
+              Powered by{" "}
+                <a
+                  href="https://mendable.ai/"
+                  target="_blank"
+                  className="underline"
+                >
+                  Mendable.ai
+                </a>
+              </div>
+            </span>
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>

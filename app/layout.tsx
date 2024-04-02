@@ -1,13 +1,10 @@
-import DocumentPopUp from "@/components/theme/document-pop-up";
-import Footer from "@/components/theme/footer";
-import Header from "@/components/theme/header";
+import LeftMenu from "@/components/theme/left-menu";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "RAG Arena",
@@ -21,15 +18,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="manrope san html-body">
-        <Header />
-        <div className="content-grow px-4">{children}</div>
-        <Analytics />
-        <Footer />
-        <DocumentPopUp />
-        <Toaster />
-      </body>
-    </html>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: "#8559F4",
+          colorBackground: "#13191d",
+          colorText: "#fff",
+        },
+      }}
+    >
+      <html lang="en" className="dark">
+        <body className="manrope san html-body">
+          <div className="content-grow px-4">
+            <div className="grid w-full pl-[53px]">
+              <LeftMenu />
+              <div className="flex flex-col">{children}</div>
+            </div>
+          </div>
+          <Analytics />
+          <Toaster />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

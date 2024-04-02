@@ -28,7 +28,7 @@ export async function handleSubmit({ customDocuments, input, chatHistory, setCha
     try {
         let receivedContent = "";
 
-        const response = await fetch(`api/retrievers/dynamic-retriever`, {
+        const response = await fetch(`api/chat`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
