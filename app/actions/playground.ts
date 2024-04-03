@@ -9,19 +9,14 @@ export async function splitText(text: string, splitOption: number) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ text: "test", split_option: 2 }),
+            body: JSON.stringify({ text, splitOption }),
         });
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        // Assuming the response is text. Use response.json() for JSON.
-        const responseBody = await response.json(); // Note the change to .json()
 
-        console.log(responseBody);
-
-        // Return a plain object or text, depending on your needs
-        return { data: responseBody };
+        return await response.json();
     } catch (error) {
         console.error(error);
     }
