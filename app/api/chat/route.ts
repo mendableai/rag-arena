@@ -43,7 +43,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         const prompt = CONDENSE_QUESTION_TEMPLATE(messages.slice(0, -1), currentMessageContent, retrievedDocs);
 
         const stream = modelConfig.modelName === 'command-r'
-            ? await handleCohere(currentMessageContent, prompt, retrievedDocs)
+            ? await handleCohere(currentMessageContent, retrievedDocs)
             : await handleOpenAI(openai, modelConfig.modelName, prompt);
 
         if (!stream) {
