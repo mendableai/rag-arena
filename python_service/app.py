@@ -48,6 +48,9 @@ cached_index = load_index()
 def baseRoute():
     return "Hello World"
 
+@app.route("/python/split-text", methods=["POST"])
+def split_text():
+    return jsonify({"message": "test"})
 
 @app.route("/api/python-retrievers/graph-rag-li", methods=["POST"])
 def graph_rag_li():
