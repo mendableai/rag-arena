@@ -3,12 +3,14 @@ from langchain_text_splitters import CharacterTextSplitter
 
 def split_by_character(text: str, splitOption: int):
 
+    print("got here\n\n\n\n\n")
+
     if splitOption == 1:
 
         text_splitter = CharacterTextSplitter(
             separator="\n\n",
-            chunk_size=500,
-            chunk_overlap=200,
+            chunk_size=100,
+            chunk_overlap=20,
             length_function=len,
             is_separator_regex=False,
         )
@@ -20,7 +22,8 @@ def split_by_character(text: str, splitOption: int):
     else:
         raise ValueError("Invalid split option provided.")
 
-    texts = text_splitter.create_documents([text])
-    print(texts[0])
+    documents = text_splitter.create_documents([text])
 
-    return texts
+    print(documents)
+    return [doc.page_content for doc in documents]
+

@@ -41,9 +41,7 @@ def load_index():
         print("Using cached index...")
     return cached_index
 
-
 cached_index = load_index()
-
 
 @app.route("/", methods=["GET"])
 def baseRoute():
@@ -58,9 +56,11 @@ def split_text():
     if splitOption == 0:
         return jsonify({"message": "no splitter chosen"})
     
-    data = split_by_character(text, splitOption)
-
-    return data
+    try:
+        data = split_by_character(text, splitOption)
+        return jsonify({"data": data}), 200
+    except ValueError as e:
+        return jsonify({"message": str(e)}), 400
 
 @app.route("/api/python-retrievers/graph-rag-li", methods=["POST"])
 def graph_rag_li():
