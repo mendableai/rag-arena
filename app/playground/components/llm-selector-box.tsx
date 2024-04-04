@@ -1,15 +1,12 @@
 "use client";
 
-import { getVectorStores } from "@/app/actions/playground";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardFooter,
     CardHeader,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import {
     Select,
     SelectContent,
@@ -19,32 +16,30 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import aplyToast from "@/lib/aplyToaster";
 import {
     useInMemoryStore,
-    useSelectedVectorStore,
-    useSplitResultStore,
+    useSelectedPlaygroundLlmStore,
+    useSplitResultStore
 } from "@/lib/zustand";
 
 const text_splitter_options = [
   {
     id: 1,
-    title: "Pinecone",
+    title: "Openai",
   },
   {
     id: 2,
-    title: "Supabase (postgres)",
+    title: "Mixtral",
   },
   {
     id: 3,
-    title: "MongoDB (atlas)",
+    title: "Cohere",
   },
 ];
 
 export default function LlmSelectorBox() {
-  const { selectedVectorStore, setSelectedVectorStore } =
-    useSelectedVectorStore();
+  const { selectedPlaygroundLlm, setSelectedPlaygroundLlm } =
+    useSelectedPlaygroundLlmStore();
 
   const { inMemory, setInMemory } = useInMemoryStore();
 
@@ -56,39 +51,23 @@ export default function LlmSelectorBox() {
         variant={"outline"}
         className="-left-6 -top-4 absolute bg-primary text-black dark:text-white"
       >
-        2
+        3
       </Badge>
 
-      <div className="flex items-center space-x-2 absolute right-0">
-        <Label htmlFor="in-memory" className="text-xs">
-          In Memory:
-        </Label>
-        <Switch
-          id="in-memory"
-          checked={inMemory}
-          onCheckedChange={setInMemory}
-        />
-      </div>
-
-      <CardHeader>Vector Store</CardHeader>
+      <CardHeader>LLM</CardHeader>
       <CardContent>
         <Select
           onValueChange={(value) => {
-            if (splitResult.length === 0) {
-              setSelectedVectorStore(value);
-            } else {
-              aplyToast("Please clear the result first");
-            }
+            setSelectedPlaygroundLlm(value);
           }}
-          disabled={inMemory}
-          value={selectedVectorStore}
+          value={selectedPlaygroundLlm}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Select a vector store" />
+            <SelectValue placeholder="Select a LLM" />
           </SelectTrigger>
           <SelectContent className="dark:bg-[#080a0c]">
             <SelectGroup>
-              <SelectLabel>Select a vector store</SelectLabel>
+              <SelectLabel>Select a LLM</SelectLabel>
               {text_splitter_options.map((option) => (
                 <SelectItem key={option.id} value={option.id.toString()}>
                   {option.title}
@@ -100,22 +79,22 @@ export default function LlmSelectorBox() {
       </CardContent>
       <CardFooter className="flex justify-between">
         {/* {splitResult.length === 0 ? ( */}
-        <Button
+        {/* <Button
           // variant={splitResult.length === 0 ? "default" : "outline"}
           variant={"default"}
           onClick={async () => {
             // setIsLoading(true);
             const result = await getVectorStores(
               splitResult,
-              selectedVectorStore
+              selectedPlaygroundLlm
             );
             // place input fields insertion to global variable here. (todo)
             // setIsLoading(false);
           }}
-          disabled={selectedVectorStore === "" || inMemory}
+          disabled={selectedPlaygroundLlm === "" || inMemory}
         >
-          Ingest
-        </Button>
+          Select
+        </Button> */}
         {/* ) : (
           <Button
             variant={"link"}

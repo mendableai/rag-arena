@@ -132,3 +132,13 @@ export const useInMemoryStore = create<InMemoryState>((set) => ({
     setInMemory: (value: boolean) => set(() => ({ inMemory: value })),
 }))
 
+interface SelectedPlaygroundLlmState {
+    selectedPlaygroundLlm: string;
+    setSelectedPlaygroundLlm: (value: string) => void;
+}
+
+export const useSelectedPlaygroundLlmStore = create<SelectedPlaygroundLlmState>((set) => ({
+    selectedPlaygroundLlm: "",
+    setSelectedPlaygroundLlm: (value: string) => set(() => ({ selectedPlaygroundLlm: value })),
+}))
+

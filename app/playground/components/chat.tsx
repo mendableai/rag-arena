@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -8,16 +10,28 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useChat } from "ai/react";
 import { CornerDownLeftIcon } from "lucide-react";
 
 export default function PlaygroundChat() {
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: "/api/playground/chat",
+  });
+
   return (
-    <Card className="h-[500px] flex flex-col">
-      <CardContent className="flex-1"></CardContent>
+    <Card className="h-full flex flex-col">
+      <CardContent className="flex-1">
+        {messages.map((m) => (
+          <div key={m.id} className="whitespace-pre-wrap">
+            {m.role === "user" ? "User: " : "AI: "}
+            {m.content}
+          </div>
+        ))}
+      </CardContent>
       <CardFooter className="self-end w-full">
         <div className="p-4 w-full m-auto">
           <form
-            // onSubmit={handleFormSubmit}
+            onSubmit={handleSubmit}
             className="relative overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring lg:col-span-3 max-w-[800px] max-h-[140px]"
           >
             <Label className="sr-only" htmlFor="message">
@@ -26,10 +40,8 @@ export default function PlaygroundChat() {
             <Textarea
               className="min-h-20 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
               placeholder={"Ask a question about your custom data"}
-              // value={input}
-              // onChange={(e) => setInput(e.target.value)}
-              // onKeyDown={handleKeyDown}
-              // disabled={hasVoted}
+              value={input}
+              onChange={handleInputChange}
             />
             <div className="flex items-center p-3 pt-0">
               <TooltipProvider>
@@ -45,12 +57,7 @@ export default function PlaygroundChat() {
                   <TooltipContent side="top">Change Layout</TooltipContent>
                 </Tooltip>
 
-                <Button
-                  className="ml-auto gap-1.5"
-                  size="sm"
-                  type="submit"
-                  // disabled={hasVoted}
-                >
+                <Button className="ml-auto gap-1.5" size="sm" type="submit">
                   Send Message
                   <CornerDownLeftIcon className="size-3.5" />
                 </Button>

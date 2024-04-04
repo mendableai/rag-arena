@@ -48,7 +48,7 @@ export default function VectorStoreBox() {
 
   const { inMemory, setInMemory } = useInMemoryStore();
 
-  const { splitResult, setSplitResult } = useSplitResultStore();
+  const { splitResult } = useSplitResultStore();
 
   return (
     <Card className={`relative  border-none`}>
@@ -66,7 +66,13 @@ export default function VectorStoreBox() {
         <Switch
           id="in-memory"
           checked={inMemory}
-          onCheckedChange={setInMemory}
+          onCheckedChange={(newInMemoryValue) => {
+            if (splitResult.length !== 0) {
+              setInMemory(newInMemoryValue);
+            } else {
+              aplyToast("Please use the text splitter first");
+            }
+          }}
         />
       </div>
 

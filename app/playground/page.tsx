@@ -1,7 +1,11 @@
 "use client";
 import Header from "@/components/theme/header";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
-import { useInMemoryStore, useSplitResultStore } from "@/lib/zustand";
+import {
+  useInMemoryStore,
+  useSelectedPlaygroundLlmStore,
+  useSplitResultStore,
+} from "@/lib/zustand";
 import PlaygroundChat from "./components/chat";
 import LlmSelectorBox from "./components/llm-selector-box";
 import TextBox from "./components/text-box";
@@ -11,6 +15,7 @@ import VectorStoreBox from "./components/vector-store-box";
 export default function PlaygroundPage() {
   const { splitResult } = useSplitResultStore();
   const { inMemory } = useInMemoryStore();
+  const { selectedPlaygroundLlm } = useSelectedPlaygroundLlmStore();
   return (
     <>
       <Header />
@@ -44,7 +49,7 @@ export default function PlaygroundPage() {
             containerClassName="rounded-md col-span-2 row-span-1 min-w-full"
             as="div"
             className="w-full rounded-md"
-            stopAnimation={inMemory}
+            stopAnimation={!inMemory || selectedPlaygroundLlm !== ""}
             withHighlight={!inMemory}
           >
             <LlmSelectorBox />
