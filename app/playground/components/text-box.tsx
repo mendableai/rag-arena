@@ -15,7 +15,6 @@ export default function TextBox() {
 
   return (
     <Card className="relative">
-      
       <CardHeader>Raw Text</CardHeader>
       <CardContent>
         <Textarea

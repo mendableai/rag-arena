@@ -86,7 +86,7 @@ export default function TextSplitterBox() {
           <SelectTrigger>
             <SelectValue placeholder="Select a splitter" />
           </SelectTrigger>
-          <SelectContent className="bg-[#080a0c]">
+          <SelectContent className="dark:bg-[#080a0c]">
             <SelectGroup>
               <SelectLabel>Split by</SelectLabel>
               {text_splitter_options.map((option) => (
