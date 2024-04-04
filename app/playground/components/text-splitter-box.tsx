@@ -108,6 +108,7 @@ export default function TextSplitterBox() {
               setSplitResult(result.data);
               setIsLoading(false);
             }}
+            disabled={selectedSplitOption === 0}
           >
             Split
           </Button>
