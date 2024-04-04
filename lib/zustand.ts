@@ -114,3 +114,21 @@ export const useSplitResultStore = create<SplitResultState>((set) => ({
     setSplitResult: (value: string[]) => set(() => ({ splitResult: value })),
 }))
 
+interface SelectedVectorStoreState {
+    selectedVectorStore: string;
+    setSelectedVectorStore: (value: string) => void;
+}
+export const useSelectedVectorStore = create<SelectedVectorStoreState>((set) => ({
+    selectedVectorStore: "",
+    setSelectedVectorStore: (value: string) => set(() => ({ selectedVectorStore: value })),
+}))
+
+interface InMemoryState {
+    inMemory: boolean;
+    setInMemory: (value: boolean) => void;
+}
+export const useInMemoryStore = create<InMemoryState>((set) => ({
+    inMemory: true,
+    setInMemory: (value: boolean) => set(() => ({ inMemory: value })),
+}))
+

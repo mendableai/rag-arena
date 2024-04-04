@@ -23,3 +23,8 @@ export async function splitText(text: string, splitOption: number) {
 
 }
 
+export async function getVectorStores(splitResult: string[], selectedVectorStore: string) {
+    const response = await fetch("http://localhost:5000/python/vector-stores");
+    return await response.json();
+}
+

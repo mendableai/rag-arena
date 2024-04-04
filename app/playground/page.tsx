@@ -1,13 +1,16 @@
 "use client";
 import Header from "@/components/theme/header";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
-import { useSplitResultStore } from "@/lib/zustand";
+import { useInMemoryStore, useSplitResultStore } from "@/lib/zustand";
 import PlaygroundChat from "./components/chat";
+import LlmSelectorBox from "./components/llm-selector-box";
 import TextBox from "./components/text-box";
 import TextSplitterBox from "./components/text-splitter-box";
+import VectorStoreBox from "./components/vector-store-box";
 
 export default function PlaygroundPage() {
-  const { splitResult, setSplitResult } = useSplitResultStore();
+  const { splitResult } = useSplitResultStore();
+  const { inMemory } = useInMemoryStore();
   return (
     <>
       <Header />
@@ -27,13 +30,25 @@ export default function PlaygroundPage() {
           <div className="col-span-2 row-span-2 min-h-max">
             <PlaygroundChat />
           </div>
-          <div className="col-span-2 row-span-1">
-            <TextSplitterBox />
-          </div>
+          <HoverBorderGradient
+            containerClassName="rounded-md col-span-2 row-span-1 min-w-full"
+            as="div"
+            className="w-full rounded-md"
+            stopAnimation={inMemory}
+            withHighlight={!inMemory}
+          >
+            <VectorStoreBox />
+          </HoverBorderGradient>
 
-          <div className="col-span-2 row-span-1">
-            <TextSplitterBox />
-          </div>
+          <HoverBorderGradient
+            containerClassName="rounded-md col-span-2 row-span-1 min-w-full"
+            as="div"
+            className="w-full rounded-md"
+            stopAnimation={inMemory}
+            withHighlight={!inMemory}
+          >
+            <LlmSelectorBox />
+          </HoverBorderGradient>
         </div>
       </div>
     </>

@@ -15,6 +15,7 @@ export function HoverBorderGradient({
   duration = 1,
   clockwise = true,
   stopAnimation,
+  withHighlight,
   ...props
 }: React.PropsWithChildren<
   {
@@ -24,6 +25,7 @@ export function HoverBorderGradient({
     duration?: number;
     clockwise?: boolean;
     stopAnimation?: boolean;
+    withHighlight?: boolean;
   } & React.HTMLAttributes<HTMLElement>
 >) {
   const [hovered, setHovered] = useState<boolean>(false);
@@ -59,8 +61,9 @@ export function HoverBorderGradient({
         : "radial-gradient(86.2% 41.199999999999996% at 100% 50%, hsl(0, 0%, 0%) 0%, rgba(0, 0, 0, 0) 100%)",
   };
 
-  const highlight =
-    "radial-gradient(75% 181.15942028985506% at 50% 50%, #7B4F9D 0%, rgba(255, 255, 255, 0) 100%)";
+  const highlight = withHighlight
+    ? ""
+    : "radial-gradient(75% 181.15942028985506% at 50% 50%, #7B4F9D 0%, rgba(255, 255, 255, 0) 100%)";
 
   useEffect(() => {
     if (!hovered && !stopAnimation) {
@@ -111,9 +114,10 @@ export function HoverBorderGradient({
         }}
         initial={{ background: movingMap[direction] }}
         animate={{
-          background: hovered || stopAnimation
-            ? [movingMap[direction], highlight]
-            : movingMap[direction],
+          background:
+            hovered || stopAnimation
+              ? [movingMap[direction], highlight]
+              : movingMap[direction],
         }}
         transition={{ ease: "linear", duration: duration ?? 1 }}
       />
