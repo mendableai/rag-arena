@@ -42,12 +42,12 @@ export default function TextSplitterBox() {
   const { rawText } = useRawTextStore();
 
   return (
-    <Card className="relative">
+    <Card className="relative border-none">
       <Badge
         variant={"outline"}
         className="-left-2 -top-2 absolute bg-white text-black dark:bg-black dark:text-white"
       >
-        2
+        1
       </Badge>
       <CardHeader>Text Splitter</CardHeader>
       <CardContent>
@@ -58,8 +58,8 @@ export default function TextSplitterBox() {
           <SelectTrigger>
             <SelectValue placeholder="Select a splitter" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
+          <SelectContent  className="bg-[#080a0c]">
+            <SelectGroup >
               <SelectLabel>Split by</SelectLabel>
               {text_splitter_options.map((option) => (
                 <SelectItem key={option.id} value={option.id.toString()}>
@@ -70,7 +70,7 @@ export default function TextSplitterBox() {
           </SelectContent>
         </Select>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex justify-between">
         <Button
           onClick={async () => {
             const result = await splitText(rawText, selectedSplitOption);
@@ -79,6 +79,8 @@ export default function TextSplitterBox() {
         >
           Split
         </Button>
+
+        <Button variant={"outline"}>Result</Button>
       </CardFooter>
     </Card>
   );

@@ -1,6 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -16,12 +15,7 @@ export default function TextBox() {
 
   return (
     <Card className="relative">
-      <Badge
-        variant={"outline"}
-        className="-left-2 -top-2 absolute bg-white text-black dark:bg-black dark:text-white"
-      >
-        1
-      </Badge>
+      
       <CardHeader>Raw Text</CardHeader>
       <CardContent>
         <Textarea
