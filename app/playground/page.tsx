@@ -1,10 +1,14 @@
+"use client";
 import Header from "@/components/theme/header";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import { useSplitResultStore } from "@/lib/zustand";
 import PlaygroundChat from "./components/chat";
 import TextBox from "./components/text-box";
 import TextSplitterBox from "./components/text-splitter-box";
 
 export default function PlaygroundPage() {
+
+  const { splitResult, setSplitResult } = useSplitResultStore();
   return (
     <>
       <Header />
@@ -17,6 +21,7 @@ export default function PlaygroundPage() {
             containerClassName="rounded-md col-span-2 row-span-1 min-w-full"
             as="div"
             className="w-full rounded-md"
+            stopAnimation={splitResult.length !== 0}
           >
             <TextSplitterBox />
           </HoverBorderGradient>

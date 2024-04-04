@@ -104,3 +104,13 @@ export const useSelectedSplitOptionStore = create<SelectedSplitOptionState>((set
     setSelectedSplitOption: (value: number) => set(() => ({ selectedSplitOption: value })),
 }))
 
+
+interface SplitResultState {
+    splitResult: string[];
+    setSplitResult: (value: string[]) => void;
+}
+export const useSplitResultStore = create<SplitResultState>((set) => ({
+    splitResult: [],
+    setSplitResult: (value: string[]) => set(() => ({ splitResult: value })),
+}))
+

@@ -14,6 +14,7 @@ export function HoverBorderGradient({
   as: Tag = "button",
   duration = 1,
   clockwise = true,
+  stopAnimation,
   ...props
 }: React.PropsWithChildren<
   {
@@ -22,6 +23,7 @@ export function HoverBorderGradient({
     className?: string;
     duration?: number;
     clockwise?: boolean;
+    stopAnimation?: boolean;
   } & React.HTMLAttributes<HTMLElement>
 >) {
   const [hovered, setHovered] = useState<boolean>(false);
@@ -58,22 +60,29 @@ export function HoverBorderGradient({
   };
 
   const highlight =
-    "radial-gradient(75% 181.15942028985506% at 50% 50%, #3275F8 0%, rgba(255, 255, 255, 0) 100%)";
+    "radial-gradient(75% 181.15942028985506% at 50% 50%, #7B4F9D 0%, rgba(255, 255, 255, 0) 100%)";
 
   useEffect(() => {
-    if (!hovered) {
+    if (!hovered && !stopAnimation) {
       const interval = setInterval(() => {
         setDirection((prevState) => rotateDirection(prevState));
       }, duration * 1000);
       return () => clearInterval(interval);
     }
-  }, [hovered]);
+  }, [hovered, stopAnimation, duration]);
+
   return (
     <Tag
       onMouseEnter={(event: React.MouseEvent<HTMLDivElement>) => {
-        setHovered(true);
+        if (!stopAnimation) {
+          setHovered(true);
+        }
       }}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={() => {
+        if (!stopAnimation) {
+          setHovered(false);
+        }
+      }}
       className={cn(
         "relative flex rounded-full border  content-center hover:bg-black/10 transition duration-500 bg-primary/20 items-center flex-col flex-nowrap gap-10 h-min justify-center overflow-visible p-px decoration-clone w-fit",
         containerClassName
@@ -102,7 +111,7 @@ export function HoverBorderGradient({
         }}
         initial={{ background: movingMap[direction] }}
         animate={{
-          background: hovered
+          background: hovered || stopAnimation
             ? [movingMap[direction], highlight]
             : movingMap[direction],
         }}
