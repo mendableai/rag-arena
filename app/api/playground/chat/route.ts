@@ -1,5 +1,13 @@
-import { OpenAIStream, StreamingTextResponse } from 'ai';
+import { ChatOpenAI } from '@langchain/openai';
+import { StreamingTextResponse } from 'ai';
+import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { dynamicRetrieverUtility } from '../../chat/utilities/config';
+import { retrieveAndSerializeDocuments } from '../../chat/utilities/retrieveAndSerializeDocuments';
+import { selectVectorStore } from '../../chat/utilities/selectVectorStore';
+import { handleCohere, handleOpenAI } from '../../chat/utilities/serviceHandlers';
+import { CONDENSE_QUESTION_TEMPLATE } from '../../chat/utilities/variables';
+import { initializeOpenAIPlayground } from './initializeOpenAIPlayground';
 
 export const runtime = 'edge';
 
@@ -8,15 +16,46 @@ const openai = new OpenAI({
 });
 
 export async function POST(req: Request) {
-    const { messages } = await req.json();
 
-    const response = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        stream: true,
-        messages: messages,
-    });
+    try {
+        const { messages, selectedPlaygroundLlm, inMemory, selectedVectorStore, splitResult } = await req.json();
 
-    const stream = OpenAIStream(response);
+        if (messages.length > 5) {
+            return NextResponse.json({ error: "Too many messages" }, { status: 400 });
+        }
 
-    return new StreamingTextResponse(stream);
+        const { openai, modelConfig } = initializeOpenAIPlayground("gpt-3.5-turbo");
+        const embeddingModel = new ChatOpenAI({
+            modelName: 'gpt-3.5-turbo-1106',
+            temperature: 0,
+            streaming: true,
+        });
+
+        const vectorstore = await selectVectorStore(splitResult);
+
+        //todo
+        const retrieverSelection = "vector-store"
+
+        const currentMessageContent = messages[messages.length - 1]?.content || '';
+        const retriever = await dynamicRetrieverUtility(retrieverSelection, embeddingModel, vectorstore, currentMessageContent, splitResult);
+
+        const { serializedSources, retrievedDocs } = await retrieveAndSerializeDocuments(retriever, currentMessageContent);
+        const prompt = CONDENSE_QUESTION_TEMPLATE(messages.slice(0, -1), currentMessageContent, retrievedDocs);
+
+        const stream = modelConfig.modelName === 'command-r'
+            ? await handleCohere(currentMessageContent, prompt, retrievedDocs)
+            : await handleOpenAI(openai, modelConfig.modelName, prompt);
+
+        if (!stream) {
+            return NextResponse.json({ error: "Error handling response stream" }, { status: 500 });
+        }
+
+        return new StreamingTextResponse(stream, {
+            headers: { "x-sources": serializedSources },
+        });
+    } catch (error) {
+        console.log(error);
+        
+        return NextResponse.json({ error: "Error while retrieving and serializing documents" }, { status: 500 });
+    }
 }

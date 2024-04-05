@@ -128,7 +128,7 @@ interface InMemoryState {
     setInMemory: (value: boolean) => void;
 }
 export const useInMemoryStore = create<InMemoryState>((set) => ({
-    inMemory: true,
+    inMemory: false,
     setInMemory: (value: boolean) => set(() => ({ inMemory: value })),
 }))
 

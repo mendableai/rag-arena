@@ -10,23 +10,36 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  useInMemoryStore,
+  useSelectedPlaygroundLlmStore,
+  useSelectedVectorStore,
+  useSplitResultStore,
+} from "@/lib/zustand";
 import { useChat } from "ai/react";
 import { CornerDownLeftIcon } from "lucide-react";
+import { PlaygroundMessageDisplay } from "./playground-message-display";
 
 export default function PlaygroundChat() {
+  const { selectedPlaygroundLlm } = useSelectedPlaygroundLlmStore();
+  const { inMemory } = useInMemoryStore();
+  const { selectedVectorStore } = useSelectedVectorStore();
+  const { splitResult } = useSplitResultStore();
+
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/playground/chat",
+    body: {
+      selectedPlaygroundLlm,
+      inMemory,
+      selectedVectorStore,
+      splitResult,
+    },
   });
 
   return (
     <Card className="h-full flex flex-col">
       <CardContent className="flex-1">
-        {messages.map((m) => (
-          <div key={m.id} className="whitespace-pre-wrap">
-            {m.role === "user" ? "User: " : "AI: "}
-            {m.content}
-          </div>
-        ))}
+        <PlaygroundMessageDisplay message={messages} loading={false} />
       </CardContent>
       <CardFooter className="self-end w-full">
         <div className="p-4 w-full m-auto">
