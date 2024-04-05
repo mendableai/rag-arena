@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSelectedPlaygroundLlmStore } from "@/lib/zustand";
+import { useSelectedPlaygroundLlmStore } from "../lib/globals";
 
 export default function LlmSelectorBox() {
   const { selectedPlaygroundLlm, setSelectedPlaygroundLlm } =

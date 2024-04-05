@@ -2,26 +2,31 @@
 
 import { Badge } from "@/components/ui/badge";
 import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
 } from "@/components/ui/card";
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import { useSelectedPlaygroundRetrieverStore } from "@/lib/zustand";
+import { useEffect } from "react";
 import { retrieversForPlayground } from "../lib/constants";
+import { useSelectedPlaygroundRetrieverStore } from "../lib/globals";
 
 export default function RetrieverSelectorBox() {
   const { selectedPlaygroundRetriever, setSelectedPlaygroundRetriever } =
     useSelectedPlaygroundRetrieverStore();
+
+  useEffect(() => {
+    console.log(selectedPlaygroundRetriever);
+  }, [selectedPlaygroundRetriever]);
 
   return (
     <Card className={`relative  border-none`}>

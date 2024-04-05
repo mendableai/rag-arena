@@ -25,7 +25,7 @@ import {
   useCustomPlaygroundChunksStore,
   useInMemoryStore,
   useSelectedVectorStore,
-} from "@/lib/zustand";
+} from "../lib/globals";
 
 const text_splitter_options = [
   {

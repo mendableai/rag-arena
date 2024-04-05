@@ -56,7 +56,7 @@ const PlaygroundMessageDisplay: React.FC<MessageDisplayProps> = React.memo(
               <div
                 key={m.id}
                 className={`flex gap-3 ${
-                  m.role === "user" ? "justify-end" : "justify-between"
+                  m.role === "user" ? "justify-end text-gray-400" : "justify-between"
                 }`}
               >
                 <div
@@ -70,7 +70,7 @@ const PlaygroundMessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                       <span className="mt-1 mr-2 px-2 py-1 rounded text-xs">
                         {m.annotations?.map((source: any, i) => {
                           
-                          const indexKey = `source:${i}`; // Unique key for each source
+                          const indexKey = `source:${i}`; 
                           const isExpanded = expandedSources[indexKey];
                           const toggleExpand = () => setExpandedSources(prevState => ({
                             ...prevState,

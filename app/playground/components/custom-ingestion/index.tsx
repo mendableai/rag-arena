@@ -27,15 +27,14 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import aplyToast from "@/lib/aplyToaster";
-import {
-    useCustomDocumentStore,
-    useCustomPlaygroundChunksStore,
-    useSelectedSplitOptionStore,
-} from "@/lib/zustand";
 import { CharacterTextSplitter } from "langchain/text_splitter";
 import { Dot, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import {
+    useCustomPlaygroundChunksStore,
+    useSelectedSplitOptionStore,
+} from "../../lib/globals";
 
 async function createDocumentFromText(
   text: string,
@@ -73,8 +72,6 @@ export default function CustomPlaygroundIngestion() {
   const [rawData, setRawData] = useState("");
   const [metadata, setMetadata] = useState([{ parameter: "", value: "" }]);
 
-  const { customDocuments, setCustomDocuments } = useCustomDocumentStore();
-
   const [chunkSize, setChunkSize] = useState(50);
   const [chunkOverlap, setChunkOverlap] = useState(25);
 
@@ -95,7 +92,7 @@ export default function CustomPlaygroundIngestion() {
     }
     createDocumentFromText(rawData, metadata, chunkSize, chunkOverlap).then(
       (res) => {
-        setCustomDocuments(res as never[]);
+        setCustomPlaygroundChunks(res as never[]);
       }
     );
   }, [metadata, rawData, chunkSize, chunkOverlap]);
@@ -149,7 +146,7 @@ export default function CustomPlaygroundIngestion() {
         <Button variant="secondary" className="w-full hover:scale-105">
           <Dot
             className={`${
-              customDocuments.length > 0 && "text-primary animate-pulse"
+              customPlaygroundChunks.length > 0 && "text-primary animate-pulse"
             } -ml-3`}
             size={40}
           />
@@ -158,7 +155,7 @@ export default function CustomPlaygroundIngestion() {
       </DialogTrigger>
       <DialogContent className="max-w-4xl justify-center">
         <DialogHeader>
-          <DialogTitle>Ingest Custom Data</DialogTitle>
+          <DialogTitle>Create Chunks</DialogTitle>
           <DialogDescription>
             Use the retrievers with your own data. You can add metadata to
             documents and split them into chunks.
@@ -244,24 +241,8 @@ export default function CustomPlaygroundIngestion() {
                       </Link>
                     </p>
                   </div>
-                  <form className="flex flex-col gap-3">
-                    <div className="flex flex-col gap-2">
-                      <Label htmlFor="width">Chunk Size:</Label>
-                      <Input
-                        id="width"
-                        defaultValue={chunkSize.toString()}
-                        className="col-span-2 h-8"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <Label htmlFor="maxWidth">Chunk Overlap:</Label>
-                      <Input
-                        id="maxWidth"
-                        defaultValue={chunkOverlap.toString()}
-                        className="col-span-2 h-8"
-                      />
-                    </div>
-
+                  <form className="flex flex-col gap-4">
+                    <Label htmlFor="maxWidth">Splitter:</Label>
                     <Select
                       onValueChange={(value) => {
                         if (customPlaygroundChunks.length === 0) {
@@ -289,6 +270,23 @@ export default function CustomPlaygroundIngestion() {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
+
+                    <div className="flex flex-col gap-3">
+                      <Label htmlFor="width">Chunk Size:</Label>
+                      <Input
+                        id="width"
+                        defaultValue={chunkSize.toString()}
+                        className="col-span-2 h-8"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <Label htmlFor="maxWidth">Chunk Overlap:</Label>
+                      <Input
+                        id="maxWidth"
+                        defaultValue={chunkOverlap.toString()}
+                        className="col-span-2 h-8"
+                      />
+                    </div>
 
                     <Button
                       onClick={(e) => {
@@ -329,7 +327,7 @@ export default function CustomPlaygroundIngestion() {
             </Label>
             <Textarea
               className="w-full h-full"
-              value={JSON.stringify(customDocuments, null, 2)}
+              value={JSON.stringify(customPlaygroundChunks, null, 2)}
               readOnly
               disabled
             ></Textarea>
