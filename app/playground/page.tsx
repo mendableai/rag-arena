@@ -27,7 +27,7 @@ export default function PlaygroundPage() {
           <HoverBorderGradient
             containerClassName="rounded-md col-span-2 row-span-1 min-w-full"
             as="div"
-            className="w-full rounded-md"
+            className="w-full rounded-md h-full"
             stopAnimation={splitResult.length !== 0}
             withHighlight={splitResult.length === 0}
             duration={3}
@@ -52,7 +52,7 @@ export default function PlaygroundPage() {
           <HoverBorderGradient
             containerClassName="rounded-md col-span-2 row-span-1 min-w-full"
             as="div"
-            className="w-full rounded-md"
+            className="w-full rounded-md h-[220px]"
             stopAnimation={selectedPlaygroundRetriever !== ""}
             duration={3}
           >
@@ -62,7 +62,7 @@ export default function PlaygroundPage() {
           <HoverBorderGradient
             containerClassName="rounded-md col-span-2 row-span-1 min-w-full"
             as="div"
-            className="w-full rounded-md"
+            className="w-full rounded-md h-[220px]"
             stopAnimation={selectedPlaygroundLlm !== ""}
             duration={3}
           >
