@@ -1,11 +1,10 @@
 import { ChatOpenAI } from '@langchain/openai';
-import { StreamingTextResponse } from 'ai';
+import { experimental_StreamData, OpenAIStream, StreamingTextResponse } from 'ai';
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { dynamicRetrieverUtility } from '../../chat/utilities/config';
 import { retrieveAndSerializeDocuments } from '../../chat/utilities/retrieveAndSerializeDocuments';
 import { selectVectorStore } from '../../chat/utilities/selectVectorStore';
-import { handleCohere, handleOpenAI } from '../../chat/utilities/serviceHandlers';
 import { CONDENSE_QUESTION_TEMPLATE } from '../../chat/utilities/variables';
 import { initializeOpenAIPlayground } from './initializeOpenAIPlayground';
 
@@ -20,7 +19,10 @@ export async function POST(req: Request) {
     try {
         const { messages, selectedPlaygroundLlm, inMemory, selectedVectorStore, customPlaygroundChunks, selectedPlaygroundRetriever } = await req.json();
 
-        if (messages.length > 5) {
+        console.log(selectedPlaygroundLlm);
+
+
+        if (messages.length > 10) {
             return NextResponse.json({ error: "Too many messages" }, { status: 400 });
         }
 
@@ -39,20 +41,37 @@ export async function POST(req: Request) {
         const { serializedSources, retrievedDocs } = await retrieveAndSerializeDocuments(retriever, currentMessageContent);
         const prompt = CONDENSE_QUESTION_TEMPLATE(messages.slice(0, -1), currentMessageContent, retrievedDocs);
 
-        const stream = modelConfig.modelName === 'command-r'
-            ? await handleCohere(currentMessageContent, prompt, retrievedDocs)
-            : await handleOpenAI(openai, modelConfig.modelName, prompt);
+
+        const data = new experimental_StreamData();
+        const response = await openai.chat.completions.create({
+            model: modelConfig.modelName,
+            stream: true,
+            messages: [
+                { "role": "system", "content": "You are a helpful assistant." },
+                { "role": "system", "content": prompt }
+            ],
+        });
+
+        data.append({
+            serializedSources,
+        });
+
+        const stream = OpenAIStream(response, {
+            onFinal() {
+                data.close(); 
+            },
+            experimental_streamData: true,
+        });
 
         if (!stream) {
             return NextResponse.json({ error: "Error handling response stream" }, { status: 500 });
         }
 
-        return new StreamingTextResponse(stream, {
-            headers: { "x-sources": serializedSources },
-        });
+
+        return new StreamingTextResponse(stream, {}, data);
     } catch (error) {
         console.log(error);
-        
+
         return NextResponse.json({ error: "Error while retrieving and serializing documents" }, { status: 500 });
     }
 }

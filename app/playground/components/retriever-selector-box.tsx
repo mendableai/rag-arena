@@ -16,17 +16,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect } from "react";
 import { retrieversForPlayground } from "../lib/constants";
 import { useSelectedPlaygroundRetrieverStore } from "../lib/globals";
 
 export default function RetrieverSelectorBox() {
   const { selectedPlaygroundRetriever, setSelectedPlaygroundRetriever } =
     useSelectedPlaygroundRetrieverStore();
-
-  useEffect(() => {
-    console.log(selectedPlaygroundRetriever);
-  }, [selectedPlaygroundRetriever]);
 
   return (
     <Card className={`relative  border-none`}>

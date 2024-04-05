@@ -1,27 +1,27 @@
-import { useChatSessionsStore } from "@/lib/zustand";
-import { Message } from "ai";
+import { JSONValue, Message } from "ai";
 import React, { useEffect, useRef, useState } from "react";
+
+interface Annotation {
+  serializedSources: string;
+}
 
 interface MessageDisplayProps {
   message: Message[];
-  setRetrieverSelection?: (value: string) => void;
-  retrieverSelection?: string;
   loading: boolean;
-  chatIndex?: number;
+  annotations?: Annotation[] | undefined | JSONValue[]; // Adjusted to use the Annotation interface
 }
 
 const PlaygroundMessageDisplay: React.FC<MessageDisplayProps> = React.memo(
-  ({
-    message,
-    setRetrieverSelection,
-    retrieverSelection,
-    loading,
-    chatIndex,
-  }) => {
+  ({ message, loading, annotations }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    // Use a state object to track expanded state of each source
-    const [expandedSources, setExpandedSources] = useState<{ [key: string]: boolean }>({});
+    console.log("annotations", annotations?.map((annotation: any) => JSON.parse(atob(annotation.serializedSources))));
+    console.log("message", message);
+    
+
+    const [expandedSources, setExpandedSources] = useState<{
+      [key: string]: boolean;
+    }>({});
 
     useEffect(() => {
       if (scrollContainerRef.current) {
@@ -33,20 +33,12 @@ const PlaygroundMessageDisplay: React.FC<MessageDisplayProps> = React.memo(
       }
     }, [message]);
 
-    const { chatSessions } = useChatSessionsStore();
-
-    let retriever: any = [];
-    chatSessions.forEach((session) => {
-      retriever.push(session.retrieverSelection);
-    });
-
     return (
       <div
         className={`flex h-full flex-col overflow-y-scroll
     
        ${loading && "hover:animate-pulse"}`}
       >
-        
         <div className="flex flex-1 flex-col">
           <div
             ref={scrollContainerRef}
@@ -56,7 +48,9 @@ const PlaygroundMessageDisplay: React.FC<MessageDisplayProps> = React.memo(
               <div
                 key={m.id}
                 className={`flex gap-3 ${
-                  m.role === "user" ? "justify-end text-gray-400" : "justify-between"
+                  m.role === "user"
+                    ? "justify-end text-gray-400"
+                    : "justify-between"
                 }`}
               >
                 <div
@@ -69,30 +63,40 @@ const PlaygroundMessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                       <span>🔍 Chunks Retrieved:</span>
                       <span className="mt-1 mr-2 px-2 py-1 rounded text-xs">
                         {m.annotations?.map((source: any, i) => {
-                          
-                          const indexKey = `source:${i}`; 
+                          const indexKey = `source:${i}`;
                           const isExpanded = expandedSources[indexKey];
-                          const toggleExpand = () => setExpandedSources(prevState => ({
-                            ...prevState,
-                            [indexKey]: !prevState[indexKey],
-                          }));
-                          const contentPreview = source.pageContent.slice(0, 100).replace(/\n/g, ' ');
+                          const toggleExpand = () =>
+                            setExpandedSources((prevState) => ({
+                              ...prevState,
+                              [indexKey]: !prevState[indexKey],
+                            }));
+                          const contentPreview = source.pageContent
+                            .slice(0, 100)
+                            .replace(/\n/g, " ");
                           const isContentLong = source.pageContent.length > 100;
 
                           return (
                             <div className="mt-10" key={indexKey}>
                               {i + 1}. &quot;
                               {isExpanded ? (
-                                <span dangerouslySetInnerHTML={{ __html: source.pageContent.replace(/\n/g, ' ') }} />
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: source.pageContent.replace(
+                                      /\n/g,
+                                      " "
+                                    ),
+                                  }}
+                                />
                               ) : (
-                                `${contentPreview}${isContentLong ? '...' : ''}`
-                              )} &quot;
+                                `${contentPreview}${isContentLong ? "..." : ""}`
+                              )}{" "}
+                              &quot;
                               {isContentLong && (
                                 <button
                                   onClick={() => toggleExpand()}
                                   className="ml-2 text-white font-semibold text-[11px]"
                                 >
-                                  {isExpanded ? 'Show Less' : 'Show More'}
+                                  {isExpanded ? "Show Less" : "Show More"}
                                 </button>
                               )}
                               {source.metadata.title !== undefined ? (
@@ -113,9 +117,10 @@ const PlaygroundMessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                                 ""
                               )}
                               <span className="float-right text-primary">
-                               Relevance Score:{" "}
+                                Relevance Score:{" "}
                                 {(
-                                  parseFloat(source.metadata.relevanceScore) * 100
+                                  parseFloat(source.metadata.relevanceScore) *
+                                  100
                                 ).toFixed(2)}
                               </span>
                             </div>

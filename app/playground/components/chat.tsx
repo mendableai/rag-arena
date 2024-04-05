@@ -10,8 +10,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Message } from "ai";
 import { useChat } from "ai/react";
 import { CornerDownLeftIcon } from "lucide-react";
+import { useState } from "react"; // Add this import if React is not already imported
 import {
   useCustomPlaygroundChunksStore,
   useInMemoryStore,
@@ -19,7 +21,7 @@ import {
   useSelectedPlaygroundRetrieverStore,
   useSelectedVectorStore,
 } from "../lib/globals";
-import { PlaygroundMessageDisplay } from "./playground-message-display";
+import { PlaygroundMessageDisplay } from "./chat-messages";
 
 export default function PlaygroundChat() {
   const { selectedPlaygroundLlm } = useSelectedPlaygroundLlmStore();
@@ -27,9 +29,10 @@ export default function PlaygroundChat() {
   const { selectedVectorStore } = useSelectedVectorStore();
   const { customPlaygroundChunks } = useCustomPlaygroundChunksStore();
   const { selectedPlaygroundRetriever } = useSelectedPlaygroundRetrieverStore();
-  
 
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
+  const [updatedMessages, setUpdatedMessages] = useState<Message[]>([]);
+
+  const { messages, input, handleInputChange, handleSubmit, data } = useChat({
     api: "/api/playground/chat",
     body: {
       selectedPlaygroundLlm,
@@ -38,12 +41,15 @@ export default function PlaygroundChat() {
       customPlaygroundChunks,
       selectedPlaygroundRetriever,
     },
+    onFinish: () => {
+      
+    },
   });
 
   return (
     <Card className="h-full flex flex-col">
       <CardContent className="flex-1">
-        <PlaygroundMessageDisplay message={messages} loading={false} />
+        <PlaygroundMessageDisplay message={messages} loading={false} annotations={data} />
       </CardContent>
       <CardFooter className="self-end w-full">
         <div className="p-4 w-full m-auto">
