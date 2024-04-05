@@ -94,13 +94,13 @@ export const useSelectedSplitOptionStore = create<SelectedSplitOptionState>((set
 }))
 
 
-interface SplitResultState {
-    splitResult: string[];
-    setSplitResult: (value: string[]) => void;
+interface CustomPlaygroundChunksState {
+    customPlaygroundChunks: string[];
+    setCustomPlaygroundChunks: (value: string[]) => void;
 }
-export const useSplitResultStore = create<SplitResultState>((set) => ({
-    splitResult: [],
-    setSplitResult: (value: string[]) => set(() => ({ splitResult: value })),
+export const useCustomPlaygroundChunksStore = create<CustomPlaygroundChunksState>((set) => ({
+    customPlaygroundChunks: [],
+    setCustomPlaygroundChunks: (value: string[]) => set(() => ({ customPlaygroundChunks: value })),
 }))
 
 interface SelectedVectorStoreState {

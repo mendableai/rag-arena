@@ -22,9 +22,9 @@ import {
 import { Switch } from "@/components/ui/switch";
 import aplyToast from "@/lib/aplyToaster";
 import {
+  useCustomPlaygroundChunksStore,
   useInMemoryStore,
   useSelectedVectorStore,
-  useSplitResultStore,
 } from "@/lib/zustand";
 
 const text_splitter_options = [
@@ -48,7 +48,7 @@ export default function VectorStoreBox() {
 
   const { inMemory, setInMemory } = useInMemoryStore();
 
-  const { splitResult } = useSplitResultStore();
+  const { customPlaygroundChunks } = useCustomPlaygroundChunksStore();
 
   return (
     <Card className={`relative  border-none`}>
@@ -67,7 +67,7 @@ export default function VectorStoreBox() {
           id="in-memory"
           checked={inMemory}
           onCheckedChange={(newInMemoryValue) => {
-            if (splitResult.length !== 0) {
+            if (customPlaygroundChunks.length !== 0) {
               setInMemory(newInMemoryValue);
             } else {
               aplyToast("Please use the text splitter first");
@@ -80,7 +80,7 @@ export default function VectorStoreBox() {
       <CardContent>
         <Select
           onValueChange={(value) => {
-            if (splitResult.length === 0) {
+            if (customPlaygroundChunks.length === 0) {
               setSelectedVectorStore(value);
             } else {
               aplyToast("Please clear the result first");
@@ -105,34 +105,21 @@ export default function VectorStoreBox() {
         </Select>
       </CardContent>
       <CardFooter className="flex justify-between">
-        {/* {splitResult.length === 0 ? ( */}
-          <Button
-            // variant={splitResult.length === 0 ? "default" : "outline"}
-            variant={"default"}
-            onClick={async () => {
-              // setIsLoading(true);
-              const result = await getVectorStores(
-                splitResult,
-                selectedVectorStore
-              );
-              // place input fields insertion to global variable here. (todo)
-              // setIsLoading(false);
-            }}
-            disabled={selectedVectorStore === "" || inMemory}
-          >
-            Ingest
-          </Button>
-        {/* ) : (
-          <Button
-            variant={"link"}
-            onClick={() => {
-              setSelectedVectorStore("");
-            }}
-          >
-            X
-          </Button>
-        )} */}
-
+        <Button
+          variant={"default"}
+          onClick={async () => {
+            // setIsLoading(true);
+            const result = await getVectorStores(
+              customPlaygroundChunks,
+              selectedVectorStore
+            );
+            // place input fields insertion to global variable here. (todo)
+            // setIsLoading(false);
+          }}
+          disabled={selectedVectorStore === "" || inMemory}
+        >
+          Ingest
+        </Button>
       </CardFooter>
     </Card>
   );

@@ -18,26 +18,26 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
 
     try {
-        const { messages, selectedPlaygroundLlm, inMemory, selectedVectorStore, splitResult } = await req.json();
+        const { messages, selectedPlaygroundLlm, inMemory, selectedVectorStore, customPlaygroundChunks, selectedRetriever } = await req.json();
+
+        console.log(customPlaygroundChunks);
+        
 
         if (messages.length > 5) {
             return NextResponse.json({ error: "Too many messages" }, { status: 400 });
         }
 
-        const { openai, modelConfig } = initializeOpenAIPlayground("gpt-3.5-turbo");
+        const { openai, modelConfig } = initializeOpenAIPlayground(selectedPlaygroundLlm);
         const embeddingModel = new ChatOpenAI({
             modelName: 'gpt-3.5-turbo-1106',
             temperature: 0,
             streaming: true,
         });
 
-        const vectorstore = await selectVectorStore(splitResult);
-
-        //todo
-        const retrieverSelection = "vector-store"
+        const vectorstore = await selectVectorStore(customPlaygroundChunks);
 
         const currentMessageContent = messages[messages.length - 1]?.content || '';
-        const retriever = await dynamicRetrieverUtility(retrieverSelection, embeddingModel, vectorstore, currentMessageContent, splitResult);
+        const retriever = await dynamicRetrieverUtility(selectedRetriever, embeddingModel, vectorstore, currentMessageContent, customPlaygroundChunks);
 
         const { serializedSources, retrievedDocs } = await retrieveAndSerializeDocuments(retriever, currentMessageContent);
         const prompt = CONDENSE_QUESTION_TEMPLATE(messages.slice(0, -1), currentMessageContent, retrievedDocs);

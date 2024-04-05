@@ -3,7 +3,8 @@ import pickle
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from playground.text_splitters.split_by_character import split_by_character
+from playground.text_splitters.split_by_character import \
+    create_document_from_text
 from retrievers.auto_merging_retriever import get_auto_merging_retriever
 from retrievers.bm25_retriever import get_bm25_retriever
 from retrievers.neo4j_retriever import (StorageContext, get_neo4j_retriever,
@@ -57,7 +58,7 @@ def split_text():
         return jsonify({"message": "no splitter chosen"})
     
     try:
-        data = split_by_character(text, splitOption)
+        data = create_document_from_text(text, splitOption)
         return jsonify({"data": data}), 200
     except ValueError as e:
         return jsonify({"message": str(e)}), 400

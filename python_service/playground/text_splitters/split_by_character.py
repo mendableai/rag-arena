@@ -1,29 +1,24 @@
 from langchain_text_splitters import CharacterTextSplitter
 
 
-def split_by_character(text: str, splitOption: int):
+def create_document_from_text(text: str, metadata: list[dict[str, str]], chunk_size: int, chunk_overlap: int):
+    text_splitter = CharacterTextSplitter(
+        separator="\n",
+        chunk_size=500,
+        chunk_overlap=200,
+        length_function=len, 
+        is_separator_regex=False,
+    )
 
-    print("got here\n\n\n\n\n")
+    split_documents = text_splitter.create_documents([text])
 
-    if splitOption == 1:
+    documents_with_metadata = []
+    for doc in split_documents:
+        additional_metadata = {item['parameter']: item['value'] for item in metadata}
+        doc_with_metadata = {
+            **doc,
+            "metadata": {**doc.get("metadata", {}), **additional_metadata},
+        }
+        documents_with_metadata.append(doc_with_metadata)
 
-        text_splitter = CharacterTextSplitter(
-            separator="\n\n",
-            chunk_size=100,
-            chunk_overlap=20,
-            length_function=len,
-            is_separator_regex=False,
-        )
-
-    elif splitOption == 2:
-        separator = " "
-    elif splitOption == 3:
-        separator = "."
-    else:
-        raise ValueError("Invalid split option provided.")
-
-    documents = text_splitter.create_documents([text])
-
-    print(documents)
-    return [doc.page_content for doc in documents]
-
+    return documents_with_metadata

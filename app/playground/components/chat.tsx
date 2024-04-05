@@ -11,10 +11,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
+  useCustomPlaygroundChunksStore,
   useInMemoryStore,
   useSelectedPlaygroundLlmStore,
+  useSelectedPlaygroundRetrieverStore,
   useSelectedVectorStore,
-  useSplitResultStore,
 } from "@/lib/zustand";
 import { useChat } from "ai/react";
 import { CornerDownLeftIcon } from "lucide-react";
@@ -24,7 +25,8 @@ export default function PlaygroundChat() {
   const { selectedPlaygroundLlm } = useSelectedPlaygroundLlmStore();
   const { inMemory } = useInMemoryStore();
   const { selectedVectorStore } = useSelectedVectorStore();
-  const { splitResult } = useSplitResultStore();
+  const { customPlaygroundChunks } = useCustomPlaygroundChunksStore();
+  const { selectedPlaygroundRetriever } = useSelectedPlaygroundRetrieverStore();
 
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/playground/chat",
@@ -32,7 +34,8 @@ export default function PlaygroundChat() {
       selectedPlaygroundLlm,
       inMemory,
       selectedVectorStore,
-      splitResult,
+      customPlaygroundChunks,
+      selectedPlaygroundRetriever,
     },
   });
 
