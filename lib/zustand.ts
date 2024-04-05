@@ -1,4 +1,3 @@
-import { paulgrahamtext } from '@/app/playground/components/paulgrahamtext';
 import { DocumentInterface } from '@langchain/core/documents';
 import { Message } from 'ai';
 import { create } from 'zustand';
@@ -85,16 +84,6 @@ export const useChosenModelStore = create<ChosenModelState>((set) => ({
 
 // playground global variables
 
-interface RawTextState {
-    rawText: string;
-    setRawText: (value: string) => void;
-}
-export const useRawTextStore = create<RawTextState>((set) => ({
-    rawText: paulgrahamtext,
-    setRawText: (value: string) => set(() => ({ rawText: value })),
-}))
-
-
 interface SelectedSplitOptionState {
     selectedSplitOption: number;
     setSelectedSplitOption: (value: number) => void;
@@ -140,5 +129,15 @@ interface SelectedPlaygroundLlmState {
 export const useSelectedPlaygroundLlmStore = create<SelectedPlaygroundLlmState>((set) => ({
     selectedPlaygroundLlm: "",
     setSelectedPlaygroundLlm: (value: string) => set(() => ({ selectedPlaygroundLlm: value })),
+}))
+
+interface SelectedPlaygroundRetrieverState {
+    selectedPlaygroundRetriever: string;
+    setSelectedPlaygroundRetriever: (value: string) => void;
+}
+
+export const useSelectedPlaygroundRetrieverStore = create<SelectedPlaygroundRetrieverState>((set) => ({
+    selectedPlaygroundRetriever: "",
+    setSelectedPlaygroundRetriever: (value: string) => set(() => ({ selectedPlaygroundRetriever: value })),
 }))
 

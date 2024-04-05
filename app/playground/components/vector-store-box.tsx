@@ -54,7 +54,7 @@ export default function VectorStoreBox() {
     <Card className={`relative  border-none`}>
       <Badge
         variant={"outline"}
-        className="-left-6 -top-4 absolute bg-primary text-black dark:text-white"
+        className="-left-6 -top-4 absolute bg-primary text-white"
       >
         2
       </Badge>

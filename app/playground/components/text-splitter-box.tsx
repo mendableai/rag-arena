@@ -27,13 +27,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import aplyToast from "@/lib/aplyToaster";
 import {
-  useRawTextStore,
   useSelectedSplitOptionStore,
-  useSplitResultStore,
+  useSplitResultStore
 } from "@/lib/zustand";
 import { useEffect, useState } from "react";
+import { paulgrahamtext } from "./paulgrahamtext";
 
 const text_splitter_options = [
   {
@@ -56,7 +57,8 @@ export default function TextSplitterBox() {
 
   const { splitResult, setSplitResult } = useSplitResultStore();
 
-  const { rawText } = useRawTextStore();
+  const [rawText, setRawText] = useState(paulgrahamtext);
+
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -67,12 +69,28 @@ export default function TextSplitterBox() {
     <Card className={`relative  border-none`}>
       <Badge
         variant={"outline"}
-        className="-left-6 -top-4 absolute bg-primary text-black dark:text-white"
+        className="-left-6 -top-4 absolute bg-primary text-white"
       >
         1
       </Badge>
       <CardHeader>Text Splitter</CardHeader>
-      <CardContent>
+      <CardContent className="flex gap-4">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant={"outline"}>Ingest</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[725px]">
+            <DialogHeader>
+              <DialogTitle>Raw Text</DialogTitle>
+            </DialogHeader>
+            <Textarea
+              className="h-[400px]"
+              value={rawText}
+              onChange={(e) => setRawText(e.target.value)}
+            />
+          </DialogContent>
+        </Dialog>
+
         <Select
           onValueChange={(value) => {
             if (splitResult.length === 0) {

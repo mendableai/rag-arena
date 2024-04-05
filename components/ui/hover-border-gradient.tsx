@@ -43,22 +43,12 @@ export function HoverBorderGradient({
   const { theme } = useTheme();
 
   const movingMap: Record<Direction, string> = {
-    TOP:
-      theme === "dark"
-        ? "radial-gradient(80.7% 50% at 50% 0%, hsl(0, 0%, 100%) 0%, rgba(255, 255, 255, 0) 100%)"
-        : "radial-gradient(80.7% 50% at 50% 0%, hsl(0, 0%, 0%) 0%, rgba(0, 0, 0, 0) 100%)",
-    LEFT:
-      theme === "dark"
-        ? "radial-gradient(86.6% 43.1% at 0% 50%, hsl(0, 0%, 100%) 0%, rgba(255, 255, 255, 0) 100%)"
-        : "radial-gradient(86.6% 43.1% at 0% 50%, hsl(0, 0%, 0%) 0%, rgba(0, 0, 0, 0) 100%)",
+    TOP: "radial-gradient(80.7% 50% at 50% 0%, #7B4F9D 0%, rgba(255, 255, 255, 0) 100%)",
+    LEFT: "radial-gradient(86.6% 43.1% at 0% 50%, #7B4F9D 0%, rgba(255, 255, 255, 0) 100%)",
     BOTTOM:
-      theme === "dark"
-        ? "radial-gradient(80.7% 50% at 50% 100%, hsl(0, 0%, 100%) 0%, rgba(255, 255, 255, 0) 100%)"
-        : "radial-gradient(80.7% 50% at 50% 100%, hsl(0, 0%, 0%) 0%, rgba(0, 0, 0, 0) 100%)",
+      "radial-gradient(80.7% 50% at 50% 100%, #7B4F9D 0%, rgba(255, 255, 255, 0) 100%)",
     RIGHT:
-      theme === "dark"
-        ? "radial-gradient(86.2% 41.199999999999996% at 100% 50%, hsl(0, 0%, 100%) 0%, rgba(255, 255, 255, 0) 100%)"
-        : "radial-gradient(86.2% 41.199999999999996% at 100% 50%, hsl(0, 0%, 0%) 0%, rgba(0, 0, 0, 0) 100%)",
+      "radial-gradient(86.2% 41.199999999999996% at 100% 50%, #7B4F9D 0%, rgba(255, 255, 255, 0) 100%)",
   };
 
   const highlight = withHighlight
