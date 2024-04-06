@@ -71,11 +71,7 @@ export default function VectorStoreBox() {
       <CardContent>
         <Select
           onValueChange={(value) => {
-            if (customPlaygroundChunks.length === 0) {
-              setSelectedVectorStore(value);
-            } else {
-              aplyToast("Please clear the result first");
-            }
+            setSelectedVectorStore(value);
           }}
           disabled={inMemory}
           value={selectedVectorStore}
@@ -86,8 +82,8 @@ export default function VectorStoreBox() {
           <SelectContent className="dark:bg-[#080a0c]">
             <SelectGroup>
               <SelectLabel>Select a vector store</SelectLabel>
-              {PLAYGROUND_VECTOR_STORES.map((option) => (
-                <SelectItem key={option.id} value={option.value}>
+              {PLAYGROUND_VECTOR_STORES.map((option, index) => (
+                <SelectItem key={index} value={option.value}>
                   {option.title}
                 </SelectItem>
               ))}

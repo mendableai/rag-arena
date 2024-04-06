@@ -124,7 +124,17 @@ export default function PlaygroundChat() {
                   <TooltipContent side="top">Change Layout</TooltipContent>
                 </Tooltip>
 
-                <Button className="ml-auto gap-1.5" size="sm" type="submit">
+                <Button
+                  className="ml-auto gap-1.5"
+                  size="sm"
+                  type="submit"
+                  disabled={
+                    selectedPlaygroundLlm === "" ||
+                    selectedPlaygroundRetriever === "" ||
+                    (selectedVectorStore === "" && !inMemory)
+                    
+                  }
+                >
                   Send Message
                   <CornerDownLeftIcon className="size-3.5" />
                 </Button>

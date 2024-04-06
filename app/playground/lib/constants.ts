@@ -13,17 +13,14 @@ export const retrieversForPlayground = {
 
 export const PLAYGROUND_VECTOR_STORES = [
     {
-        id: 1,
-        title: "Pinecone",
-        value: "pinecone",
-    },
-    {
-        id: 2,
         title: "Supabase (postgres)",
         value: "supabase",
     },
     {
-        id: 3,
+        title: "Pinecone",
+        value: "pinecone",
+    },
+    {
         title: "MongoDB (atlas)",
         value: "mongodb",
     },
