@@ -26,7 +26,7 @@ interface SelectedVectorStoreState {
     setSelectedVectorStore: (value: string) => void;
 }
 export const useSelectedVectorStore = create<SelectedVectorStoreState>((set) => ({
-    selectedVectorStore: "",
+    selectedVectorStore: "supabase",
     setSelectedVectorStore: (value: string) => set(() => ({ selectedVectorStore: value })),
 }))
 
@@ -45,7 +45,7 @@ interface SelectedPlaygroundLlmState {
 }
 
 export const useSelectedPlaygroundLlmStore = create<SelectedPlaygroundLlmState>((set) => ({
-    selectedPlaygroundLlm: "",
+    selectedPlaygroundLlm: "mistral",
     setSelectedPlaygroundLlm: (value: string) => set(() => ({ selectedPlaygroundLlm: value })),
 }))
 
@@ -55,7 +55,7 @@ interface SelectedPlaygroundRetrieverState {
 }
 
 export const useSelectedPlaygroundRetrieverStore = create<SelectedPlaygroundRetrieverState>((set) => ({
-    selectedPlaygroundRetriever: "",
+    selectedPlaygroundRetriever: "vector-store",
     setSelectedPlaygroundRetriever: (value: string) => set(() => ({ selectedPlaygroundRetriever: value })),
 }))
 

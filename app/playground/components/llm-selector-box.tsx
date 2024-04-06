@@ -1,6 +1,5 @@
 "use client";
 
-import { VALID_MODELS } from "@/app/api/chat/utilities/variables";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -17,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PLAYGROUND_LLMS } from "../lib/constants";
 import { useSelectedPlaygroundLlmStore } from "../lib/globals";
 
 export default function LlmSelectorBox() {
@@ -46,7 +46,7 @@ export default function LlmSelectorBox() {
           <SelectContent className="dark:bg-[#080a0c]">
             <SelectGroup>
               <SelectLabel>Select a LLM</SelectLabel>
-              {Object.entries(VALID_MODELS).map(([id, option]) => (
+              {Object.entries(PLAYGROUND_LLMS).map(([id, option]) => (
                 <SelectItem key={id} value={id}>
                   {option.modelName}
                 </SelectItem>

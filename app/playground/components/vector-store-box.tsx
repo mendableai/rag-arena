@@ -21,26 +21,13 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import aplyToast from "@/lib/aplyToaster";
+import { useEffect } from "react";
+import { PLAYGROUND_VECTOR_STORES } from "../lib/constants";
 import {
   useCustomPlaygroundChunksStore,
   useInMemoryStore,
   useSelectedVectorStore,
 } from "../lib/globals";
-
-const text_splitter_options = [
-  {
-    id: 1,
-    title: "Pinecone",
-  },
-  {
-    id: 2,
-    title: "Supabase (postgres)",
-  },
-  {
-    id: 3,
-    title: "MongoDB (atlas)",
-  },
-];
 
 export default function VectorStoreBox() {
   const { selectedVectorStore, setSelectedVectorStore } =
@@ -49,6 +36,10 @@ export default function VectorStoreBox() {
   const { inMemory, setInMemory } = useInMemoryStore();
 
   const { customPlaygroundChunks } = useCustomPlaygroundChunksStore();
+
+  useEffect(() => {
+    console.log(selectedVectorStore);
+  }, [selectedVectorStore]);
 
   return (
     <Card className={`relative  border-none`}>
@@ -95,8 +86,8 @@ export default function VectorStoreBox() {
           <SelectContent className="dark:bg-[#080a0c]">
             <SelectGroup>
               <SelectLabel>Select a vector store</SelectLabel>
-              {text_splitter_options.map((option) => (
-                <SelectItem key={option.id} value={option.id.toString()}>
+              {PLAYGROUND_VECTOR_STORES.map((option) => (
+                <SelectItem key={option.id} value={option.value}>
                   {option.title}
                 </SelectItem>
               ))}

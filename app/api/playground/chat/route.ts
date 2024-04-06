@@ -4,9 +4,9 @@ import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { dynamicRetrieverUtility } from '../../chat/utilities/config';
 import { retrieveAndSerializeDocuments } from '../../chat/utilities/retrieveAndSerializeDocuments';
-import { selectVectorStore } from '../../chat/utilities/selectVectorStore';
 import { CONDENSE_QUESTION_TEMPLATE } from '../../chat/utilities/variables';
 import { initializeOpenAIPlayground } from './initializeOpenAIPlayground';
+import { selectPlaygroundsVectorStore } from './selectPlaygroundsVectorStore';
 
 export const runtime = 'edge';
 
@@ -19,9 +19,6 @@ export async function POST(req: Request) {
     try {
         const { messages, selectedPlaygroundLlm, inMemory, selectedVectorStore, customPlaygroundChunks, selectedPlaygroundRetriever } = await req.json();
 
-        console.log(selectedPlaygroundLlm);
-
-
         if (messages.length > 10) {
             return NextResponse.json({ error: "Too many messages" }, { status: 400 });
         }
@@ -33,7 +30,7 @@ export async function POST(req: Request) {
             streaming: true,
         });
 
-        const vectorstore = await selectVectorStore(customPlaygroundChunks);
+        const vectorstore = await selectPlaygroundsVectorStore(customPlaygroundChunks, inMemory, selectedVectorStore);
 
         const currentMessageContent = messages[messages.length - 1]?.content || '';
         const retriever = await dynamicRetrieverUtility(selectedPlaygroundRetriever, embeddingModel, vectorstore, currentMessageContent, customPlaygroundChunks);
@@ -41,8 +38,6 @@ export async function POST(req: Request) {
         const { serializedSources, retrievedDocs } = await retrieveAndSerializeDocuments(retriever, currentMessageContent);
         const prompt = CONDENSE_QUESTION_TEMPLATE(messages.slice(0, -1), currentMessageContent, retrievedDocs);
 
-
-        
         const response = await openai.chat.completions.create({
             model: modelConfig.modelName,
             stream: true,
@@ -55,9 +50,6 @@ export async function POST(req: Request) {
         const data = new experimental_StreamData();
         data.append(serializedSources);
 
-        console.log("SOURCES: ", serializedSources);
-        
-
         const stream = OpenAIStream(response, {
             onFinal() {
                 data.close();
@@ -69,11 +61,8 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Error handling response stream" }, { status: 500 });
         }
 
-
         return new StreamingTextResponse(stream, {}, data);
     } catch (error) {
-        console.log(error);
-
         return NextResponse.json({ error: "Error while retrieving and serializing documents" }, { status: 500 });
     }
 }
