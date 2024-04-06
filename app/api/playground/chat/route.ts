@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         const prompt = CONDENSE_QUESTION_TEMPLATE(messages.slice(0, -1), currentMessageContent, retrievedDocs);
 
 
-        const data = new experimental_StreamData();
+        
         const response = await openai.chat.completions.create({
             model: modelConfig.modelName,
             stream: true,
@@ -52,13 +52,15 @@ export async function POST(req: Request) {
             ],
         });
 
-        data.append({
-            serializedSources,
-        });
+        const data = new experimental_StreamData();
+        data.append(serializedSources);
+
+        console.log("SOURCES: ", serializedSources);
+        
 
         const stream = OpenAIStream(response, {
             onFinal() {
-                data.close(); 
+                data.close();
             },
             experimental_streamData: true,
         });

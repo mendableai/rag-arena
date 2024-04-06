@@ -1,40 +1,41 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import aplyToast from "@/lib/aplyToaster";
 import { CharacterTextSplitter } from "langchain/text_splitter";
 import { Dot, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-    useCustomPlaygroundChunksStore,
-    useSelectedSplitOptionStore,
+  useCustomPlaygroundChunksStore,
+  useSelectedSplitOptionStore,
 } from "../../lib/globals";
+import { paulgrahamtext } from "../../lib/paulgrahamtext";
 
 async function createDocumentFromText(
   text: string,
@@ -69,8 +70,10 @@ async function createDocumentFromText(
 }
 
 export default function CustomPlaygroundIngestion() {
-  const [rawData, setRawData] = useState("");
-  const [metadata, setMetadata] = useState([{ parameter: "", value: "" }]);
+  const [rawData, setRawData] = useState(paulgrahamtext);
+  const [metadata, setMetadata] = useState([
+    { parameter: "author", value: "Paul Graham" },
+  ]);
 
   const [chunkSize, setChunkSize] = useState(50);
   const [chunkOverlap, setChunkOverlap] = useState(25);
@@ -84,18 +87,6 @@ export default function CustomPlaygroundIngestion() {
 
   const { selectedSplitOption, setSelectedSplitOption } =
     useSelectedSplitOptionStore();
-
-  useEffect(() => {
-    if (rawData.length > 32000) {
-      aplyToast("Raw data is too long.");
-      return;
-    }
-    createDocumentFromText(rawData, metadata, chunkSize, chunkOverlap).then(
-      (res) => {
-        setCustomPlaygroundChunks(res as never[]);
-      }
-    );
-  }, [metadata, rawData, chunkSize, chunkOverlap]);
 
   const handleAddPair = () => {
     if (metadata.length < 5) {
@@ -150,15 +141,15 @@ export default function CustomPlaygroundIngestion() {
             } -ml-3`}
             size={40}
           />
-          <span className="hidden sm:inline">Ingest</span>
+          <span className="hidden sm:inline">Create Documents</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl justify-center">
         <DialogHeader>
-          <DialogTitle>Create Chunks</DialogTitle>
+          <DialogTitle>Create Documents</DialogTitle>
           <DialogDescription>
-            Use the retrievers with your own data. You can add metadata to
-            documents and split them into chunks.
+            Add your custom text and metadata to create documents which will be
+            then ingested into the vector store.
           </DialogDescription>
         </DialogHeader>
         <div className="flex gap-4 md:min-w-[800px] md:min-h-[400px]">
@@ -216,6 +207,7 @@ export default function CustomPlaygroundIngestion() {
               )}
             </div>
           </div>
+
           <div className="flex flex-col gap-2 w-full">
             <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
               <PopoverTrigger asChild>
@@ -333,13 +325,33 @@ export default function CustomPlaygroundIngestion() {
             ></Textarea>
           </div>
         </div>
-        <DialogFooter>
+        <DialogFooter className="flex">
+          <Button
+            variant="outline"
+            onClick={() => {
+              if (rawData.length > 32000) {
+                aplyToast("Raw data is too long.");
+                return;
+              }
+              createDocumentFromText(
+                rawData,
+                metadata,
+                chunkSize,
+                chunkOverlap
+              ).then((res) => {
+                setCustomPlaygroundChunks(res as never[]);
+              });
+            }}
+          >
+            Generate
+          </Button>
+
           <Button
             className=" text-white"
             type="submit"
             onClick={() => setDialogOpen(false)}
           >
-            Save changes
+            Close
           </Button>
         </DialogFooter>
       </DialogContent>

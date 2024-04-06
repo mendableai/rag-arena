@@ -8,16 +8,12 @@ interface Annotation {
 interface MessageDisplayProps {
   message: Message[];
   loading: boolean;
-  annotations?: Annotation[] | undefined | JSONValue[]; // Adjusted to use the Annotation interface
+  annotations?: Annotation[] | undefined | JSONValue[];
 }
 
 const PlaygroundMessageDisplay: React.FC<MessageDisplayProps> = React.memo(
   ({ message, loading, annotations }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-    console.log("annotations", annotations?.map((annotation: any) => JSON.parse(atob(annotation.serializedSources))));
-    console.log("message", message);
-    
 
     const [expandedSources, setExpandedSources] = useState<{
       [key: string]: boolean;
@@ -35,15 +31,13 @@ const PlaygroundMessageDisplay: React.FC<MessageDisplayProps> = React.memo(
 
     return (
       <div
+        ref={scrollContainerRef}
         className={`flex h-full flex-col overflow-y-scroll
     
        ${loading && "hover:animate-pulse"}`}
       >
         <div className="flex flex-1 flex-col">
-          <div
-            ref={scrollContainerRef}
-            className="flex-1 whitespace-pre-wrap p-4 text-sm   gap-6 flex flex-col"
-          >
+          <div className="flex-1 whitespace-pre-wrap p-4 text-sm gap-6 flex flex-col">
             {message.map((m) => (
               <div
                 key={m.id}

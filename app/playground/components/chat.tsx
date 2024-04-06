@@ -10,10 +10,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Message } from "ai";
+import { JSONValue, Message } from "ai";
 import { useChat } from "ai/react";
 import { CornerDownLeftIcon } from "lucide-react";
-import { useState } from "react"; // Add this import if React is not already imported
+import { useEffect, useRef, useState } from "react";
 import {
   useCustomPlaygroundChunksStore,
   useInMemoryStore,
@@ -30,7 +30,10 @@ export default function PlaygroundChat() {
   const { customPlaygroundChunks } = useCustomPlaygroundChunksStore();
   const { selectedPlaygroundRetriever } = useSelectedPlaygroundRetrieverStore();
 
-  const [updatedMessages, setUpdatedMessages] = useState<Message[]>([]);
+  const [messagesHistoryWithSource, setMessagesHistoryWithSource] = useState<
+    Message[]
+  >([]);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const { messages, input, handleInputChange, handleSubmit, data } = useChat({
     api: "/api/playground/chat",
@@ -42,14 +45,55 @@ export default function PlaygroundChat() {
       selectedPlaygroundRetriever,
     },
     onFinish: () => {
-      
+      if (data) {
+        processSources(data);
+      }
     },
   });
 
+  const processSources = (data: JSONValue[] | undefined) => {
+    const sources = data?.flatMap((annotation: any) =>
+      JSON.parse(atob(annotation)).map((item: any) => item)
+    );
+
+    setMessagesHistoryWithSource((prev: Message[]) => {
+      if (prev.length === 0) {
+        return prev;
+      }
+      const newMessages = [...prev];
+      newMessages[newMessages.length - 1] = {
+        ...newMessages[newMessages.length - 1],
+        annotations: sources,
+      };
+      return newMessages;
+    });
+  };
+
+  useEffect(() => {
+    if (data && messagesHistoryWithSource.length === 2) {
+      processSources(data);
+    }
+
+    setMessagesHistoryWithSource((prevMessages) => {
+      const prevMessagesMap = new Map(prevMessages.map((msg) => [msg.id, msg]));
+
+      const updatedMessages = messages.map((newMsg) => {
+        const existingMsg = prevMessagesMap.get(newMsg.id);
+        return existingMsg ? { ...existingMsg, ...newMsg } : newMsg;
+      });
+
+      return updatedMessages;
+    });
+  }, [messages]);
+
   return (
     <Card className="h-full flex flex-col">
-      <CardContent className="flex-1">
-        <PlaygroundMessageDisplay message={messages} loading={false} annotations={data} />
+      <CardContent className="flex-1 max-h-[400px]">
+        <PlaygroundMessageDisplay
+          message={messagesHistoryWithSource}
+          loading={false}
+          annotations={data}
+        />
       </CardContent>
       <CardFooter className="self-end w-full">
         <div className="p-4 w-full m-auto">

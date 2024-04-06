@@ -8,7 +8,7 @@ interface SelectedSplitOptionState {
     setSelectedSplitOption: (value: number) => void;
 }
 export const useSelectedSplitOptionStore = create<SelectedSplitOptionState>((set) => ({
-    selectedSplitOption: 0,
+    selectedSplitOption: 1,
     setSelectedSplitOption: (value: number) => set(() => ({ selectedSplitOption: value })),
 }))
 
