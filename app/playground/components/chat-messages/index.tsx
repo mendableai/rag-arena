@@ -1,27 +1,23 @@
-import { useChatSessionsStore } from "@/lib/zustand";
-import { Message } from "ai";
+import { JSONValue, Message } from "ai";
 import React, { useEffect, useRef, useState } from "react";
-import { SelectRetrieverMenu } from "./select-retriever-menu";
+
+interface Annotation {
+  serializedSources: string;
+}
 
 interface MessageDisplayProps {
   message: Message[];
-  setRetrieverSelection: (value: string) => void;
-  retrieverSelection: string;
   loading: boolean;
-  chatIndex?: number;
+  annotations?: Annotation[] | undefined | JSONValue[];
 }
 
-const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
-  ({
-    message,
-    setRetrieverSelection,
-    retrieverSelection,
-    loading,
-    chatIndex,
-  }) => {
+const PlaygroundMessageDisplay: React.FC<MessageDisplayProps> = React.memo(
+  ({ message, loading, annotations }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    const [expandedSources, setExpandedSources] = useState<{ [key: string]: boolean }>({});
+    const [expandedSources, setExpandedSources] = useState<{
+      [key: string]: boolean;
+    }>({});
 
     useEffect(() => {
       if (scrollContainerRef.current) {
@@ -33,35 +29,22 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
       }
     }, [message]);
 
-    const { chatSessions } = useChatSessionsStore();
-
-    let retriever: any = [];
-    chatSessions.forEach((session) => {
-      retriever.push(session.retrieverSelection);
-    });
-
     return (
       <div
+        ref={scrollContainerRef}
         className={`flex h-full flex-col overflow-y-scroll
     
        ${loading && "hover:animate-pulse"}`}
       >
-        <SelectRetrieverMenu
-          setRetrieverSelection={setRetrieverSelection}
-          retrieverSelection={retrieverSelection}
-          chatIndex={chatIndex}
-        />
-
         <div className="flex flex-1 flex-col">
-          <div
-            ref={scrollContainerRef}
-            className="flex-1 whitespace-pre-wrap p-4 text-sm gap-6 flex flex-col"
-          >
+          <div className="flex-1 whitespace-pre-wrap p-4 text-sm gap-6 flex flex-col">
             {message.map((m) => (
               <div
                 key={m.id}
                 className={`flex gap-3 ${
-                  m.role === "user" ? "justify-end" : "justify-between"
+                  m.role === "user"
+                    ? "justify-end text-gray-400"
+                    : "justify-between"
                 }`}
               >
                 <div
@@ -74,30 +57,40 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                       <span>🔍 Chunks Retrieved:</span>
                       <span className="mt-1 mr-2 px-2 py-1 rounded text-xs">
                         {m.annotations?.map((source: any, i) => {
-                          
                           const indexKey = `source:${i}`;
                           const isExpanded = expandedSources[indexKey];
-                          const toggleExpand = () => setExpandedSources(prevState => ({
-                            ...prevState,
-                            [indexKey]: !prevState[indexKey],
-                          }));
-                          const contentPreview = source.pageContent.slice(0, 100).replace(/\n/g, ' ');
+                          const toggleExpand = () =>
+                            setExpandedSources((prevState) => ({
+                              ...prevState,
+                              [indexKey]: !prevState[indexKey],
+                            }));
+                          const contentPreview = source.pageContent
+                            .slice(0, 100)
+                            .replace(/\n/g, " ");
                           const isContentLong = source.pageContent.length > 100;
 
                           return (
                             <div className="mt-10" key={indexKey}>
                               {i + 1}. &quot;
                               {isExpanded ? (
-                                <span dangerouslySetInnerHTML={{ __html: source.pageContent.replace(/\n/g, ' ') }} />
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: source.pageContent.replace(
+                                      /\n/g,
+                                      " "
+                                    ),
+                                  }}
+                                />
                               ) : (
-                                `${contentPreview}${isContentLong ? '...' : ''}`
-                              )} &quot;
+                                `${contentPreview}${isContentLong ? "..." : ""}`
+                              )}{" "}
+                              &quot;
                               {isContentLong && (
                                 <button
                                   onClick={() => toggleExpand()}
                                   className="ml-2 text-white font-semibold text-[11px]"
                                 >
-                                  {isExpanded ? 'Show Less' : 'Show More'}
+                                  {isExpanded ? "Show Less" : "Show More"}
                                 </button>
                               )}
                               {source.metadata.title !== undefined ? (
@@ -118,9 +111,10 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                                 ""
                               )}
                               <span className="float-right text-primary">
-                               Relevance Score:{" "}
+                                Relevance Score:{" "}
                                 {(
-                                  parseFloat(source.metadata.relevanceScore) * 100
+                                  parseFloat(source.metadata.relevanceScore) *
+                                  100
                                 ).toFixed(2)}
                               </span>
                             </div>
@@ -146,7 +140,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
   }
 );
 
-MessageDisplay.displayName = "MessageDisplay";
+PlaygroundMessageDisplay.displayName = "MessageDisplay";
 
-export { MessageDisplay };
+export { PlaygroundMessageDisplay };
 

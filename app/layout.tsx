@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/components/theme/header/theme-provider";
 import LeftMenu from "@/components/theme/left-menu";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
@@ -28,18 +29,20 @@ export default function RootLayout({
         },
       }}
     >
-      <html lang="en" className="dark">
-        <body className="manrope san html-body">
-          <div className="content-grow px-4">
-            <div className="grid w-full pl-[53px]">
-              <LeftMenu />
-              <div className="flex flex-col">{children}</div>
+      <ThemeProvider>
+        <html lang="en" className="dark">
+          <body className="manrope san html-body">
+            <div className="content-grow px-4">
+              <div className="grid w-full pl-[53px]">
+                <LeftMenu />
+                <div className="flex flex-col">{children}</div>
+              </div>
             </div>
-          </div>
-          <Analytics />
-          <Toaster />
-        </body>
-      </html>
+            <Analytics />
+            <Toaster />
+          </body>
+        </html>
+      </ThemeProvider>
     </ClerkProvider>
   );
 }

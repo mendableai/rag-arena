@@ -41,6 +41,9 @@ export default function MainNavbar() {
         {pathname === "/voters" && (
           <h1 className="text-lg font-semibold">Top Voters by Github Username</h1>
         )}
+        {pathname === "/playground" && (
+          <h1 className="text-lg font-semibold">Playground</h1>
+        )}
       </div>
 
       {isSmallScreen ? (

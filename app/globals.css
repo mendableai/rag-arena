@@ -125,3 +125,12 @@ body {
 .resize-handle {
   transform: rotate(180deg); /* Example - Adjust as needed */
 }
+
+
+
+
+
+
+::-webkit-resizer {
+  background-color: #27272a;
+}

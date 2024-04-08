@@ -13,7 +13,7 @@ import {
   Swords,
   TerminalSquareIcon,
   Trophy,
-  Users
+  Users,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -103,17 +103,19 @@ export default function LeftMenu() {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                aria-label="Playground"
-                className={`rounded-lg ${
-                  isActive("/playground") ? "bg-muted" : ""
-                }`}
-                size="icon"
-                variant="ghost"
-                disabled
-              >
-                <TerminalSquareIcon className="size-5" />
-              </Button>
+              <a href="/playground">
+                <Button
+                  aria-label="Playground"
+                  className={`rounded-lg ${
+                    isActive("/playground") ? "bg-muted" : ""
+                  }`}
+                  size="icon"
+                  variant="ghost"
+                  disabled={isActive("/playground")}
+                >
+                  <TerminalSquareIcon className="size-5" />
+                </Button>
+              </a>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
               Playground

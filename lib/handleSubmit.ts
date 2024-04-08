@@ -63,7 +63,7 @@ export async function handleSubmit({ customDocuments, input, chatHistory, setCha
         }
 
         const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 10000, { done: true }));
-
+ 
         while (true) {
             const result = await Promise.race([
                 reader.read(),
