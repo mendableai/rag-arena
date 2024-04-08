@@ -35,7 +35,7 @@ export async function POST(req: Request) {
         const vectorstore = await selectPlaygroundsVectorStore(customPlaygroundChunks, inMemory, selectedVectorStore);
 
         const currentMessageContent = messages[messages.length - 1]?.content || '';
-        const retriever = await dynamicRetrieverUtility(selectedPlaygroundRetriever, embeddingModel, vectorstore, currentMessageContent, customPlaygroundChunks);
+        const retriever = await dynamicRetrieverUtility(selectedPlaygroundRetriever.replace(/_/g, "-"), embeddingModel, vectorstore, currentMessageContent, customPlaygroundChunks);
 
         const { serializedSources, retrievedDocs } = await retrieveAndSerializeDocuments(retriever, currentMessageContent);
         const prompt = CONDENSE_QUESTION_TEMPLATE(messages.slice(0, -1), currentMessageContent, retrievedDocs);

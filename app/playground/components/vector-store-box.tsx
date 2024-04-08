@@ -90,7 +90,8 @@ export default function VectorStoreBox() {
             onValueChange={(value) => {
               setSelectedVectorStore(value);
             }}
-            disabled={selectedVectorStore === "in_memory"}
+            // disabled={selectedVectorStore === "in_memory"}
+            disabled
             value={selectedVectorStore}
           >
             <SelectTrigger>
@@ -120,7 +121,8 @@ export default function VectorStoreBox() {
               // place input fields insertion to global variable here. (todo)
               // setIsLoading(false);
             }}
-            disabled={selectedVectorStore !== ""}
+            // disabled={selectedVectorStore !== ""}
+            disabled
           >
             Ingest
           </Button>

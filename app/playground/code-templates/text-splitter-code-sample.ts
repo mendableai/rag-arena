@@ -1,4 +1,4 @@
-type SplitOption = 'split_by_character' | 'recursive_character_text_splitter' | 'semantic_chunking';
+type SplitOption = 'split_by_character' | 'recursive_character_text_splitter';
 type LanguageOption = 'python' | 'typescript';
 
 export async function getTextSplitterCode(splitOption: SplitOption, language: LanguageOption, variable: string): Promise<string> {
@@ -34,12 +34,29 @@ ${dynamicPart}
       const output = await splitter.createDocuments([text]);`,
     },
     recursive_character_text_splitter: {
-      python: `aaa`,
-      typescript: `bbb`,
-    },
-    semantic_chunking: {
-      python: `aaabbb`,
-      typescript: `abababa`,
+      python: `
+      with open("../../state_of_the_union.txt") as f:
+          state_of_the_union = f.read()
+      
+      from langchain_text_splitters import RecursiveCharacterTextSplitter
+      
+      text_splitter = RecursiveCharacterTextSplitter(
+          chunk_size=100,
+          chunk_overlap=20,
+          length_function=len,
+          is_separator_regex=False,
+      )
+      
+      texts = text_splitter.create_documents([state_of_the_union])`,
+      typescript: `import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+
+      const text = "Hi./n/nI'm Harrison./n/nHow? Are? You?/nOkay then f f f f./n/nThis is a weird text to write, but gotta test the splittingggg some how./n/nBye!./n/n-H.";
+      const splitter = new RecursiveCharacterTextSplitter({
+        chunkSize: 10,
+        chunkOverlap: 1,
+      });
+      
+      const output = await splitter.createDocuments([text]);`,
     },
   };
 

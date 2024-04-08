@@ -29,5 +29,15 @@ export const PLAYGROUND_VECTOR_STORES = [
 export const PLAYGROUND_LLMS: { [key: string]: { apiKeyEnv: string, modelName: string } } = {
     'mistral': { apiKeyEnv: 'GROQ_API_KEY', modelName: 'mixtral-8x7b-32768' },
     'gpt-3.5-turbo': { apiKeyEnv: 'OPENAI_API_KEY', modelName: 'gpt-3.5-turbo-1106' },
-    'command-r': { apiKeyEnv: 'COHERE_API_KEY', modelName: 'command-r' },
 };
+
+export const text_splitter_options = [
+    {
+        title: "Split by character",
+        value: "split_by_character",
+    },
+    {
+        title: "Recursive Character Text Splitter",
+        value: "recursive_character_text_splitter",
+    },
+];

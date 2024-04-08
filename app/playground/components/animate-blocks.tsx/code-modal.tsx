@@ -85,7 +85,7 @@ export function CodeModal({
               <Code />
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-3xl">
+          <DialogContent className="max-w-4xl">
             <DialogHeader>
               <DialogTitle>Code for {name}</DialogTitle>
               <DialogDescription>

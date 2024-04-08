@@ -31,6 +31,7 @@ import { CharacterTextSplitter } from "langchain/text_splitter";
 import { Dot, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { text_splitter_options } from "../../lib/constants";
 import {
   useCustomPlaygroundChunksStore,
   useSelectedSplitOptionStore,
@@ -116,20 +117,7 @@ export default function CustomPlaygroundIngestion() {
     setMetadata(newMetadata);
   };
 
-  const text_splitter_options = [
-    {
-      title: "Split by character",
-      value: "split_by_character",
-    },
-    {
-      title: "Recursive Character Text Splitter",
-      value: "recursive_character_text_splitter",
-    },
-    {
-      title: "Semantic Chunking",
-      value: "semantic_chunking",
-    },
-  ];
+
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
