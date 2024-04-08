@@ -16,7 +16,6 @@ import { CornerDownLeftIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import {
   useCustomPlaygroundChunksStore,
-  useInMemoryStore,
   useSelectedPlaygroundLlmStore,
   useSelectedPlaygroundRetrieverStore,
   useSelectedVectorStore,
@@ -25,7 +24,6 @@ import { PlaygroundMessageDisplay } from "./chat-messages";
 
 export default function PlaygroundChat() {
   const { selectedPlaygroundLlm } = useSelectedPlaygroundLlmStore();
-  const { inMemory } = useInMemoryStore();
   const { selectedVectorStore } = useSelectedVectorStore();
   const { customPlaygroundChunks } = useCustomPlaygroundChunksStore();
   const { selectedPlaygroundRetriever } = useSelectedPlaygroundRetrieverStore();
@@ -39,7 +37,6 @@ export default function PlaygroundChat() {
     api: "/api/playground/chat",
     body: {
       selectedPlaygroundLlm,
-      inMemory,
       selectedVectorStore,
       customPlaygroundChunks,
       selectedPlaygroundRetriever,
@@ -131,8 +128,7 @@ export default function PlaygroundChat() {
                   disabled={
                     selectedPlaygroundLlm === "" ||
                     selectedPlaygroundRetriever === "" ||
-                    (selectedVectorStore === "" && !inMemory)
-                    
+                    selectedVectorStore === ""
                   }
                 >
                   Send Message

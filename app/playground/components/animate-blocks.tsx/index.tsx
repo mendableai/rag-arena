@@ -25,6 +25,8 @@ export function BlockChunk({
   ...props
 }: BlockChunkProps) {
   if (!chunk) {
+    console.log("NOPE");
+    
     return null;
   }
 

@@ -17,7 +17,7 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
 
     try {
-        const { messages, selectedPlaygroundLlm, inMemory, selectedVectorStore, customPlaygroundChunks, selectedPlaygroundRetriever } = await req.json();
+        const { messages, selectedPlaygroundLlm, selectedVectorStore, customPlaygroundChunks, selectedPlaygroundRetriever } = await req.json();
 
         if (messages.length > 10) {
             return NextResponse.json({ error: "Too many messages" }, { status: 400 });
@@ -29,6 +29,8 @@ export async function POST(req: Request) {
             temperature: 0,
             streaming: true,
         });
+
+        const inMemory = selectedVectorStore === "in_memory";
 
         const vectorstore = await selectPlaygroundsVectorStore(customPlaygroundChunks, inMemory, selectedVectorStore);
 

@@ -4,12 +4,12 @@
 import { create } from "zustand";
 
 interface SelectedSplitOptionState {
-    selectedSplitOption: number;
-    setSelectedSplitOption: (value: number) => void;
+    selectedSplitOption: string;
+    setSelectedSplitOption: (value: string) => void;
 }
 export const useSelectedSplitOptionStore = create<SelectedSplitOptionState>((set) => ({
-    selectedSplitOption: 1,
-    setSelectedSplitOption: (value: number) => set(() => ({ selectedSplitOption: value })),
+    selectedSplitOption: "split_by_character",
+    setSelectedSplitOption: (value: string) => set(() => ({ selectedSplitOption: value })),
 }))
 
 interface CustomPlaygroundChunksState {
@@ -30,15 +30,6 @@ export const useSelectedVectorStore = create<SelectedVectorStoreState>((set) => 
     setSelectedVectorStore: (value: string) => set(() => ({ selectedVectorStore: value })),
 }))
 
-interface InMemoryState {
-    inMemory: boolean;
-    setInMemory: (value: boolean) => void;
-}
-export const useInMemoryStore = create<InMemoryState>((set) => ({
-    inMemory: false,
-    setInMemory: (value: boolean) => set(() => ({ inMemory: value })),
-}))
-
 interface SelectedPlaygroundLlmState {
     selectedPlaygroundLlm: string;
     setSelectedPlaygroundLlm: (value: string) => void;
@@ -55,7 +46,7 @@ interface SelectedPlaygroundRetrieverState {
 }
 
 export const useSelectedPlaygroundRetrieverStore = create<SelectedPlaygroundRetrieverState>((set) => ({
-    selectedPlaygroundRetriever: "vector-store",
+    selectedPlaygroundRetriever: "vector_store",
     setSelectedPlaygroundRetriever: (value: string) => set(() => ({ selectedPlaygroundRetriever: value })),
 }))
 

@@ -118,16 +118,16 @@ export default function CustomPlaygroundIngestion() {
 
   const text_splitter_options = [
     {
-      id: 1,
       title: "Split by character",
+      value: "split_by_character",
     },
     {
-      id: 2,
       title: "Recursive Character Text Splitter",
+      value: "recursive_character_text_splitter",
     },
     {
-      id: 3,
       title: "Semantic Chunking",
+      value: "semantic_chunking",
     },
   ];
 
@@ -238,7 +238,7 @@ export default function CustomPlaygroundIngestion() {
                     <Select
                       onValueChange={(value) => {
                         if (customPlaygroundChunks.length === 0) {
-                          setSelectedSplitOption(Number(value));
+                          setSelectedSplitOption(value);
                         } else {
                           aplyToast("Please clear the result first");
                         }
@@ -253,8 +253,8 @@ export default function CustomPlaygroundIngestion() {
                           <SelectLabel>Split by</SelectLabel>
                           {text_splitter_options.map((option) => (
                             <SelectItem
-                              key={option.id}
-                              value={option.id.toString()}
+                              key={option.value}
+                              value={option.value}
                             >
                               {option.title}
                             </SelectItem>

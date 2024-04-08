@@ -8,16 +8,16 @@ import TextSplitterBox from "./components/text-splitter-box";
 import VectorStoreBox from "./components/vector-store-box";
 import {
   useCustomPlaygroundChunksStore,
-  useInMemoryStore,
   useSelectedPlaygroundLlmStore,
   useSelectedPlaygroundRetrieverStore,
+  useSelectedVectorStore
 } from "./lib/globals";
 
 export default function PlaygroundPage() {
   const { customPlaygroundChunks } = useCustomPlaygroundChunksStore();
-  const { inMemory } = useInMemoryStore();
   const { selectedPlaygroundLlm } = useSelectedPlaygroundLlmStore();
   const { selectedPlaygroundRetriever } = useSelectedPlaygroundRetrieverStore();
+  const { selectedVectorStore } = useSelectedVectorStore();
 
   return (
     <>
@@ -38,8 +38,8 @@ export default function PlaygroundPage() {
           <HoverBorderGradient
             containerClassName="rounded-md col-span-2 row-span-1 min-w-full"
             as="div"
-            className="w-full rounded-md"
-            stopAnimation={inMemory}
+            className="w-full rounded-md h-full"
+            stopAnimation={selectedVectorStore !== ""}
             duration={3}
           >
             <VectorStoreBox />

@@ -22,7 +22,29 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { Code } from "lucide-react";
 import { CopyBlock, tomorrowNight } from "react-code-blocks";
-import { TEXT_SPLITTER_CODE } from "../../code-templates/text-splitters";
+import {
+  getRetrieverCode,
+  RetrieverLanguages,
+  RetrieverOption,
+} from "../../code-templates/retriever-code-sample";
+import {
+  getTextSplitterCode,
+  SplitOptionLanguages,
+} from "../../code-templates/text-splitter-code-sample";
+import {
+  getVectorStoreCode,
+  VectorStoreLanguages,
+} from "../../code-templates/vector-store-code-sample";
+import {
+  useSelectedPlaygroundRetrieverStore,
+  useSelectedSplitOptionStore,
+  useSelectedVectorStore,
+} from "../../lib/globals";
+import {
+  LanguageOption,
+  SplitOption,
+  VectorStoreOption,
+} from "../../lib/types";
 
 export function CodeModal({
   name,
@@ -38,7 +60,11 @@ export function CodeModal({
   setLanguage: React.Dispatch<React.SetStateAction<string>>;
   setLanguageDemo: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  type LanguageKey = keyof typeof TEXT_SPLITTER_CODE;
+  const { selectedSplitOption } = useSelectedSplitOptionStore();
+
+  const { selectedVectorStore } = useSelectedVectorStore();
+
+  const { selectedPlaygroundRetriever } = useSelectedPlaygroundRetrieverStore();
 
   return (
     <AnimatePresence>
@@ -56,7 +82,7 @@ export function CodeModal({
               variant="outline"
               className="h-7 w-7 rounded-[6px] [&_svg]:size-3.5"
             >
-              <Code/>
+              <Code />
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-3xl">
@@ -68,10 +94,55 @@ export function CodeModal({
             </DialogHeader>
             <div className="flex flex-col gap-4">
               <Select
-                onValueChange={(value) => {
-                  const languageKey = value as LanguageKey;
-                  setLanguageDemo(TEXT_SPLITTER_CODE[languageKey]);
-                  setLanguage(languageKey);
+                onValueChange={async (value) => {
+                  const languageKey = value as LanguageOption;
+                  let newLanguageDemo = "";
+
+                  switch (name) {
+                    case "Text Splitter":
+                      if (selectedSplitOption) {
+                        newLanguageDemo = await getTextSplitterCode(
+                          selectedSplitOption as SplitOption,
+                          languageKey,
+                          ""
+                        );
+                      }
+
+                      setLanguageDemo(newLanguageDemo);
+                      setLanguage(languageKey);
+                      break;
+                    case "Vector Store":
+                      if (selectedVectorStore) {
+                        newLanguageDemo = await getVectorStoreCode(
+                          selectedVectorStore as VectorStoreOption,
+                          languageKey,
+                          ""
+                        );
+                      }
+
+                      setLanguageDemo(newLanguageDemo);
+                      setLanguage(languageKey);
+                      break;
+
+                    case "Retriever":
+                      if (selectedPlaygroundRetriever) {
+                        newLanguageDemo = await getRetrieverCode(
+                          selectedPlaygroundRetriever as RetrieverOption,
+                          languageKey,
+                          "CHANGED"
+                        );
+                      }
+
+                      console.log(newLanguageDemo);
+                      
+
+                      setLanguageDemo(newLanguageDemo);
+                      setLanguage(languageKey);
+                      break;
+                    default:
+                      console.log("No code to update");
+                      break;
+                  }
                 }}
                 value={codeExample.language}
               >
@@ -81,22 +152,44 @@ export function CodeModal({
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Languages</SelectLabel>
-                    {Object.keys(TEXT_SPLITTER_CODE).map((language) => (
-                      <SelectItem key={language} value={language}>
-                        {language}
-                      </SelectItem>
-                    ))}
+
+                    {name === "Text Splitter" &&
+                      SplitOptionLanguages[
+                        selectedSplitOption as SplitOption
+                      ]?.map((language, index) => (
+                        <SelectItem key={index} value={language}>
+                          {language}
+                        </SelectItem>
+                      ))}
+
+                    {name === "Vector Store" &&
+                      VectorStoreLanguages[
+                        selectedVectorStore as VectorStoreOption
+                      ]?.map((language, index) => (
+                        <SelectItem key={index} value={language}>
+                          {language}
+                        </SelectItem>
+                      ))}
+
+                    {name === "Retriever" &&
+                      RetrieverLanguages[
+                        selectedPlaygroundRetriever as RetrieverOption
+                      ]?.map((language, index) => (
+                        <SelectItem key={index} value={language}>
+                          {language}
+                        </SelectItem>
+                      ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
 
-                <CopyBlock
-                  language={codeExample.language}
-                  text={codeExample.languageDemo}
-                  showLineNumbers={true}
-                  theme={tomorrowNight}
-                  codeBlock
-                />
+              <CopyBlock
+                language={codeExample.language}
+                text={codeExample.languageDemo}
+                showLineNumbers={true}
+                theme={tomorrowNight}
+                codeBlock
+              />
             </div>
             <DialogFooter>
               <Button type="submit">Save changes</Button>

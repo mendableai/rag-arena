@@ -2,9 +2,6 @@ import { z } from "zod"
 
 export const blockChunkSchema = z.object({
   name: z.string(),
-  description: z.string(),
-  component: z.any(),
-  file: z.string(),
   code: z.string().optional(),
   container: z
     .object({
