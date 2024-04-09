@@ -9,8 +9,7 @@ export async function getRetrieverCode(splitOption: RetrieverOption, language: L
 
   const codeTemplates = {
     vector_store: {
-      python: `
-            from langchain_community.document_loaders import TextLoader
+      python: `from langchain_community.document_loaders import TextLoader
 
             loader = TextLoader("../../state_of_the_union.txt")
             
@@ -27,8 +26,7 @@ export async function getRetrieverCode(splitOption: RetrieverOption, language: L
             retriever = db.as_retriever()
             
             docs = retriever.get_relevant_documents("what did he say about ketanji brown jackson")`,
-      typescript: `
-            import { OpenAI, OpenAIEmbeddings } from "@langchain/openai";
+      typescript: `import { OpenAI, OpenAIEmbeddings } from "@langchain/openai";
             import { HNSWLib } from "langchain/vectorstores/hnswlib";
             import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
             import * as fs from "fs";
@@ -50,8 +48,7 @@ export async function getRetrieverCode(splitOption: RetrieverOption, language: L
             );`,
     },
     multi_query: {
-      python: `
-            # Build a sample vectorDB
+      python: `# Build a sample vectorDB
             from langchain_community.document_loaders import WebBaseLoader
             from langchain_community.vectorstores import Chroma
             from langchain_openai import OpenAIEmbeddings
@@ -86,8 +83,7 @@ export async function getRetrieverCode(splitOption: RetrieverOption, language: L
 
             unique_docs = retriever_from_llm.get_relevant_documents(query=question)
             len(unique_docs)`,
-      typescript: `
-            import { MemoryVectorStore } from "langchain/vectorstores/memory";
+      typescript: `import { MemoryVectorStore } from "langchain/vectorstores/memory";
             import { CohereEmbeddings } from "@langchain/cohere";
             import { MultiQueryRetriever } from "langchain/retrievers/multi_query";
             import { ChatAnthropic } from "@langchain/anthropic";

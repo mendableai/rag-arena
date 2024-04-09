@@ -14,7 +14,6 @@ export function HoverBorderGradient({
   as: Tag = "button",
   duration = 1,
   clockwise = true,
-  stopAnimation,
   ...props
 }: React.PropsWithChildren<
   {
@@ -23,7 +22,6 @@ export function HoverBorderGradient({
     className?: string;
     duration?: number;
     clockwise?: boolean;
-    stopAnimation?: boolean;
   } & React.HTMLAttributes<HTMLElement>
 >) {
   const [hovered, setHovered] = useState<boolean>(false);
@@ -56,19 +54,16 @@ export function HoverBorderGradient({
       }, duration * 1000);
       return () => clearInterval(interval);
     }
-  }, [hovered, stopAnimation, duration]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hovered, duration]);
 
   return (
     <Tag
-      onMouseEnter={(event: React.MouseEvent<HTMLDivElement>) => {
-        if (!stopAnimation) {
-          setHovered(true);
-        }
+      onMouseEnter={() => {
+        setHovered(true);
       }}
       onMouseLeave={() => {
-        if (!stopAnimation) {
-          setHovered(false);
-        }
+        setHovered(false);
       }}
       className={cn(
         "relative flex rounded-full border  content-center  transition duration-500 bg-primary/20 items-center flex-col flex-nowrap gap-10 h-min justify-center overflow-visible p-px decoration-clone w-fit",

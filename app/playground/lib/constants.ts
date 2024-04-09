@@ -28,7 +28,7 @@ export const PLAYGROUND_VECTOR_STORES = [
 
 export const PLAYGROUND_LLMS: { [key: string]: { apiKeyEnv: string, modelName: string } } = {
     'mistral': { apiKeyEnv: 'GROQ_API_KEY', modelName: 'mixtral-8x7b-32768' },
-    'gpt-3.5-turbo': { apiKeyEnv: 'OPENAI_API_KEY', modelName: 'gpt-3.5-turbo-1106' },
+    'gpt_3x5_turbo': { apiKeyEnv: 'OPENAI_API_KEY', modelName: 'gpt-3.5-turbo-1106' },
 };
 
 export const text_splitter_options = [

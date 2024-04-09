@@ -26,6 +26,12 @@ import { Code } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CopyBlock, tomorrowNight } from "react-code-blocks";
 import {
+  getLlmCode,
+  LLMLanguageOption,
+  LLMLanguages,
+  LLMOption,
+} from "../../code-templates/get-llm-code-sample";
+import {
   getRetrieverCode,
   RetrieverLanguages,
   RetrieverOption,
@@ -39,6 +45,7 @@ import {
   VectorStoreLanguages,
 } from "../../code-templates/vector-store-code-sample";
 import {
+  useSelectedPlaygroundLlmStore,
   useSelectedPlaygroundRetrieverStore,
   useSelectedSplitOptionStore,
   useSelectedVectorStore,
@@ -68,6 +75,8 @@ export function CodeModal({
   const { selectedVectorStore } = useSelectedVectorStore();
 
   const { selectedPlaygroundRetriever } = useSelectedPlaygroundRetrieverStore();
+
+  const { selectedPlaygroundLlm } = useSelectedPlaygroundLlmStore();
 
   const [link, setLink] = useState("");
 
@@ -100,8 +109,9 @@ export function CodeModal({
       setLink(languageLink);
     }
 
-    if(name === "Retriever" && selectedPlaygroundRetriever) {
-      const optionLinks = RetrieverLanguages[selectedPlaygroundRetriever as RetrieverOption];
+    if (name === "Retriever" && selectedPlaygroundRetriever) {
+      const optionLinks =
+        RetrieverLanguages[selectedPlaygroundRetriever as RetrieverOption];
       const languageLink = optionLinks.find(
         (option) => option.language === codeExample.language
       )?.link;
@@ -112,7 +122,26 @@ export function CodeModal({
       }
       setLink(languageLink);
     }
-  }, [selectedSplitOption, selectedVectorStore, selectedPlaygroundRetriever, codeExample.language]);
+
+    if (name === "LLM" && selectedPlaygroundLlm) {
+      const optionLinks = LLMLanguages[selectedPlaygroundLlm as LLMOption];
+      const languageLink = optionLinks?.find(
+        (option) => option.language === codeExample.language
+      )?.link;
+
+      if (!languageLink) {
+        aplyToast("No link found");
+        return;
+      }
+      setLink(languageLink);
+    }
+  }, [
+    selectedSplitOption,
+    selectedVectorStore,
+    selectedPlaygroundRetriever,
+    selectedPlaygroundLlm,
+    codeExample.language,
+  ]);
 
   return (
     <AnimatePresence>
@@ -186,6 +215,19 @@ export function CodeModal({
                         setLanguageDemo(newLanguageDemo);
                         setLanguage(languageKey);
                         break;
+
+                      case "LLM":
+                        if (selectedPlaygroundLlm) {
+                          newLanguageDemo = await getLlmCode(
+                            selectedPlaygroundLlm as LLMOption,
+                            languageKey as LLMLanguageOption,
+                            ""
+                          );
+                        }
+
+                        setLanguageDemo(newLanguageDemo);
+                        setLanguage(languageKey);
+                        break;
                       default:
                         console.log("No code to update");
                         break;
@@ -226,6 +268,15 @@ export function CodeModal({
                             {language.language}
                           </SelectItem>
                         ))}
+
+                      {name === "LLM" &&
+                        LLMLanguages[selectedPlaygroundLlm as LLMOption]?.map(
+                          (language, index) => (
+                            <SelectItem key={index} value={language.language}>
+                              {language.language}
+                            </SelectItem>
+                          )
+                        )}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
