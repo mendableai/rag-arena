@@ -41,14 +41,14 @@ export default function RetrieverSelectorBox() {
     fetchInitialCode();
   }, []);
 
-  const mockBlockChunk = {
+  const blockInfo = {
     name: "Retriever",
     code: languageDemo,
   };
 
   return (
     <BlockChunk
-      chunk={mockBlockChunk}
+      info={blockInfo}
       codeExample={{ languageDemo, language }}
       setLanguage={setLanguage}
       setLanguageDemo={setLanguageDemo}

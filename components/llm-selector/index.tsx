@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useChosenModelStore } from "@/lib/zustand";
-// deploy
 const frameworks = [
   {
     value: "mistral",

@@ -21,8 +21,7 @@ export async function getVectorStoreCode(splitOption: VectorStoreOption, languag
             typescript: `Not done yet!`,
         },
         in_memory: {
-            python: `
-            from langchain_openai import ChatOpenAI
+            python: `from langchain_openai import ChatOpenAI
             from langchain.prompts import (
                 ChatPromptTemplate,
                 MessagesPlaceholder,
@@ -56,8 +55,7 @@ export async function getVectorStoreCode(splitOption: VectorStoreOption, languag
             
             # Notice that we just pass in the "question" variables - "chat_history" gets populated by memory
             conversation({"question": "hi"})`,
-            typescript: `
-            import { MemoryVectorStore } from "langchain/vectorstores/memory";
+            typescript: `import { MemoryVectorStore } from "langchain/vectorstores/memory";
             import { OpenAIEmbeddings } from "@langchain/openai";
             import { TextLoader } from "langchain/document_loaders/fs/text";
             
@@ -82,9 +80,37 @@ export async function getVectorStoreCode(splitOption: VectorStoreOption, languag
 }
 
 export const VectorStoreLanguages = {
-    supabase: ["python", "typescript"],
-    pinecone: ["python", "typescript"],
-    mongodb: ["python", "typescript"],
-    in_memory: ["python", "typescript"],
+    supabase: [{
+        language: "python",
+        link: "https://python.langchain.com/docs/integrations/vectorstores/supabase/",
+    },
+    {
+        language: "typescript",
+        link: "https://js.langchain.com/docs/integrations/vectorstores/supabase",
+    }],
+    pinecone: [{
+        language: "python",
+        link: "https://python.langchain.com/docs/integrations/vectorstores/pinecone/",
+    },
+    {
+        language: "typescript",
+        link: "https://js.langchain.com/docs/integrations/vectorstores/pinecone",
+    }],
+    mongodb: [{
+        language: "python",
+        link: "https://python.langchain.com/docs/integrations/vectorstores/mongodb_atlas/",
+    },
+    {
+        language: "typescript",
+        link: "https://js.langchain.com/docs/integrations/vectorstores/mongodb_atlas",
+    }],
+    in_memory: [{
+        language: "python",
+        link: "https://python.langchain.com/docs/modules/memory/",
+    },
+    {
+        language: "typescript",
+        link: "https://js.langchain.com/docs/modules/memory/",
+    }],
 };
 

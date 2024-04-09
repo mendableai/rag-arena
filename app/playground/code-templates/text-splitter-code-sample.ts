@@ -7,8 +7,7 @@ export async function getTextSplitterCode(splitOption: SplitOption, language: La
 
   const codeTemplates = {
     split_by_character: {
-      python: `
-      from langchain_text_splitters import CharacterTextSplitter
+      python: `from langchain_text_splitters import CharacterTextSplitter
 ${dynamicPart}
       text_splitter = CharacterTextSplitter(
           separator="/n/n",
@@ -21,8 +20,7 @@ ${dynamicPart}
       texts = text_splitter.create_documents("TEXT TO SPLIT")
       print(texts[0])
 `,
-      typescript: `
-      import { Document } from "langchain/document";
+      typescript: `import { Document } from "langchain/document";
       import { CharacterTextSplitter } from "langchain/text_splitter";
       
       const text = "foo bar baz 123";
@@ -34,8 +32,7 @@ ${dynamicPart}
       const output = await splitter.createDocuments([text]);`,
     },
     recursive_character_text_splitter: {
-      python: `
-      with open("../../state_of_the_union.txt") as f:
+      python: `with open("../../state_of_the_union.txt") as f:
           state_of_the_union = f.read()
       
       from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -50,7 +47,7 @@ ${dynamicPart}
       texts = text_splitter.create_documents([state_of_the_union])`,
       typescript: `import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
-      const text = "Hi./n/nI'm Harrison./n/nHow? Are? You?/nOkay then f f f f./n/nThis is a weird text to write, but gotta test the splittingggg some how./n/nBye!./n/n-H.";
+      const text = "Hi./n/nI'm Harrison./n/nHow? Are? You?/nOkay then f f f f";
       const splitter = new RecursiveCharacterTextSplitter({
         chunkSize: 10,
         chunkOverlap: 1,
@@ -64,7 +61,23 @@ ${dynamicPart}
 }
 
 export const SplitOptionLanguages = {
-  split_by_character: ["python", "typescript"],
-  recursive_character_text_splitter: ["python", "typescript"],
-  semantic_chunking: ["python", "typescript"],
+  split_by_character: [{
+    language: "python",
+    link: "https://python.langchain.com/docs/modules/data_connection/document_transformers/character_text_splitter/",
+  },
+  {
+    language: "typescript",
+    link: "https://js.langchain.com/docs/modules/data_connection/document_transformers/character_text_splitter",
+  }
+  ],
+  recursive_character_text_splitter: [{
+    language: "python",
+    link: "https://python.langchain.com/docs/modules/data_connection/document_transformers/recursive_text_splitter/",
+  },
+  {
+    language: "typescript",
+    link: "https://js.langchain.com/docs/modules/data_connection/document_transformers/recursive_text_splitter",
+  }
+  ],
 };
+

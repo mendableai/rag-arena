@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -19,9 +20,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import aplyToast from "@/lib/aplyToaster";
 import { AnimatePresence, motion } from "framer-motion";
 import { Code } from "lucide-react";
+import { useEffect, useState } from "react";
 import { CopyBlock, tomorrowNight } from "react-code-blocks";
+import {
+  getLlmCode,
+  LLMLanguageOption,
+  LLMLanguages,
+  LLMOption,
+} from "../../code-templates/get-llm-code-sample";
 import {
   getRetrieverCode,
   RetrieverLanguages,
@@ -36,6 +45,7 @@ import {
   VectorStoreLanguages,
 } from "../../code-templates/vector-store-code-sample";
 import {
+  useSelectedPlaygroundLlmStore,
   useSelectedPlaygroundRetrieverStore,
   useSelectedSplitOptionStore,
   useSelectedVectorStore,
@@ -66,6 +76,73 @@ export function CodeModal({
 
   const { selectedPlaygroundRetriever } = useSelectedPlaygroundRetrieverStore();
 
+  const { selectedPlaygroundLlm } = useSelectedPlaygroundLlmStore();
+
+  const [link, setLink] = useState("");
+
+  useEffect(() => {
+    if (name === "Text Splitter" && selectedSplitOption) {
+      const optionLinks =
+        SplitOptionLanguages[selectedSplitOption as SplitOption];
+      const languageLink = optionLinks.find(
+        (option) => option.language === codeExample.language
+      )?.link;
+
+      if (!languageLink) {
+        aplyToast("No link found");
+        return;
+      }
+      setLink(languageLink);
+    }
+
+    if (name === "Vector Store" && selectedVectorStore) {
+      const optionLinks =
+        VectorStoreLanguages[selectedVectorStore as VectorStoreOption];
+      const languageLink = optionLinks.find(
+        (option) => option.language === codeExample.language
+      )?.link;
+
+      if (!languageLink) {
+        aplyToast("No link found");
+        return;
+      }
+      setLink(languageLink);
+    }
+
+    if (name === "Retriever" && selectedPlaygroundRetriever) {
+      const optionLinks =
+        RetrieverLanguages[selectedPlaygroundRetriever as RetrieverOption];
+      const languageLink = optionLinks.find(
+        (option) => option.language === codeExample.language
+      )?.link;
+
+      if (!languageLink) {
+        aplyToast("No link found");
+        return;
+      }
+      setLink(languageLink);
+    }
+
+    if (name === "LLM" && selectedPlaygroundLlm) {
+      const optionLinks = LLMLanguages[selectedPlaygroundLlm as LLMOption];
+      const languageLink = optionLinks?.find(
+        (option) => option.language === codeExample.language
+      )?.link;
+
+      if (!languageLink) {
+        aplyToast("No link found");
+        return;
+      }
+      setLink(languageLink);
+    }
+  }, [
+    selectedSplitOption,
+    selectedVectorStore,
+    selectedPlaygroundRetriever,
+    selectedPlaygroundLlm,
+    codeExample.language,
+  ]);
+
   return (
     <AnimatePresence>
       <motion.div
@@ -80,7 +157,7 @@ export function CodeModal({
             <Button
               size="icon"
               variant="outline"
-              className="h-7 w-7 rounded-[6px] [&_svg]:size-3.5"
+              className="h-7 w-7 rounded-[6px] [&_svg]:size-3.5 bg-primary"
             >
               <Code />
             </Button>
@@ -93,96 +170,124 @@ export function CodeModal({
               </DialogDescription>
             </DialogHeader>
             <div className="flex flex-col gap-4">
-              <Select
-                onValueChange={async (value) => {
-                  const languageKey = value as LanguageOption;
-                  let newLanguageDemo = "";
+              <div className="flex justify-between items-center">
+                <Select
+                  onValueChange={async (value) => {
+                    const languageKey = value as LanguageOption;
+                    let newLanguageDemo = "";
 
-                  switch (name) {
-                    case "Text Splitter":
-                      if (selectedSplitOption) {
-                        newLanguageDemo = await getTextSplitterCode(
-                          selectedSplitOption as SplitOption,
-                          languageKey,
-                          ""
-                        );
-                      }
+                    switch (name) {
+                      case "Text Splitter":
+                        if (selectedSplitOption) {
+                          newLanguageDemo = await getTextSplitterCode(
+                            selectedSplitOption as SplitOption,
+                            languageKey,
+                            ""
+                          );
+                        }
 
-                      setLanguageDemo(newLanguageDemo);
-                      setLanguage(languageKey);
-                      break;
-                    case "Vector Store":
-                      if (selectedVectorStore) {
-                        newLanguageDemo = await getVectorStoreCode(
-                          selectedVectorStore as VectorStoreOption,
-                          languageKey,
-                          ""
-                        );
-                      }
+                        setLanguageDemo(newLanguageDemo);
+                        setLanguage(languageKey);
 
-                      setLanguageDemo(newLanguageDemo);
-                      setLanguage(languageKey);
-                      break;
+                        break;
+                      case "Vector Store":
+                        if (selectedVectorStore) {
+                          newLanguageDemo = await getVectorStoreCode(
+                            selectedVectorStore as VectorStoreOption,
+                            languageKey,
+                            ""
+                          );
+                        }
 
-                    case "Retriever":
-                      if (selectedPlaygroundRetriever) {
-                        newLanguageDemo = await getRetrieverCode(
-                          selectedPlaygroundRetriever as RetrieverOption,
-                          languageKey,
-                          "CHANGED"
-                        );
-                      }
+                        setLanguageDemo(newLanguageDemo);
+                        setLanguage(languageKey);
+                        break;
 
-                      console.log(newLanguageDemo);
-                      
+                      case "Retriever":
+                        if (selectedPlaygroundRetriever) {
+                          newLanguageDemo = await getRetrieverCode(
+                            selectedPlaygroundRetriever as RetrieverOption,
+                            languageKey,
+                            ""
+                          );
+                        }
 
-                      setLanguageDemo(newLanguageDemo);
-                      setLanguage(languageKey);
-                      break;
-                    default:
-                      console.log("No code to update");
-                      break;
-                  }
-                }}
-                value={codeExample.language}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select a language" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Languages</SelectLabel>
+                        setLanguageDemo(newLanguageDemo);
+                        setLanguage(languageKey);
+                        break;
 
-                    {name === "Text Splitter" &&
-                      SplitOptionLanguages[
-                        selectedSplitOption as SplitOption
-                      ]?.map((language, index) => (
-                        <SelectItem key={index} value={language}>
-                          {language}
-                        </SelectItem>
-                      ))}
+                      case "LLM":
+                        if (selectedPlaygroundLlm) {
+                          newLanguageDemo = await getLlmCode(
+                            selectedPlaygroundLlm as LLMOption,
+                            languageKey as LLMLanguageOption,
+                            ""
+                          );
+                        }
 
-                    {name === "Vector Store" &&
-                      VectorStoreLanguages[
-                        selectedVectorStore as VectorStoreOption
-                      ]?.map((language, index) => (
-                        <SelectItem key={index} value={language}>
-                          {language}
-                        </SelectItem>
-                      ))}
+                        setLanguageDemo(newLanguageDemo);
+                        setLanguage(languageKey);
+                        break;
+                      default:
+                        console.log("No code to update");
+                        break;
+                    }
+                  }}
+                  value={codeExample.language}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select a language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Languages</SelectLabel>
 
-                    {name === "Retriever" &&
-                      RetrieverLanguages[
-                        selectedPlaygroundRetriever as RetrieverOption
-                      ]?.map((language, index) => (
-                        <SelectItem key={index} value={language}>
-                          {language}
-                        </SelectItem>
-                      ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+                      {name === "Text Splitter" &&
+                        SplitOptionLanguages[
+                          selectedSplitOption as SplitOption
+                        ]?.map((language, index) => (
+                          <SelectItem key={index} value={language.language}>
+                            {language.language}
+                          </SelectItem>
+                        ))}
 
+                      {name === "Vector Store" &&
+                        VectorStoreLanguages[
+                          selectedVectorStore as VectorStoreOption
+                        ]?.map((language, index) => (
+                          <SelectItem key={index} value={language.language}>
+                            {language.language}
+                          </SelectItem>
+                        ))}
+
+                      {name === "Retriever" &&
+                        RetrieverLanguages[
+                          selectedPlaygroundRetriever as RetrieverOption
+                        ]?.map((language, index) => (
+                          <SelectItem key={index} value={language.language}>
+                            {language.language}
+                          </SelectItem>
+                        ))}
+
+                      {name === "LLM" &&
+                        LLMLanguages[selectedPlaygroundLlm as LLMOption]?.map(
+                          (language, index) => (
+                            <SelectItem key={index} value={language.language}>
+                              {language.language}
+                            </SelectItem>
+                          )
+                        )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <a
+                  href={link}
+                  target="_blank"
+                  className="text-sm text-primary hover:text-primary/80 cursor-pointer"
+                >
+                  Full documentation
+                </a>
+              </div>
               <CopyBlock
                 language={codeExample.language}
                 text={codeExample.languageDemo}
