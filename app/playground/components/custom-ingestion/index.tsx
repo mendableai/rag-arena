@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import aplyToast from "@/lib/aplyToaster";
-import { CharacterTextSplitter } from "langchain/text_splitter";
 import { Dot, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -37,38 +36,7 @@ import {
   useSelectedSplitOptionStore,
 } from "../../lib/globals";
 import { paulgrahamtext } from "../../lib/paulgrahamtext";
-
-async function createDocumentFromText(
-  text: string,
-  metadata: { parameter: string; value: string }[],
-  chunkSize: number,
-  chunkOverlap: number
-) {
-  const splitter = new CharacterTextSplitter({
-    separator: "\n",
-    chunkSize: chunkSize,
-    chunkOverlap: chunkOverlap,
-  });
-
-  const splitDocuments = await splitter.createDocuments([text]);
-
-  const documentsWithMetadata = splitDocuments.map((doc) => {
-    const additionalMetadata = metadata.reduce(
-      (acc: Record<string, string>, { parameter, value }) => {
-        acc[parameter] = value;
-        return acc;
-      },
-      {}
-    );
-
-    return {
-      ...doc,
-      metadata: { ...doc.metadata, ...additionalMetadata },
-    };
-  });
-
-  return documentsWithMetadata;
-}
+import { createDocumentFromText } from "../utils/text-splitter-functions";
 
 export default function CustomPlaygroundIngestion() {
   const [rawData, setRawData] = useState(paulgrahamtext);
@@ -116,8 +84,6 @@ export default function CustomPlaygroundIngestion() {
     newMetadata.splice(index, 1);
     setMetadata(newMetadata);
   };
-
-
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -225,11 +191,8 @@ export default function CustomPlaygroundIngestion() {
                     <Label htmlFor="maxWidth">Splitter:</Label>
                     <Select
                       onValueChange={(value) => {
-                        if (customPlaygroundChunks.length === 0) {
-                          setSelectedSplitOption(value);
-                        } else {
-                          aplyToast("Please clear the result first");
-                        }
+                        setSelectedSplitOption(value);
+                        setCustomPlaygroundChunks([]);
                       }}
                       value={selectedSplitOption.toString()}
                     >
@@ -240,10 +203,7 @@ export default function CustomPlaygroundIngestion() {
                         <SelectGroup>
                           <SelectLabel>Split by</SelectLabel>
                           {text_splitter_options.map((option) => (
-                            <SelectItem
-                              key={option.value}
-                              value={option.value}
-                            >
+                            <SelectItem key={option.value} value={option.value}>
                               {option.title}
                             </SelectItem>
                           ))}
@@ -325,7 +285,8 @@ export default function CustomPlaygroundIngestion() {
                 rawData,
                 metadata,
                 chunkSize,
-                chunkOverlap
+                chunkOverlap,
+                selectedSplitOption
               ).then((res) => {
                 setCustomPlaygroundChunks(res as never[]);
               });

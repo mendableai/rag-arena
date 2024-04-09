@@ -50,7 +50,7 @@ ${dynamicPart}
       texts = text_splitter.create_documents([state_of_the_union])`,
       typescript: `import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
-      const text = "Hi./n/nI'm Harrison./n/nHow? Are? You?/nOkay then f f f f./n/nThis is a weird text to write, but gotta test the splittingggg some how./n/nBye!./n/n-H.";
+      const text = "Hi./n/nI'm Harrison./n/nHow? Are? You?/nOkay then f f f f";
       const splitter = new RecursiveCharacterTextSplitter({
         chunkSize: 10,
         chunkOverlap: 1,
