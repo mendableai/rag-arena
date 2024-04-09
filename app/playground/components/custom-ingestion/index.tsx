@@ -275,7 +275,7 @@ export default function CustomPlaygroundIngestion() {
         </div>
         <DialogFooter className="flex">
           <Button
-            variant="outline"
+            variant="default"
             onClick={() => {
               if (rawData.length > 32000) {
                 aplyToast("Raw data is too long.");
@@ -294,11 +294,12 @@ export default function CustomPlaygroundIngestion() {
           >
             Generate
           </Button>
-
+          <Button className="ml-10" onClick={() => setCustomPlaygroundChunks([])} variant={"destructive"}>Erase</Button>
           <Button
             className=" text-white"
             type="submit"
             onClick={() => setDialogOpen(false)}
+            variant={"outline"}
           >
             Close
           </Button>

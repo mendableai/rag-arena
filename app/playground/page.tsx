@@ -29,7 +29,6 @@ export default function PlaygroundPage() {
             as="div"
             className="w-full rounded-md h-full"
             stopAnimation={customPlaygroundChunks.length !== 0}
-            withHighlight={customPlaygroundChunks.length === 0}
             duration={3}
           >
             <TextSplitterBox />

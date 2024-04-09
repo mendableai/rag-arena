@@ -82,9 +82,37 @@ export async function getVectorStoreCode(splitOption: VectorStoreOption, languag
 }
 
 export const VectorStoreLanguages = {
-    supabase: ["python", "typescript"],
-    pinecone: ["python", "typescript"],
-    mongodb: ["python", "typescript"],
-    in_memory: ["python", "typescript"],
+    supabase: [{
+        language: "python",
+        link: "https://python.langchain.com/docs/modules/vectorstores/supabase/",
+    },
+    {
+        language: "typescript",
+        link: "https://js.langchain.com/docs/modules/vectorstores/supabase",
+    }],
+    pinecone: [{
+        language: "python",
+        link: "https://python.langchain.com/docs/modules/vectorstores/pinecone/",
+    },
+    {
+        language: "typescript",
+        link: "https://js.langchain.com/docs/modules/vectorstores/pinecone",
+    }],
+    mongodb: [{
+        language: "python",
+        link: "https://python.langchain.com/docs/modules/vectorstores/mongodb/",
+    },
+    {
+        language: "typescript",
+        link: "https://js.langchain.com/docs/modules/vectorstores/mongodb",
+    }],
+    in_memory: [{
+        language: "python",
+        link: "https://python.langchain.com/docs/modules/vectorstores/in_memory/",
+    },
+    {
+        language: "typescript",
+        link: "https://js.langchain.com/docs/modules/vectorstores/in_memory",
+    }],
 };
 

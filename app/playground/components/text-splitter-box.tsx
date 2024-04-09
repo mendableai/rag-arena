@@ -26,14 +26,14 @@ export default function TextSplitterBox() {
     fetchInitialCode();
   }, []);
 
-  const mockBlockChunk = {
+  const blockInfo = {
     name: "Text Splitter",
     code: languageDemo,
   };
 
   return (
     <BlockChunk
-      chunk={mockBlockChunk}
+      info={blockInfo}
       codeExample={{ languageDemo, language }}
       setLanguage={setLanguage}
       setLanguageDemo={setLanguageDemo}

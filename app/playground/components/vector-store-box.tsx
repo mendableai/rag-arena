@@ -47,14 +47,14 @@ export default function VectorStoreBox() {
     fetchInitialCode();
   }, []);
 
-  const mockBlockChunk = {
+  const blockInfo = {
     name: "Vector Store",
     code: languageDemo,
   };
 
   return (
     <BlockChunk
-      chunk={mockBlockChunk}
+      info={blockInfo}
       codeExample={{ languageDemo, language }}
       setLanguage={setLanguage}
       setLanguageDemo={setLanguageDemo}
@@ -90,7 +90,6 @@ export default function VectorStoreBox() {
             onValueChange={(value) => {
               setSelectedVectorStore(value);
             }}
-            // disabled={selectedVectorStore === "in_memory"}
             disabled
             value={selectedVectorStore}
           >
@@ -113,15 +112,11 @@ export default function VectorStoreBox() {
           <Button
             variant={"default"}
             onClick={async () => {
-              // setIsLoading(true);
               const result = await getVectorStores(
                 customPlaygroundChunks,
                 selectedVectorStore
               );
-              // place input fields insertion to global variable here. (todo)
-              // setIsLoading(false);
             }}
-            // disabled={selectedVectorStore !== ""}
             disabled
           >
             Ingest

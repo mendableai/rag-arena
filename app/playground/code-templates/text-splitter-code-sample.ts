@@ -64,7 +64,23 @@ ${dynamicPart}
 }
 
 export const SplitOptionLanguages = {
-  split_by_character: ["python", "typescript"],
-  recursive_character_text_splitter: ["python", "typescript"],
-  semantic_chunking: ["python", "typescript"],
+  split_by_character: [{
+    language: "python",
+    link: "https://python.langchain.com/docs/modules/data_connection/document_transformers/character_text_splitter/",
+  },
+  {
+    language: "typescript",
+    link: "https://js.langchain.com/docs/modules/data_connection/document_transformers/character_text_splitter",
+  }
+  ],
+  recursive_character_text_splitter: [{
+    language: "python",
+    link: "https://python.langchain.com/docs/modules/data_connection/document_transformers/recursive_text_splitter/",
+  },
+  {
+    language: "typescript",
+    link: "https://js.langchain.com/docs/modules/data_connection/document_transformers/recursive_text_splitter",
+  }
+  ],
 };
+
