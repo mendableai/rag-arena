@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -98,7 +99,20 @@ export function CodeModal({
       }
       setLink(languageLink);
     }
-  }, [selectedSplitOption, selectedVectorStore, codeExample.language]);
+
+    if(name === "Retriever" && selectedPlaygroundRetriever) {
+      const optionLinks = RetrieverLanguages[selectedPlaygroundRetriever as RetrieverOption];
+      const languageLink = optionLinks.find(
+        (option) => option.language === codeExample.language
+      )?.link;
+
+      if (!languageLink) {
+        aplyToast("No link found");
+        return;
+      }
+      setLink(languageLink);
+    }
+  }, [selectedSplitOption, selectedVectorStore, selectedPlaygroundRetriever, codeExample.language]);
 
   return (
     <AnimatePresence>
@@ -208,8 +222,8 @@ export function CodeModal({
                         RetrieverLanguages[
                           selectedPlaygroundRetriever as RetrieverOption
                         ]?.map((language, index) => (
-                          <SelectItem key={index} value={language}>
-                            {language}
+                          <SelectItem key={index} value={language.language}>
+                            {language.language}
                           </SelectItem>
                         ))}
                     </SelectGroup>

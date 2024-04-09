@@ -84,35 +84,35 @@ export async function getVectorStoreCode(splitOption: VectorStoreOption, languag
 export const VectorStoreLanguages = {
     supabase: [{
         language: "python",
-        link: "https://python.langchain.com/docs/modules/vectorstores/supabase/",
+        link: "https://python.langchain.com/docs/integrations/vectorstores/supabase/",
     },
     {
         language: "typescript",
-        link: "https://js.langchain.com/docs/modules/vectorstores/supabase",
+        link: "https://js.langchain.com/docs/integrations/vectorstores/supabase",
     }],
     pinecone: [{
         language: "python",
-        link: "https://python.langchain.com/docs/modules/vectorstores/pinecone/",
+        link: "https://python.langchain.com/docs/integrations/vectorstores/pinecone/",
     },
     {
         language: "typescript",
-        link: "https://js.langchain.com/docs/modules/vectorstores/pinecone",
+        link: "https://js.langchain.com/docs/integrations/vectorstores/pinecone",
     }],
     mongodb: [{
         language: "python",
-        link: "https://python.langchain.com/docs/modules/vectorstores/mongodb/",
+        link: "https://python.langchain.com/docs/integrations/vectorstores/mongodb_atlas/",
     },
     {
         language: "typescript",
-        link: "https://js.langchain.com/docs/modules/vectorstores/mongodb",
+        link: "https://js.langchain.com/docs/integrations/vectorstores/mongodb_atlas",
     }],
     in_memory: [{
         language: "python",
-        link: "https://python.langchain.com/docs/modules/vectorstores/in_memory/",
+        link: "https://python.langchain.com/docs/modules/memory/",
     },
     {
         language: "typescript",
-        link: "https://js.langchain.com/docs/modules/vectorstores/in_memory",
+        link: "https://js.langchain.com/docs/modules/memory/",
     }],
 };
 

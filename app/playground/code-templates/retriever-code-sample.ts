@@ -5,11 +5,11 @@ export type LanguageOption = "python" | "typescript";
 
 export async function getRetrieverCode(splitOption: RetrieverOption, language: LanguageOption, variable: string): Promise<string> {
 
-    const dynamicPart = variable ? `dynamicPart = ${variable};` : '';
+  const dynamicPart = variable ? `dynamicPart = ${variable};` : '';
 
-    const codeTemplates = {
-        vector_store: {
-            python: `
+  const codeTemplates = {
+    vector_store: {
+      python: `
             from langchain_community.document_loaders import TextLoader
 
             loader = TextLoader("../../state_of_the_union.txt")
@@ -27,7 +27,7 @@ export async function getRetrieverCode(splitOption: RetrieverOption, language: L
             retriever = db.as_retriever()
             
             docs = retriever.get_relevant_documents("what did he say about ketanji brown jackson")`,
-            typescript: `
+      typescript: `
             import { OpenAI, OpenAIEmbeddings } from "@langchain/openai";
             import { HNSWLib } from "langchain/vectorstores/hnswlib";
             import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
@@ -48,9 +48,9 @@ export async function getRetrieverCode(splitOption: RetrieverOption, language: L
             const docs = await retriever.getRelevantDocuments(
               "what did he say about ketanji brown jackson"
             );`,
-        },
-        multi_query: {
-            python: `
+    },
+    multi_query: {
+      python: `
             # Build a sample vectorDB
             from langchain_community.document_loaders import WebBaseLoader
             from langchain_community.vectorstores import Chroma
@@ -86,7 +86,7 @@ export async function getRetrieverCode(splitOption: RetrieverOption, language: L
 
             unique_docs = retriever_from_llm.get_relevant_documents(query=question)
             len(unique_docs)`,
-            typescript: `
+      typescript: `
             import { MemoryVectorStore } from "langchain/vectorstores/memory";
             import { CohereEmbeddings } from "@langchain/cohere";
             import { MultiQueryRetriever } from "langchain/retrievers/multi_query";
@@ -114,14 +114,28 @@ export async function getRetrieverCode(splitOption: RetrieverOption, language: L
             
             const query = "What are mitochondria made of?";
             const retrievedDocs = await retriever.getRelevantDocuments(query);`,
-        }
-    };
+    }
+  };
 
-    return codeTemplates[splitOption]?.[language] || '';
+  return codeTemplates[splitOption]?.[language] || '';
 }
 
 export const RetrieverLanguages = {
-    vector_store: ["python", "typescript"],
-    multi_query: ["python", "typescript"],
+  vector_store: [{
+    language: "python",
+    link: "https://python.langchain.com/docs/modules/data_connection/retrievers/vectorstore/"
+  },
+  {
+    language: "typescript",
+    link: "https://js.langchain.com/docs/modules/data_connection/retrievers/self_query/memory-self-query"
+  }],
+  multi_query: [{
+    language: "python",
+    link: "https://python.langchain.com/docs/modules/data_connection/retrievers/MultiQueryRetriever/"
+  },
+  {
+    language: "typescript",
+    link: "https://js.langchain.com/docs/modules/data_connection/retrievers/multi-query-retriever"
+  }]
 };
 
