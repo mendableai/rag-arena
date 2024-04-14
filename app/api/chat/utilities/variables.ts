@@ -25,6 +25,8 @@ export const VALID_MODELS: { [key: string]: { apiKeyEnv: string, modelName: stri
   'command_r': { apiKeyEnv: 'COHERE_API_KEY', modelName: 'command-r' },
 };
 
+export const COHERE_RAG_PREAMBLE = "You are a helpful assistant. Given a question and a set of provided documents, answer the question in English based on the documents. Be concise in your answer. If an answer is not found or derivable from the documents, try your best to answer based on the documents. You must use the documents to formulate your answer, they are the only source of truth!"
+
 export const CONDENSE_QUESTION_TEMPLATE = (chat_history: any[], question: string, sources: DocumentInterface<Record<string, any>>[]) => {
   return `Given the chat history and the sources found, answer the current input in English. Be concise in your answer. If an answer is not found or derivable from the sources, try your best to answer based on the sources. YOU MUST USE THE SOURCES TO FORMULATE YOUR ANSWER, they are the only source of truth! 
 
