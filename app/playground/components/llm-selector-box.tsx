@@ -48,6 +48,7 @@ export default function LlmSelectorBox() {
       codeExample={{ languageDemo: languageDemo, language }}
       setLanguage={setLanguage}
       setLanguageDemo={setLanguageDemo}
+      disabled={selectedPlaygroundLlm === ""}
     >
       <Card className="relative border-none">
         <Badge

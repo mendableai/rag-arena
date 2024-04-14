@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -26,23 +25,18 @@ import { Code } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CopyBlock, tomorrowNight } from "react-code-blocks";
 import {
-  getLlmCode,
-  LLMLanguageOption,
   LLMLanguages,
-  LLMOption,
+  LLMOption
 } from "../../code-templates/get-llm-code-sample";
 import {
-  getRetrieverCode,
   RetrieverLanguages,
-  RetrieverOption,
+  RetrieverOption
 } from "../../code-templates/retriever-code-sample";
 import {
-  getTextSplitterCode,
-  SplitOptionLanguages,
+  SplitOptionLanguages
 } from "../../code-templates/text-splitter-code-sample";
 import {
-  getVectorStoreCode,
-  VectorStoreLanguages,
+  VectorStoreLanguages
 } from "../../code-templates/vector-store-code-sample";
 import {
   useSelectedPlaygroundLlmStore,
@@ -55,6 +49,7 @@ import {
   SplitOption,
   VectorStoreOption,
 } from "../../lib/types";
+import { updateLanguageAndDemo } from "../utils/update-language-and-demo";
 
 export function CodeModal({
   name,
@@ -62,6 +57,7 @@ export function CodeModal({
   codeExample,
   setLanguage,
   setLanguageDemo,
+  disabled,
   ...props
 }: {
   name: string;
@@ -69,6 +65,7 @@ export function CodeModal({
   codeExample: { language: string; languageDemo: string };
   setLanguage: React.Dispatch<React.SetStateAction<string>>;
   setLanguageDemo: React.Dispatch<React.SetStateAction<string>>;
+  disabled: boolean;
 }) {
   const { selectedSplitOption } = useSelectedSplitOptionStore();
 
@@ -135,6 +132,17 @@ export function CodeModal({
       }
       setLink(languageLink);
     }
+
+    updateLanguageAndDemo(
+      name,
+      codeExample.language as LanguageOption,
+      selectedSplitOption as SplitOption,
+      selectedVectorStore as VectorStoreOption,
+      selectedPlaygroundRetriever as RetrieverOption,
+      selectedPlaygroundLlm as LLMOption,
+      setLanguageDemo,
+      setLanguage
+    );
   }, [
     selectedSplitOption,
     selectedVectorStore,
@@ -158,6 +166,7 @@ export function CodeModal({
               size="icon"
               variant="outline"
               className="h-7 w-7 rounded-[6px] [&_svg]:size-3.5 bg-primary"
+              disabled={disabled}
             >
               <Code />
             </Button>
@@ -166,15 +175,13 @@ export function CodeModal({
             <DialogHeader>
               <DialogTitle>Code for {name}</DialogTitle>
               <DialogDescription>
-                {
-                  name === "Text Splitter"
-                    ? "Select a language to see the code for Text Splitter"
-                    : name === "Vector Store"
-                    ? "Select a language to see the code for Vector Store"
-                    : name === "Retriever"
-                    ? "Select a language to see the code for Retriever"
-                    : "Select a language to see the code for LLM"
-                }
+                {name === "Text Splitter"
+                  ? "Select a language to see the code for Text Splitter"
+                  : name === "Vector Store"
+                  ? "Select a language to see the code for Vector Store"
+                  : name === "Retriever"
+                  ? "Select a language to see the code for Retriever"
+                  : "Select a language to see the code for LLM"}
               </DialogDescription>
             </DialogHeader>
             <div className="flex flex-col gap-4">
@@ -182,64 +189,16 @@ export function CodeModal({
                 <Select
                   onValueChange={async (value) => {
                     const languageKey = value as LanguageOption;
-                    let newLanguageDemo = "";
-
-                    switch (name) {
-                      case "Text Splitter":
-                        if (selectedSplitOption) {
-                          newLanguageDemo = await getTextSplitterCode(
-                            selectedSplitOption as SplitOption,
-                            languageKey,
-                            ""
-                          );
-                        }
-
-                        setLanguageDemo(newLanguageDemo);
-                        setLanguage(languageKey);
-
-                        break;
-                      case "Vector Store":
-                        if (selectedVectorStore) {
-                          newLanguageDemo = await getVectorStoreCode(
-                            selectedVectorStore as VectorStoreOption,
-                            languageKey,
-                            ""
-                          );
-                        }
-
-                        setLanguageDemo(newLanguageDemo);
-                        setLanguage(languageKey);
-                        break;
-
-                      case "Retriever":
-                        if (selectedPlaygroundRetriever) {
-                          newLanguageDemo = await getRetrieverCode(
-                            selectedPlaygroundRetriever as RetrieverOption,
-                            languageKey,
-                            ""
-                          );
-                        }
-
-                        setLanguageDemo(newLanguageDemo);
-                        setLanguage(languageKey);
-                        break;
-
-                      case "LLM":
-                        if (selectedPlaygroundLlm) {
-                          newLanguageDemo = await getLlmCode(
-                            selectedPlaygroundLlm as LLMOption,
-                            languageKey as LLMLanguageOption,
-                            ""
-                          );
-                        }
-
-                        setLanguageDemo(newLanguageDemo);
-                        setLanguage(languageKey);
-                        break;
-                      default:
-                        console.log("No code to update");
-                        break;
-                    }
+                    await updateLanguageAndDemo(
+                      name,
+                      languageKey,
+                      selectedSplitOption as SplitOption,
+                      selectedVectorStore as VectorStoreOption,
+                      selectedPlaygroundRetriever as RetrieverOption,
+                      selectedPlaygroundLlm as LLMOption,
+                      setLanguageDemo,
+                      setLanguage
+                    );
                   }}
                   value={codeExample.language}
                 >
@@ -296,17 +255,16 @@ export function CodeModal({
                   Full documentation
                 </a>
               </div>
-              <CopyBlock
-                language={codeExample.language}
-                text={codeExample.languageDemo}
-                showLineNumbers={true}
-                theme={tomorrowNight}
-                codeBlock
-              />
+              <div className="max-h-[350px] overflow-auto">
+                <CopyBlock
+                  language={codeExample.language}
+                  text={codeExample.languageDemo}
+                  showLineNumbers={true}
+                  theme={tomorrowNight}
+                  codeBlock
+                />
+              </div>
             </div>
-            <DialogFooter>
-              <Button type="submit">Save changes</Button>
-            </DialogFooter>
           </DialogContent>
         </Dialog>
       </motion.div>

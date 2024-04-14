@@ -14,6 +14,7 @@ interface BlockChunkProps
     codeExample: { language: string; languageDemo: string };
     setLanguage: React.Dispatch<React.SetStateAction<string>>;
     setLanguageDemo: React.Dispatch<React.SetStateAction<string>>;
+    disabled: boolean;
   }> {}
 
 export function BlockChunk({
@@ -22,6 +23,7 @@ export function BlockChunk({
   codeExample,
   setLanguage,
   setLanguageDemo,
+  disabled,
   ...props
 }: BlockChunkProps) {
   if (!info) {
@@ -48,6 +50,7 @@ export function BlockChunk({
                 event="copy_chunk_code"
                 name={info.name}
                 code={info.code}
+                disabled={disabled}
               />
               <CodeModal
                 name={info.name}
@@ -55,6 +58,7 @@ export function BlockChunk({
                 codeExample={codeExample}
                 setLanguage={setLanguage}
                 setLanguageDemo={setLanguageDemo}
+                disabled={disabled}
               />
             </div>
           </div>

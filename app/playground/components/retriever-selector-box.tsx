@@ -52,6 +52,7 @@ export default function RetrieverSelectorBox() {
       codeExample={{ languageDemo, language }}
       setLanguage={setLanguage}
       setLanguageDemo={setLanguageDemo}
+      disabled={selectedPlaygroundRetriever === ""}
     >
       <Card className={`relative  border-none`}>
         <Badge

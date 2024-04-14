@@ -9,7 +9,8 @@ export async function getLlmCode(splitOption: LLMOption, language: LLMLanguageOp
 
     const codeTemplates = {
         mistral: {
-            typescript: `import { MistralStream, StreamingTextResponse } from 'ai';
+            typescript: `# Typescript code for Vercel AI SDK Mistral
+            import { MistralStream, StreamingTextResponse } from 'ai';
  
             import MistralClient from '@mistralai/mistralai';
             
@@ -34,7 +35,8 @@ export async function getLlmCode(splitOption: LLMOption, language: LLMLanguageOp
             }`,
         },
         gpt_3x5_turbo: {
-            typescript: `import OpenAI from 'openai';
+            typescript: `// Typescript code for Vercel AI SDK OpenAI
+            import OpenAI from 'openai';
             import { OpenAIStream, StreamingTextResponse } from 'ai';
             
             // Create an OpenAI API client (that's edge friendly!)

@@ -9,19 +9,26 @@ export async function getVectorStoreCode(splitOption: VectorStoreOption, languag
 
     const codeTemplates = {
         supabase: {
-            python: `Not done yet!`,
-            typescript: `Not done yet!`,
+            python: `# Python code for Supabase vector store
+            Not done yet!`,
+            typescript: `// Typescript code for Supabase vector store
+            Not done yet!`,
         },
         pinecone: {
-            python: `Not done yet!`,
-            typescript: `Not done yet!`,
+            python: `# Python code for Pinecone vector store
+            Not done yet!`,
+            typescript: `// Typescript code for Pinecone vector store
+            Not done yet!`,
         },
         mongodb: {
-            python: `Not done yet!`,
-            typescript: `Not done yet!`,
+            python: `# Python code for MongoDB vector store
+            Not done yet!`,
+            typescript: `// Typescript code for MongoDB vector store
+            Not done yet!`,
         },
         in_memory: {
-            python: `from langchain_openai import ChatOpenAI
+            python: `# Python code for in memory vector store
+            from langchain_openai import ChatOpenAI
             from langchain.prompts import (
                 ChatPromptTemplate,
                 MessagesPlaceholder,
@@ -55,7 +62,8 @@ export async function getVectorStoreCode(splitOption: VectorStoreOption, languag
             
             # Notice that we just pass in the "question" variables - "chat_history" gets populated by memory
             conversation({"question": "hi"})`,
-            typescript: `import { MemoryVectorStore } from "langchain/vectorstores/memory";
+            typescript: `// Typescript code for in memory vector store
+            import { MemoryVectorStore } from "langchain/vectorstores/memory";
             import { OpenAIEmbeddings } from "@langchain/openai";
             import { TextLoader } from "langchain/document_loaders/fs/text";
             
