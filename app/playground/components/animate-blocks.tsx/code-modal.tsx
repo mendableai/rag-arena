@@ -166,7 +166,15 @@ export function CodeModal({
             <DialogHeader>
               <DialogTitle>Code for {name}</DialogTitle>
               <DialogDescription>
-                Make changes to your profile here. Click save when youre done.
+                {
+                  name === "Text Splitter"
+                    ? "Select a language to see the code for Text Splitter"
+                    : name === "Vector Store"
+                    ? "Select a language to see the code for Vector Store"
+                    : name === "Retriever"
+                    ? "Select a language to see the code for Retriever"
+                    : "Select a language to see the code for LLM"
+                }
               </DialogDescription>
             </DialogHeader>
             <div className="flex flex-col gap-4">
