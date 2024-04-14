@@ -3,11 +3,14 @@ import { CustomError } from './config';
 import { VALID_MODELS } from './variables';
 
 export function initializeOpenAI(body: any) {
-    if (!(body.chosenModel in VALID_MODELS)) {
-        throw new CustomError('Invalid model selected', 400);
+    const normalizedModel = body.chosenModel.replace(/-/g, '_');
+    
+    if (!(normalizedModel in VALID_MODELS)) {
+        throw new CustomError('Invalid model selecteda', 400);
     }
 
-    const modelConfig = VALID_MODELS[body.chosenModel];
+    const modelConfig = VALID_MODELS[normalizedModel];
+    
     const apiKey = process.env[modelConfig.apiKeyEnv];
 
     if (!apiKey) {

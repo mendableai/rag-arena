@@ -27,8 +27,9 @@ export async function POST(req: NextRequest): Promise<Response> {
         if (messages.length > 5) {
             return NextResponse.json({ error: "Too many messages" }, { status: 400 });
         }
-
+        
         const { openai, modelConfig } = initializeOpenAI(body);
+
         const embeddingModel = new ChatOpenAI({
             modelName: 'gpt-3.5-turbo-1106',
             temperature: 0,
@@ -54,6 +55,8 @@ export async function POST(req: NextRequest): Promise<Response> {
             headers: { "x-sources": serializedSources },
         });
     } catch (error) {
+        console.log(error);
+        
         return NextResponse.json({ error: "Error while retrieving and serializing documents" }, { status: 500 });
     }
 }
