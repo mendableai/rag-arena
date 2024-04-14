@@ -2,11 +2,8 @@ export const arrayOfRetrievers = [
   "vector-store",
   "contextual-compression",
   "multi-query",
-  // "multi-vector",
   "parent-document",
-  // "self-query",
   "similarity-score",
-  // "time-weighted",
   "bm-25-li",
   "vector-store-li",
   "reciprocal-rerank-fusion-li",
@@ -80,5 +77,4 @@ export const retrieverInfo = {
     fullName: "Knowledge Graph RAG",
     link: "https://docs.llamaindex.ai/en/stable/examples/query_engine/knowledge_graph_rag_query_engine.html"
   }
-
 }

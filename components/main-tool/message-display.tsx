@@ -21,7 +21,6 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
   }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    // Use a state object to track expanded state of each source
     const [expandedSources, setExpandedSources] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
@@ -56,7 +55,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
         <div className="flex flex-1 flex-col">
           <div
             ref={scrollContainerRef}
-            className="flex-1 whitespace-pre-wrap p-4 text-sm   gap-6 flex flex-col"
+            className="flex-1 whitespace-pre-wrap p-4 text-sm gap-6 flex flex-col"
           >
             {message.map((m) => (
               <div
@@ -76,7 +75,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                       <span className="mt-1 mr-2 px-2 py-1 rounded text-xs">
                         {m.annotations?.map((source: any, i) => {
                           
-                          const indexKey = `source:${i}`; // Unique key for each source
+                          const indexKey = `source:${i}`;
                           const isExpanded = expandedSources[indexKey];
                           const toggleExpand = () => setExpandedSources(prevState => ({
                             ...prevState,
@@ -95,7 +94,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = React.memo(
                               )} &quot;
                               {isContentLong && (
                                 <button
-                                  onClick={() => toggleExpand()} // Pass the unique key
+                                  onClick={() => toggleExpand()}
                                   className="ml-2 text-white font-semibold text-[11px]"
                                 >
                                   {isExpanded ? 'Show Less' : 'Show More'}
