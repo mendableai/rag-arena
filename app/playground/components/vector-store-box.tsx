@@ -58,6 +58,7 @@ export default function VectorStoreBox() {
       codeExample={{ languageDemo, language }}
       setLanguage={setLanguage}
       setLanguageDemo={setLanguageDemo}
+      disabled={selectedVectorStore === ""}
     >
       <Card className={`relative border-none`}>
         <Badge

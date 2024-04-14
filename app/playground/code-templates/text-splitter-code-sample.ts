@@ -7,7 +7,8 @@ export async function getTextSplitterCode(splitOption: SplitOption, language: La
 
   const codeTemplates = {
     split_by_character: {
-      python: `from langchain_text_splitters import CharacterTextSplitter
+      python: `# Python code for split by character text splitter
+      from langchain_text_splitters import CharacterTextSplitter
 ${dynamicPart}
       text_splitter = CharacterTextSplitter(
           separator="/n/n",
@@ -20,7 +21,8 @@ ${dynamicPart}
       texts = text_splitter.create_documents("TEXT TO SPLIT")
       print(texts[0])
 `,
-      typescript: `import { Document } from "langchain/document";
+      typescript: `// Typescript code for split by character text splitter
+      import { Document } from "langchain/document";
       import { CharacterTextSplitter } from "langchain/text_splitter";
       
       const text = "foo bar baz 123";
@@ -32,7 +34,8 @@ ${dynamicPart}
       const output = await splitter.createDocuments([text]);`,
     },
     recursive_character_text_splitter: {
-      python: `with open("../../state_of_the_union.txt") as f:
+      python: `# Python code for recursive character text splitter
+      with open("../../state_of_the_union.txt") as f:
           state_of_the_union = f.read()
       
       from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -45,7 +48,8 @@ ${dynamicPart}
       )
       
       texts = text_splitter.create_documents([state_of_the_union])`,
-      typescript: `import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+      typescript: `// Typescript code for recursive character text splitter
+      import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
       const text = "Hi./n/nI'm Harrison./n/nHow? Are? You?/nOkay then f f f f";
       const splitter = new RecursiveCharacterTextSplitter({

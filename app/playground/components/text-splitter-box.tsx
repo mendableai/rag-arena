@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { getTextSplitterCode } from "../code-templates/text-splitter-code-sample";
+import { useSelectedSplitOptionStore } from "../lib/globals";
 import { BlockChunk } from "./animate-blocks.tsx";
 import CustomPlaygroundIngestion from "./custom-ingestion";
 
@@ -31,12 +32,15 @@ export default function TextSplitterBox() {
     code: languageDemo,
   };
 
+  const {selectedSplitOption} = useSelectedSplitOptionStore();
+
   return (
     <BlockChunk
       info={blockInfo}
       codeExample={{ languageDemo, language }}
       setLanguage={setLanguage}
       setLanguageDemo={setLanguageDemo}
+      disabled={selectedSplitOption === ""}
     >
       <Card className={`relative border-none`}>
         <Badge
