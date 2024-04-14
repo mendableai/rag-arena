@@ -25,7 +25,7 @@ interface SelectedVectorStoreState {
     setSelectedVectorStore: (value: string) => void;
 }
 export const useSelectedVectorStore = create<SelectedVectorStoreState>((set) => ({
-    selectedVectorStore: "",
+    selectedVectorStore: "in_memory",
     setSelectedVectorStore: (value: string) => set(() => ({ selectedVectorStore: value })),
 }))
 
