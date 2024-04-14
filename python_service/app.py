@@ -3,6 +3,8 @@ import pickle
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from playground.text_splitters.split_by_character import \
+    create_document_from_text
 from retrievers.auto_merging_retriever import get_auto_merging_retriever
 from retrievers.bm25_retriever import get_bm25_retriever
 from retrievers.neo4j_retriever import (StorageContext, get_neo4j_retriever,
@@ -40,14 +42,26 @@ def load_index():
         print("Using cached index...")
     return cached_index
 
-
 cached_index = load_index()
-
 
 @app.route("/", methods=["GET"])
 def baseRoute():
     return "Hello World"
 
+@app.route("/python/split-text", methods=["POST"])
+def split_text():
+
+    text = request.json.get("text", "")
+    splitOption = request.json.get("splitOption", 0)
+
+    if splitOption == 0:
+        return jsonify({"message": "no splitter chosen"})
+    
+    try:
+        data = create_document_from_text(text, splitOption)
+        return jsonify({"data": data}), 200
+    except ValueError as e:
+        return jsonify({"message": str(e)}), 400
 
 @app.route("/api/python-retrievers/graph-rag-li", methods=["POST"])
 def graph_rag_li():
